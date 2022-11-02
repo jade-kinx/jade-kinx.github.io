@@ -9,15 +9,17 @@
 
 오픈스택은 컴퓨팅/네트워킹/스토리지 등의 자원을 가상화하여, 이를 API를 통해 End-User에게 On-Demand로 제공하는 오픈 소스 클라우드 운영체제입니다. 
 
-![오픈스택 = 클라우드 운영체제](img/Untitled.png)
-
-오픈스택 = 클라우드 운영체제
+<figure markdown>
+  ![오픈스택 = 클라우드 운영체제](img/Untitled.png)
+  <figcaption>오픈스택 = 클라우드 운영체제</figcaption>
+</figure>
 
 오픈스택은 CPU, RAM 등의 컴퓨팅 자원과, HDD, SSD 등의 스토리지 자원 및 L2 스위치, L3 라우터, IP 주소 등의 네트워크 자원 등을 가상화하여 관리하고, 이 자원들을 연결하여 최종 사용자에게 가상 머신을 제공하는 등의 클라우드 서비스를 제공하는 것을 목적으로 하는 플랫폼입니다.
 
-![오픈스택 프로젝트들](img/Untitled%201.png)
-
-오픈스택 프로젝트들
+<figure markdown>
+  ![오픈스택 프로젝트들](img/Untitled%201.png)
+  <figcaption>오픈스택 프로젝트들</figcaption>
+</figure>
 
 오픈스택은 서비스 또는 컴포넌트라고 불리는 여러 프로젝트들의 집합입니다. 각각의 프로젝트는 클라우드 서비스를 위한 특화된 기능을 제공합니다. 
 
@@ -29,8 +31,6 @@
   ![코어 서비스와 빅텐트](img/Untitled%202.png)
   <figcaption>코어 서비스와 빅텐트</figcaption>
 </figure>
-
-코어 서비스와 빅텐트
 
 오픈스택의 프로젝트는 최소한의 클라우드 서비스를 가능하게 하는 코어 서비스와, 클라우드 서비스 확장을 위한 빅텐트 서비스로 구분할 수 있습니다. 코어 서비스는 Keystone, Glance, Cinder, Neutron, Nova 의 5개 서비스로 구성됩니다. (오브젝트 스토리지도 코어 서비스에 포함하는 경우가 있지만, IXCloud에서 사용하지 않고 있기 때문에 경계선에…)
 
@@ -50,9 +50,10 @@
 
 Keystone은 사용자 및 오픈스택 서비스 접근에 대한 인증 관련 서비스를 제공하는 서비스 컴포넌트입니다.
 
-![[인증 기능 제공을 통해 서비스 통합]](img/keystone-1.png)
-
-[인증 기능 제공을 통해 서비스 통합]
+<figure markdown>
+  ![[인증 기능 제공을 통해 서비스 통합]](img/keystone-1.png)
+  <figcaption>인증 기능 제공을 통한 서비스 통합</figcaption>
+</figure>
 
 오픈스택은 분산환경에서 동작하는 여러 서비스 컴포넌트들로 운영되는 플랫폼이기 때문에, 각 서비스 컴포넌트로 오는 API 요청에 대해 인증 방법을 제공할 수 있는 중앙 집중형의 인증 서비스가 필요하게 됩니다. 이러한 요구에 맞춰 오픈스택의 서비스들의 중심에서 모든 API 요청에 인증 및 권한에 대한 서비스를 제공하는 것이 Keystone의 핵심 역할입니다. 
 
@@ -66,9 +67,10 @@ Keystone이 제공하는 주요 기능은 대략 다음과 같이 정리할 수 
 - 서비스 목록(Catalog) 관리
 - API 요청에 대한 인증/검증 제공
 
-![Keystone 구성](img/Untitled%203.png)
-
-Keystone 구성
+<figure markdown>
+  ![Keystone 구성](img/Untitled%203.png)
+  <figcaption>Keystone 구성</figcaption>
+</figure>
 
 #### 1. 사용자/그룹 관리
 
@@ -123,7 +125,7 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
 
 `<target>: <rule>` 의 형식으로 되어 있으며, `target` 항목은 서비스에서 제공하는 API와 매핑되어 있습니다. 가령, `publicize_image`는 공용 이미지를 생성하거나 갱신할 수 있는 API와 매핑되어 있습니다 . 만약, 중간 관리자인 `manager` 라는 역할을 추가하고, `manager` 역할의 사용자에게 `publicize_image` API 권한을 주고 싶은 경우 아래와 같이 정책을 변경할 수 있습니다.
 
-```json hl_lines="4 8"
+```json title="/etc/glance/policy.json" hl_lines="4 8"
 {
     "context_is_admin":  "role:admin",
     "default": "role:admin",
@@ -141,9 +143,10 @@ Keystone은 개별 서비스들의 정책 정보를 수집하여 Policy Backend 
 
 - 사용자, 그룹, 프로젝트, 도메인, 역할, 정책 관계
 
-![사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조](img/Untitled%204.png)
-
-사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조
+<figure markdown>
+  ![사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조](img/Untitled%204.png)
+  <figcaption>사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조</figcaption>
+</figure>
 
 앞에서 살펴본 사용자, 그룹, 프로젝트, 도메인, 역할과 정책에 대한 관계는 위 그림과 같이 표현할 수 있습니다. 시스템에는 도메인 A가 존재하고, 도메인 A에는 User A 부터 User F까지 6명의 사용자와 프로젝트 A가 속해 있습니다. 프로젝트 A에는 User A와 User B가 Group A로서 Role A 역할을 부여 받아 참여하고 있고, User C도 Role A 역할을 부여 받아 참여하고 있습니다. User F는 Role B의 역할을 부여 받아 참여 하고 있습니다. Role A는 Policy A와 Policy B로 구성되어 있고, Role B는 Policy B와 Policy C로 구성되어 있습니다. 각각의 Policy는 Rule의 집합으로 정의됩니다.
 
@@ -153,7 +156,7 @@ Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서�
 
 사용자는 여러 곳에 분산되어 있는 개별 서비스의 API EndPoint 위치를 알 수 없기 때문에, Keystone이 API EndPoint 목록을 사용자 권한에 맞게 정리해서 전달하여 사용자가 필요한 API EndPoint 에 요청을 보낼 수 있도록 해야합니다. 이러한 API EndPoint 목록은 인증 토큰 생성 또는 검증 요청에 대한 응답에 포함되어 전송되거나, 사용자가 `GET /v3/auth/catalog` API로 직접 요청할 수도 있습니다.
 
-```json
+```json linenums="1"
 {
     "catalog": [
         {
@@ -198,9 +201,10 @@ GET /v3/auth/catalog 예
 
 API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을 서비스가 Keystone에 보내 검증하는 방식으로 진행됩니다. 아래는 API 요청에 대한 인증 과정을 개념적으로 단순화 하여 보여주는 그림입니다.
 
-![기본적인 API 인증/검증 과정](img/keystone-2.png)
-
-기본적인 API 인증/검증 과정
+<figure markdown>
+  ![기본적인 API 인증/검증 과정](img/keystone-2.png)
+  <figcaption>기본적인 API 인증/검증 과정</figcaption>
+</figure>
 
 1) 사용자가 Keystone으로 자격 증명(id, passwd)과 함께 인증 토큰 생성 요청을 보내면 Keystone이 Credentials Backend 에 저장된 자격 증명과 비교하여 확인합니다.
 
@@ -235,9 +239,11 @@ Glance는 오픈스택의 다른 서비스(주로 가상 머신)에서 사용할
 
 Glance 서비스는 다음과 같이 구성되어 있습니다.
 
-![Glance 구성](img/Untitled%205.png)
+<figure markdown>
+  ![Glance 구성](img/Untitled%205.png)
+  <figcaption>Glance 구성</figcaption>
+</figure>
 
-Glance 구성
 
 #### glance-api
 
@@ -251,9 +257,11 @@ glance-registry는 데이터베이스에 대해 추상화된 접근 기능을 �
 
 이미지와 메타데이터 정의에 대한 정보 등을 저장하는 SQLDB 입니다. 
 
-![DATABASE schema](img/Untitled%206.png)
+<figure markdown>
+  ![DATABASE schema](img/Untitled%206.png)
+  <figcaption>DATABASE SCHEMA</figcaption>
+</figure>
 
-DATABASE schema
 
 주로 이미지와 관련된 테이블(images, image_*)과 메타데이터 정의 관련 테이블(metadef_*)로 구성되어 있음을 알 수 있습니다.
 
@@ -304,25 +312,29 @@ Glance 서비스는 아래의 API를 통해 이미지의 업로드와 다운로�
 
 Glance 서비스는 다양한 종류의 클라우드 자원에서 사용할 수 있는 메타데이터를 정의하고 관리할 수 있는 기능을 API를 통해 제공합니다.
 
-![Horizon Flavor metadata settings](img/Untitled%207.png)
-
-Horizon Flavor metadata settings
+<figure markdown>
+  ![Horizon Flavor metadata settings](img/Untitled%207.png)
+  <figcaption>Horizon Flavor Metadata Settings</figcaption>
+</figure>
 
 Glance 서비스가 기본적으로 제공하는 메타데이터 정의 외에도, 사용자나 서비스가 직접 메타데이터를 정의하고 관리할 수 있습니다.
 
 메타데이터 정의 서비스는 메타데이터의 정의에 대한 관리를 할 뿐, 클라우드 자원 인스턴스의 실제 메타데이터 값을 관리하지는 않습니다. 클라우드 자원 인스턴스에 메타데이터 값을 설정하면, 해당 자원을 소유하고 있는 서비스에 저장됩니다. 위 그림과 같이 Flavor에 메타데이터를 설정하면 아래 그림과 같이 자원을 소유한 Nova 서비스의 데이터베이스에 저장됩니다. 
 
-![metadata store for flavor](img/Untitled%208.png)
+<figure markdown>
+  ![metadata store for flavor](img/Untitled%208.png)
+  <figcaption>metadata store for flavor</figcaption>
+</figure>
 
-metadata store for flavor
 
 ### 이미지를 이용한 VM 생성
 
 Nova 서비스는 아래 그림과 같이 Glance로 부터 이미지를 제공받아, VM 인스턴스를 생성합니다.
 
-![Instance creation from an image](img/Untitled%209.png)
-
-Instance creation from an image
+<figure markdown>
+  ![Instance creation from an image](img/Untitled%209.png)
+  <figcaption>Instance creation from an image</figcaption>
+</figure>
 
 glance stores 에 저장된 이미지 파일을 컴퓨트 노드로 다운로드 받아와서, 그 이미지를 VM 인스턴스의 root volume과 연결하여 인스턴스에 OS를 제공합니다.
 
@@ -362,9 +374,10 @@ Persistent Storage는 VM 인스턴스의 수명 주기와 무관하게 사용자
 
 ### Cinder 서비스 구성
 
-![Cinder Service Architecture](img/Untitled%2010.png)
-
-Cinder Service Architecture
+<figure markdown>
+  ![Cinder Service Architecture](img/Untitled%2010.png)
+  <figcaption>Cinder Service Architecture</figcaption>
+</figure>
 
 - cinder-api
 
@@ -396,15 +409,18 @@ Message Broker는 Cinder 내부의 주요 프로세스 간 메세지를 전달�
 
 #### VM 인스턴스에 볼륨 제공
 
-![VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공](img/Untitled%2011.png)
-
-VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공
+<figure markdown>
+  ![VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공](img/Untitled%2011.png)
+  <figcaption>VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공</figcaption>
+</figure>
 
 Cinder 서비스를 통해 생성된 볼륨(/dev/hda)은 위 그림과 같이 iSCSI 프로토콜을 이용해 원격지 호스트의 VM 인스턴스와 연결되어, 볼륨에 직접 읽고 쓰기가 가능해 집니다. 일반적으로, Cinder의 기본 블록 스토리지 드라이버는 iSCSI 기반의 LVM(Logical Volume Manager) 이지만, 아래 그림과 같이 다양한 블록 스토리지 드라이버를 사용할 수 있습니다.
 
-![다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)](img/Untitled%2012.png)
+<figure markdown>
+  ![다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)](img/Untitled%2012.png)
+  <figcaption>다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)</figcaption>
+</figure>
 
-다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)
 
 #### 볼륨 관리 기능
 
@@ -428,22 +444,23 @@ Cinder V3 API References - [https://docs.openstack.org/api-ref/block-storage/v3/
 
 Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장치를, 소프트웨어로 구현한 가상화 네트워크로 추상화하여(SDN, Software Defined Network), 사용자 요구에 맞게 구성된 가상 네트워크 인프라를 제공하는 서비스 컴포넌트입니다. 
 
-![Physical Infrastructure to Virtual Networks(Overlay Networks)](img/Untitled%2013.png)
-
-Physical Infrastructure to Virtual Networks(Overlay Networks)
+<figure markdown>
+  ![Physical Infrastructure to Virtual Networks(Overlay Networks)](img/Untitled%2013.png)
+  <figcaption>Physical Infrastructure to Virtual Networks(Overlay Networks)</figcaption>
+</figure>
 
 보다 개념적으로 이해하자면, 위 그림과 같이 물리적으로 분산된 네트워크 환경에서 동작하는 VM에게 논리적으로 구성된 오버레이 네트워크 환경을 제공하는 것이 주요 기능이라고 할 수 있습니다. 
 
-<aside>
-💡 Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. ( 그래서, 데브스택의 Neutron 관련 서비스 이름이 Nova 관련 서비스(devstack@n-*)와 네이밍 충돌을 피하기 위해 devstack@q-* 인듯? )
-
-</aside>
+!!! note ""
+  💡 Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. ( 그래서, 데브스택의 Neutron 관련 서비스 이름이 Nova 관련 서비스(devstack@n-*)와 네이밍 충돌을 피하기 위해 devstack@q-* 인듯? )
 
 ### Neutron 서비스 구성
 
-![Neutron architecture](img/Untitled%2014.png)
+<figure markdown>
+  ![Neutron architecture](img/Untitled%2014.png)
+  <figcaption>Neutron Architecture</figcaption>
+</figure>
 
-Neutron architecture
 
 #### neutron-server
 
@@ -473,9 +490,11 @@ Neutron 서비스는 네트워크의 생성/변경/삭제 등에 대한 API를 �
 
 ML2 플러그인은 사용자의 가상 L2 네트워크를 구현할 수 있도록 소프트웨어 L2 스위치(브릿지) 장비를 제공해주는 플러그인이며, 아래 그림은 대표적으로 지원하는 Type Driver와 Mechanism Driver를 나타냅니다.
 
-![ML2 Plugin Drivers](img/Untitled%2015.png)
+<figure markdown>
+  ![ML2 Plugin Drivers](img/Untitled%2015.png)
+  <figcaption>ML2 Plugin Drivers</figcaption>
+</figure>
 
-ML2 Plugin Drivers
 
 Type Driver는 L2 스위치 장비가 지원할 L2 네트워크 유형을 정의하며, Mechanism Driver는 실제로 L2 스위치 장비를 가상화하여 제공할 소프트웨어 드라이버를 의미합니다. 
 
@@ -496,7 +515,7 @@ ML2 driver support matrix
 
 L3 라우터를 가상화하여 제공하는 소프트웨어 L3 Agent 이며, 사용하는 메카니즘 드라이버의 Agent(ovs-agent, linuxbridge-agent, 등)를 통해 제공됩니다. 호스트와 별도의 네트워크 네임스페이스 상에 존재하며, 가상화된 L2 네트워크의 라우팅을 위해 자체 라우팅 테이블을 가집니다.
 
-```bash
+```bash title="호스트의 라우팅 테이블과 가상 라우터의 라우팅 테이블" hl_lines="4 10 15"
 root@controller:~# route -n
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
@@ -523,9 +542,10 @@ DHCP 서버를 가상화하여 제공하는 DHCP Agent 입니다. 사용하는 �
 
 #### 결론: Neutron 서비스의 역할?
 
-![컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )](img/Untitled%2016.png)
-
-컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )
+<figure markdown>
+  ![컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )](img/Untitled%2016.png)
+  <figcaption>컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )</figcaption>
+</figure>
 
 Neutron 서비스를 이용한 사용자 네트워크 구성은 클라우드 서비스 프로바이더 인프라 상황과 네트워크 유형, 메카니즘 드라이버 등에 따라 대단히 다양한 방식으로 구성될 수 있습니다. 위 그림은 DevStack Rocky 버전을 멀티 노드로 설치했을 때의 모습이며, Neutron 서비스의 이해를 돕기 위한 참고 자료용입니다.
 
@@ -556,9 +576,10 @@ Nova 서비스는 하이퍼바이저를 통해 CPU, RAM 등의 컴퓨팅 자원�
 
 ### Nova 서비스 구성
 
-![Nova Service Architecture](img/Untitled%2017.png)
-
-Nova Service Architecture
+<figure markdown>
+  ![Nova Service Architecture](img/Untitled%2017.png)
+  <figcaption>Nova Service Architecture</figcaption>
+</figure>
 
 Nova 서비스는 그림과 같이 nova-api, nova-scheduler, nova-conductor, nova-compute 를 주요 구성 요소로 동작하며, 대개 컨트롤러 노드와 다수의 컴퓨트 노드로 구성됩니다. 각 구성 요소의 주요 기능은 아래와 같습니다. 
 
@@ -587,9 +608,10 @@ nova-conductor 모듈은 nova-compute 모듈이 데이터베이스에 접근할 
 
 하이퍼바이저는 CPU, RAM, DISK, NIC 등의 물리 서버의 자원을 추상화하고, 논리적으로 공간을 분할하여 독립적인 가상 환경의 서버(VM)를 제공하는 소프트웨어입니다. 
 
-![Native Hypervisor  & Hosted Hypervisor](img/Untitled%2018.png)
-
-Native Hypervisor  & Hosted Hypervisor
+<figure markdown>
+  ![Native Hypervisor  & Hosted Hypervisor](img/Untitled%2018.png)
+  <figcaption>Native Hypervisor  & Hosted Hypervisor</figcaption>
+</figure>
 
 하이퍼바이저는 물리적 하드웨어 위에서 직접 실행되는 Type 1 Native (전가상화) 방식과, 호스트의 OS 위에서 에뮬레이터 형태로 실행되는 Type 2 Hosted (반가상화) 방식으로 구분할 수 있습니다.
 
@@ -644,7 +666,10 @@ Nova Service API - [https://docs.openstack.org/api-ref/compute](https://docs.ope
 
 ### Nova 서비스에서 VM을 생성하는 과정
 
-![Untitled](img/Untitled%2019.png)
+<figure markdown>
+  ![Untitled](img/Untitled%2019.png)
+  <figcaption>VM 생성 과정</figcaption>
+</figure>
 
 그림은 Nova 서비스에서 사용자의 VM 생성 요청을 처리하는 과정을 간략하게 나타냅니다.
 
