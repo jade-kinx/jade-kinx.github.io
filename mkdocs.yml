@@ -1,4 +1,6 @@
 site_name: jade-kinx
 theme:
   name: material
+  palette:
+    scheme: slate
   language: kr
