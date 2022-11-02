@@ -1,12 +1,11 @@
-# 오픈스택 개요
-
+# 오픈스택 입문
 ---
 
 이 문서는 오픈스택을 처음 접하는 분들이 클라우드 서비스에서 오픈스택이 어떤 역할을 하는 지에 대한 이해를 돕기 위한 목적으로 작성되었습니다. 오픈스택을 구성하는 코어 서비스의 개념적인 역할을 중심으로 기술하기 때문에 정확한 내부 구조나 동작 방식은 실제와 다를 수 있고, 오픈스택의 상세 문서를 접하기 전에 미리 이해하면 좋을 것 같은 내용을 간략한 개요와 함께 기술합니다.
 
 2022년 10월 31일 기준 IXCloud에서 사용 중인 오픈스택 Rocky 버전을 기준으로 작성되었습니다.
 
-## 오픈스택 이란?
+### 오픈스택 이란?
 
 오픈스택은 컴퓨팅/네트워킹/스토리지 등의 자원을 가상화하여, 이를 API를 통해 End-User에게 On-Demand로 제공하는 오픈 소스 클라우드 운영체제입니다. 
 
@@ -42,7 +41,7 @@
 
 이 문서에서는 위 5개 코어 서비스에 대해 간략한 개요를 소개합니다.
 
-# Identity Service - Keystone
+## Identity Service - Keystone
 
 ---
 
@@ -54,7 +53,7 @@ Keystone은 사용자 및 오픈스택 서비스 접근에 대한 인증 관련 
 
 오픈스택은 분산환경에서 동작하는 여러 서비스 컴포넌트들로 운영되는 플랫폼이기 때문에, 각 서비스 컴포넌트로 오는 API 요청에 대해 인증 방법을 제공할 수 있는 중앙 집중형의 인증 서비스가 필요하게 됩니다. 이러한 요구에 맞춰 오픈스택의 서비스들의 중심에서 모든 API 요청에 인증 및 권한에 대한 서비스를 제공하는 것이 Keystone의 핵심 역할입니다. 
 
-## Keystone 주요 기능
+### Keystone 주요 기능
 
 Keystone이 제공하는 주요 기능은 대략 다음과 같이 정리할 수 있습니다.
 
@@ -68,7 +67,7 @@ Keystone이 제공하는 주요 기능은 대략 다음과 같이 정리할 수 
 
 Keystone 구성
 
-### 1. 사용자/그룹 관리
+#### 1. 사용자/그룹 관리
 
 Keystone은 Identity Backend를 통해 사용자 및 그룹에 대한 정보를 관리하고 서비스를 제공합니다. 일반적으로 SQLDB를 통해 구성되며, LDAP을 이용하여 구성할 수도 있습니다. 
 
@@ -82,7 +81,7 @@ Keystone은 Identity Backend를 통해 사용자 및 그룹에 대한 정보를 
 
 사용자의 자격 증명 정보(id, password, api-key 등)는 Credentials Backend에 보관되며, 인증 서비스는 보관된 자격 증명 정보를 통해 사용자의 인증을 처리합니다. 
 
-### 2. 프로젝트, 도메인, 역할(Role) 관리
+#### 2. 프로젝트, 도메인, 역할(Role) 관리
 
 Keystone은 SQLDB를 이용하여 구성되는 Assignments Backend를 통해 프로젝트, 도메인, 역할 및 역할 부여(Role Assignments)에 대한 정보를 관리하고 서비스를 제공합니다.
 
@@ -100,7 +99,7 @@ Keystone은 SQLDB를 이용하여 구성되는 Assignments Backend를 통해 프
 
 Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭제 등의 관리 기능과, 사용자/그룹에게 역할을 부여하는 기능 등을 API 를 통해 제공합니다.
 
-### 3. 정책(Policy) 관리
+#### 3. 정책(Policy) 관리
 
 각각의 오픈스택 서비스는 서비스 내 자원의 접근 권한에 대한 정책을 /etc/{service}/policy.json 파일을 통해 정의하고 있습니다. 
 
@@ -145,7 +144,7 @@ Keystone은 개별 서비스들의 정책 정보를 수집하여 Policy Backend 
 
 앞에서 살펴본 사용자, 그룹, 프로젝트, 도메인, 역할과 정책에 대한 관계는 위 그림과 같이 표현할 수 있습니다. 시스템에는 도메인 A가 존재하고, 도메인 A에는 User A 부터 User F까지 6명의 사용자와 프로젝트 A가 속해 있습니다. 프로젝트 A에는 User A와 User B가 Group A로서 Role A 역할을 부여 받아 참여하고 있고, User C도 Role A 역할을 부여 받아 참여하고 있습니다. User F는 Role B의 역할을 부여 받아 참여 하고 있습니다. Role A는 Policy A와 Policy B로 구성되어 있고, Role B는 Policy B와 Policy C로 구성되어 있습니다. 각각의 Policy는 Rule의 집합으로 정의됩니다.
 
-### 4. 서비스 목록(Catalog) 관리
+#### 4. 서비스 목록(Catalog) 관리
 
 Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서비스의 EndPoint 목록을 제공하는 기능을 수행합니다. 오픈스택은 분산된 환경에서 서비스가 동작하기 때문에, 어떤 서비스가 등록되어 있으며, API EndPoint가 어디에 있는지 중앙 집중형으로 관리할 필요가 있습니다. 
 
@@ -192,7 +191,7 @@ GET /v3/auth/catalog 예
 
 추가적으로, 유일하게 등록된 모든 서비스의 API 목록을 가지고 있으므로, 각 API EndPoint에 대해 응답 여부를 확인하는 Health Check 기능을 수행하기도 합니다. 
 
-### 5. API 요청에 대한 인증/검증 제공
+#### 5. API 요청에 대한 인증/검증 제공
 
 API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을 서비스가 Keystone에 보내 검증하는 방식으로 진행됩니다. 아래는 API 요청에 대한 인증 과정을 개념적으로 단순화 하여 보여주는 그림입니다.
 
@@ -214,8 +213,7 @@ API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을
 
 오픈스택의 각 서비스는 독립적이지만, 서비스간 유기적으로 동작해야 하는 부분들이 있습니다. 가령, 사용자가 Compute 서비스에 VM 생성을 요청하게 되면, VM 생성을 위해 Image Service로 부터 OS 이미지를 제공받아야 하고, Storage 서비스로부터 볼륨, Network 서비스로부터 IP 주소 및 네트워크 정보 등을 제공 받아야 합니다. 이때, Compute 서비스가 Image, Storage, Network 서비스로 직접 API 요청을 하게 되는데, 이 요청에서는  Compute 서비스가 사용자 역할이 되어 위의 (1)-(5)의 과정을 비슷하게 거친다고 할 수 있습니다. 서비스도 사용자로 등록되어야 하는 이유라고 할 수 있습니다.
 
-## 참고 자료
-
+#### 참고 자료
 ---
 
 Keystone(Rocky) documents - [https://docs.openstack.org/keystone/rocky/index.html](https://docs.openstack.org/keystone/rocky/index.html)
@@ -224,13 +222,13 @@ Keystone API - [https://docs.openstack.org/api-ref/identity/](https://docs.opens
 
 Mapping of policy target to API - [https://docs.openstack.org/keystone/rocky/getting-started/policy_mapping.html](https://docs.openstack.org/keystone/rocky/getting-started/policy_mapping.html)
 
-# Image Service - Glance
+## Image Service - Glance
 
 ---
 
 Glance는 오픈스택의 다른 서비스(주로 가상 머신)에서 사용할 VM 이미지를 관리하고 제공하는 서비스 컴포넌트입니다. 이미지는 우리가 흔히 VirtualBox나 VMWare 등을 통해 OS를 설치할 때 사용하는 설치 이미지라기보다는 가상 머신에 탑재되어 부팅과 함께 바로 작동 가능한 OS가 이미 설치되어 있는 디스크 이미지를 의미합니다. 
 
-## Glance 서비스 구성
+### Glance 서비스 구성
 
 Glance 서비스는 다음과 같이 구성되어 있습니다.
 
@@ -238,15 +236,15 @@ Glance 서비스는 다음과 같이 구성되어 있습니다.
 
 Glance 구성
 
-### glance-api
+#### glance-api
 
 glance-api는 image service의 API EndPoint를 제공하며, 데이터베이스 계층을 추상화하여 접근하기 위해 glance-registry 를 이용해 데이터베이스에 접근합니다. 또한, 이미지 파일의 물리적 저장소로 로컬 디스크 뿐만 아니라, 네트워크 파일 시스템, 블록 스토리지, 오브젝트 스토리지 등 glance store driver가 지원하는 여러 형태의 storage backend를 사용할 수 있습니다.
 
-### glance-registry
+#### glance-registry
 
 glance-registry는 데이터베이스에 대해 추상화된 접근 기능을 제공합니다. 그러나, use case 가 떨어지고, 버전의 유지 보수가 어려운 문제 때문에 openstack queens 버전부터 deprecated 되었고, stein 버전 부터 제거되어 glance-api 에서 직접 데이터베이스로 접근하도록 변경되었습니다.
 
-### glance database
+#### glance database
 
 이미지와 메타데이터 정의에 대한 정보 등을 저장하는 SQLDB 입니다. 
 
@@ -256,7 +254,7 @@ DATABASE schema
 
 주로 이미지와 관련된 테이블(images, image_*)과 메타데이터 정의 관련 테이블(metadef_*)로 구성되어 있음을 알 수 있습니다.
 
-## Glance 주요 기능
+### Glance 주요 기능
 
 Glance 서비스가 제공하는 주요 기능은 다음과 같이 정리할 수 있습니다.
 
@@ -264,7 +262,7 @@ Glance 서비스가 제공하는 주요 기능은 다음과 같이 정리할 수
 - 이미지 파일 전송 기능
 - 메타데이터 정의 서비스
 
-### 1. 이미지 관리 기능
+#### 1. 이미지 관리 기능
 
 Glance 서비스는 아래의 API를 통해 이미지의 등록, 조회, 수정, 삭제 기능 등을 제공합니다.
 
@@ -286,7 +284,7 @@ Glance 서비스는 아래의 API를 통해 이미지의 등록, 조회, 수정,
 
 `download-image` API를 통해 이미지 파일을 다운로드 할 수 있습니다. Nova 서비스와 같은 다른 서비스들은 일반적으로 이 API를 통해 이미지 파일을 다운로드 받습니다.
 
-### 2. 이미지 파일 전송 기능
+#### 2. 이미지 파일 전송 기능
 
 Glance 서비스는 아래의 API를 통해 이미지의 업로드와 다운로드 기능을 제공합니다.
 
@@ -299,7 +297,7 @@ Glance 서비스는 아래의 API를 통해 이미지의 업로드와 다운로�
 
 `download-image` API 호출을 통해 이미지 파일을 다운로드 받을 수 있습니다. Nova 서비스는 일반적으로 이 API를 통해 인스턴스 생성을 위한 이미지 파일을 전송 받지만, storage backend 구성에 따라, 원격지 저장소의 direct_url을 통해 직접 다운로드 받을 수도 있습니다. 
 
-### 3. 메타데이터 정의 서비스
+#### 3. 메타데이터 정의 서비스
 
 Glance 서비스는 다양한 종류의 클라우드 자원에서 사용할 수 있는 메타데이터를 정의하고 관리할 수 있는 기능을 API를 통해 제공합니다.
 
@@ -315,7 +313,7 @@ Glance 서비스가 기본적으로 제공하는 메타데이터 정의 외에�
 
 metadata store for flavor
 
-## 이미지를 이용한 VM 생성
+### 이미지를 이용한 VM 생성
 
 Nova 서비스는 아래 그림과 같이 Glance로 부터 이미지를 제공받아, VM 인스턴스를 생성합니다.
 
@@ -327,7 +325,7 @@ glance stores 에 저장된 이미지 파일을 컴퓨트 노드로 다운로드
 
 결론적으로, Glance 서비스는 Nova 서비스에 OS 이미지를 제공하는 것이 핵심 기능이고, 그 이미지들을 관리하는 기능을 포함하고 있는 서비스 컴포넌트라고 할 수 있습니다.
 
-## 참고 자료
+### 참고 자료
 
 ---
 
@@ -337,13 +335,13 @@ Image v2 API - [https://docs.openstack.org/api-ref/image/v2/index.html](https://
 
 Image Metadata v2 API - [https://docs.openstack.org/api-ref/image/v2/metadefs-index.html](https://docs.openstack.org/api-ref/image/v2/metadefs-index.html)
 
-# Block Storage Service - Cinder
+## Block Storage Service - Cinder
 
 ---
 
 Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제공하고, 제공된 볼륨을 효과적으로 관리하는 기능을 제공하는 서비스 컴포넌트입니다. HDD, SSD, LVM, iSCSI, NetApp, ZADARA 등의 여러 물리적 저장 장치, 컨트롤러, 벤더 사의 스토리지 장치를 추상화하여 VM에서 사용 가능한 볼륨 형태로 제공하는 것이 핵심 기능입니다.
 
-## 스토리지 유형
+### 스토리지 유형
 
 - Ephemeral Storage vs Persistent Storage
 
@@ -359,7 +357,7 @@ Persistent Storage는 VM 인스턴스의 수명 주기와 무관하게 사용자
 
 이러한 스토리지 유형중에서, Cinder 서비스는 Persistent Storage + Block Storage 형태로 VM에 볼륨을 제공합니다. 또한, Nova 서비스는 Ephemeral Storage + Block Storage 형태로 VM에 볼륨을 제공하고, Swift 서비스는 Persistent Storage + Object Storage 형태의 저장소를 제공합니다.
 
-## Cinder 서비스 구성
+### Cinder 서비스 구성
 
 ![Cinder Service Architecture](img/Untitled%2010.png)
 
@@ -387,13 +385,13 @@ cinder-backup 컴포넌트는 여러 유형의 볼륨을 볼륨 백업 저장소
 
 Message Broker는 Cinder 내부의 주요 프로세스 간 메세지를 전달하는 단일화된 창구역할을 하는 AMQP(Advanced Message Queing Protocol) 이며, 오픈스택에서는 주로 RabbitMQ 를 사용합니다. 가령, 사용자가 볼륨 생성 요청을 cinder-api로 보내면, cinder-api는 볼륨을 생성할 적당한 스토리지를 선택하기 위해 Message Broker를 통해 cinder-scheduler로 요청을 전달합니다. cinder-scheduler는 현재 스토리지 할당 현황을 참고하여 볼륨 생성 요청을 Message Broker를 통해 cinder-volume 프로세스로 전달하여 볼륨을 생성하도록 합니다. 만약, Message Broker가 존재하지 않는다면, cinder-api, cinder-scheduler, cinder-volume, cinder-backup 프로세스간 개별적으로 모두 연결해야 하기 때문에 연결 구조가 훨씬 복잡해 질 수 있지만, Message Broker를 통해 단일화 된 창구를 제공할 수 있습니다. 
 
-## Cinder 서비스 주요 기능
+### Cinder 서비스 주요 기능
 
 - VM 인스턴스에 볼륨 제공
 - 볼륨 관리 기능
 - 볼륨 스냅샷 및 백업 기능
 
-### VM 인스턴스에 볼륨 제공
+#### VM 인스턴스에 볼륨 제공
 
 ![VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공](img/Untitled%2011.png)
 
@@ -405,15 +403,15 @@ Cinder 서비스를 통해 생성된 볼륨(/dev/hda)은 위 그림과 같이 iS
 
 다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)
 
-### 볼륨 관리 기능
+#### 볼륨 관리 기능
 
 cinder-api 가 제공하는 API EndPoint를 통해, 볼륨에 대해 CRUD(Create/Read/Update/Delete) 작업이 가능합니다. 또한, 동적으로 볼륨을 VM에서 분리하거나, 다른 VM에 장착할 수 있습니다. 
 
-### 볼륨 스냅샷 및 백업 기능
+#### 볼륨 스냅샷 및 백업 기능
 
 Cinder 서비스는 볼륨에 대해 사본을 생성하거나(스냅샷), Volume Backup Repository의 여러 장치로 백업할 수 있습니다. 
 
-## 참고 자료
+### 참고 자료
 
 ---
 
@@ -421,7 +419,7 @@ Cinder(Rocky) documents - [https://docs.openstack.org/cinder/rocky/](https://doc
 
 Cinder V3 API References - [https://docs.openstack.org/api-ref/block-storage/v3/index.html](https://docs.openstack.org/api-ref/block-storage/v3/index.html)
 
-# Network Service - Neutron
+## Network Service - Neutron
 
 ---
 
@@ -438,29 +436,29 @@ Physical Infrastructure to Virtual Networks(Overlay Networks)
 
 </aside>
 
-## Neutron 서비스 구성
+### Neutron 서비스 구성
 
 ![Neutron architecture](img/Untitled%2014.png)
 
 Neutron architecture
 
-### neutron-server
+#### neutron-server
 
 Neutron 서비스의 API EndPoint 를 제공하고, 사용자의 API 요청을 처리하는 기능을 제공합니다. neutron-server는 message queue를 통해 L2 Agent, L3 Agent, DHCP Agent에게 필요한 자원의 할당을 요청할 수 있습니다.
 
-### neutron-l2-agent
+#### neutron-l2-agent
 
 L2-Switch(브릿지) 장치를 가상화하여 제공해 주는 Agent 입니다. ML2 플러그인을 이용하고, Linux Bridge, Open vSwitch 등의 메카니즘 드라이버를 이용하여 L2 Switch 가상화를 구현합니다. 
 
-### neutron-l3-agent
+#### neutron-l3-agent
 
 L3-Router 장치를 가상화하여 제공해 주는 Agent 입니다. 마찬가지로 Linux Bridge, Open vSwitch 등의 메카니즘 드라이버를 이용하여 L3 Router 가상화를 구현합니다.
 
-### neutron-dhcp-agent
+#### neutron-dhcp-agent
 
 DHCP 서버를 제공하는 Agent 입니다.
 
-## Neutron 서비스 주요 기능
+### Neutron 서비스 주요 기능
 
 - VM에 L2 네트워크 환경 제공
 - L2 네트워크에 L3 라우터 제공
@@ -468,7 +466,7 @@ DHCP 서버를 제공하는 Agent 입니다.
 
 Neutron 서비스는 네트워크의 생성/변경/삭제 등에 대한 API를 제공하고, 실제 네트워크 기능은 각 Network Provider를 통해  SDN 환경을 구성합니다. 가령, L2 스위치 기능은 neutron-l2-agent(ML2 플러그인)을 통해 제공되고, L3 라우터 기능은 neutron-l3-agent, DHCP 기능은 neutron-dhcp-agent를 통해 제공됩니다.
 
-### ML2(Modular Layer 2) plug-in
+#### ML2(Modular Layer 2) plug-in
 
 ML2 플러그인은 사용자의 가상 L2 네트워크를 구현할 수 있도록 소프트웨어 L2 스위치(브릿지) 장비를 제공해주는 플러그인이며, 아래 그림은 대표적으로 지원하는 Type Driver와 Mechanism Driver를 나타냅니다.
 
@@ -491,7 +489,7 @@ ML2 driver support matrix
 
 가령, 메카니즘 드라이버로 SRIOV를 사용하면, 사용자에게 VXLAN 유형의 L2 네트워크는 제공할 수 없다는 뜻입니다. 또한, Flat, VLAN 네트워크만 제공할 계획이라면 위 표의 어떤 메카니즘 드라이버를 선택해도 무방하다는 뜻이기도 합니다.
 
-### neutron-l3-agent
+#### neutron-l3-agent
 
 L3 라우터를 가상화하여 제공하는 소프트웨어 L3 Agent 이며, 사용하는 메카니즘 드라이버의 Agent(ovs-agent, linuxbridge-agent, 등)를 통해 제공됩니다. 호스트와 별도의 네트워크 네임스페이스 상에 존재하며, 가상화된 L2 네트워크의 라우팅을 위해 자체 라우팅 테이블을 가집니다.
 
@@ -516,11 +514,11 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 root@controller:~#
 ```
 
-### neutron-dhcp-agent
+#### neutron-dhcp-agent
 
 DHCP 서버를 가상화하여 제공하는 DHCP Agent 입니다. 사용하는 메카니즘 드라이버에 따라, Open vSwitch, Linux Bridge 등의 Agent를 통해 제공됩니다. 필요에 따라 고가용성(High Availabilty)으로 구성하거나(IXCloud의 경우 dhcp_agents_per_network = 3) 네트워크에서 DHCP Agent를 제거하고 VM 인스턴스에 static ip address 를 설정하여 사용하도록 할 수도 있습니다.
 
-### 결론: Neutron 서비스의 역할?
+#### 결론: Neutron 서비스의 역할?
 
 ![컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )](img/Untitled%2016.png)
 
@@ -541,19 +539,19 @@ Neutron 서비스를 이용한 사용자 네트워크 구성은 클라우드 서
 
 결론적으로, Neutron 서비스는 가상의 네트워크 장비를 통해, 분산 환경에서 사용자 네트워크 환경을 VM에게 제공하는 역할을 한다고 할 수 있습니다.
 
-## 참고 자료
+### 참고 자료
 
 ---
 
 Neutron(Rocky) documents - [https://docs.openstack.org/neutron/rocky/](https://docs.openstack.org/neutron/rocky/)
 
-# Compute Service - Nova
+## Compute Service - Nova
 
 ---
 
 Nova 서비스는 하이퍼바이저를 통해 CPU, RAM 등의 컴퓨팅 자원을 할당하여 VM 인스턴스를 제공하고, VM을 관리할 수 있는 기능을 제공하는 서비스 컴포넌트입니다. Nova 서비스는 Glance 서비스로부터 OS 이미지, Cinder 서비스로 부터 볼륨, Neutron 서비스로 부터 네트워크를 제공 받아 최종적으로 사용자가 사용할 수 있는 VM 인스턴스를 생성하여 제공합니다. 클라우드 서비스를 위한 최소한의 필요 기능이며, 나머지 코어 서비스는 Nova 서비스를 위한 리소스 제공 서비스라고 할 수 있습니다.
 
-## Nova 서비스 구성
+### Nova 서비스 구성
 
 ![Nova Service Architecture](img/Untitled%2017.png)
 
@@ -561,28 +559,28 @@ Nova Service Architecture
 
 Nova 서비스는 그림과 같이 nova-api, nova-scheduler, nova-conductor, nova-compute 를 주요 구성 요소로 동작하며, 대개 컨트롤러 노드와 다수의 컴퓨트 노드로 구성됩니다. 각 구성 요소의 주요 기능은 아래와 같습니다. 
 
-### nova-api
+#### nova-api
 
 nova-api 모듈은 사용자에게 API EndPoint를 제공하며, API 요청에 대해 적절한 프로세스로 요청을 전달하는 등 API 요청에 대한 처리를 관장(Orchestration)합니다. 가령, 사용자가 VM 생성 요청을 보내면, nova-api가 이 요청을 수신하여 VM을 생성할 적절한 컴퓨트 노드를 결정하기 위해 nova-scheduler로 요청을 전달하고, 최종적으로 nova-compute로 요청이 전달되어 해당 컴퓨트 노드에 VM이 생성됩니다. nova-api 모듈은 컨트롤러 노드에 존재합니다.
 
-### nova-compute
+#### nova-compute
 
 nova-compute 모듈은 각 컴퓨트 노드 상에 존재하며, 하이퍼바이저와 직접 상호작용하며 VM의 수명 주기 등을 관리하는 기능을 제공합니다. 가령, 하이퍼바이저로 KVM을 사용하는 컴퓨트 노드의 nova-compute 모듈이 VM 생성 요청을 수신하면 KVM API인 libvirt-api 를 호출하여 VM을 생성합니다. 마찬가지로, VM의 삭제, 재부팅, 일시정지, 크기(Flavor) 변경 등의 작업도 하이퍼바이저 API 호출을 통해 관리할 수 있습니다. 
 
-### nova-scheduler
+#### nova-scheduler
 
 nova-scheduler 모듈은 2대 이상의 컴퓨트 노드가 존재할 때, CPU/RAM/Disk/메타데이터 등의 리소스 필터를 참고하여 VM을 생성할 적절한 컴퓨트 노드를 결정하는 기능을 제공합니다. nova-api 로부터 VM 생성 요청을 수신하면, 자원 할당 현황, 가용존, 메타데이터 정보를 참고하여 VM을 할당할 가장 적당한 컴퓨트 노드를 결정하고, 메세지 큐를 통해 해당 컴퓨트 노드의 nova-compute 모듈로 VM 생성 요청을 보내 VM을 생성하도록 합니다. nova-scheduler 모듈은 컨트롤러 노드에 존재합니다.
 
-### nova-conductor
+#### nova-conductor
 
 nova-conductor 모듈은 nova-compute 모듈이 데이터베이스에 접근할 수 있도록 proxy 기능을 제공합니다. 컴퓨트 노드가 외부 공격에 의해 해킹되더라도 전체 데이터베이스를 보호할 수 있도록 nova-compute 모듈은 데이터베이스에 직접 접근할 수 없도록 설계되었습니다. nova-compute는 nova-conductor가 제공하는 API를 통해서만 데이터베이스에 접근할 수 있으며, 같은 이유로 nova-conductor 모듈은 컴퓨트 노드에 설치되어서는 안되고, 컨트롤러 노드에 존재해야 합니다.
 
-## Nova 서비스 주요 기능
+### Nova 서비스 주요 기능
 
 - 하이퍼바이저를 통한 VM 인스턴스 제공
 - 컴퓨트 서비스 API EndPoint 제공
 
-### 하이퍼바이저를 통한 VM 인스턴스 제공
+#### 하이퍼바이저를 통한 VM 인스턴스 제공
 
 하이퍼바이저는 CPU, RAM, DISK, NIC 등의 물리 서버의 자원을 추상화하고, 논리적으로 공간을 분할하여 독립적인 가상 환경의 서버(VM)를 제공하는 소프트웨어입니다. 
 
@@ -615,33 +613,33 @@ Type 1 하이퍼바이저는 물리적 하드웨어를 직접 제어하기 때�
 
 Nova 서비스는 하이퍼바이저를 통해 생성한 VM과 Cinder, Neutron, Glance 서비스 등에서 할당받은 자원을 연결하여 최종 사용자에게 사용 가능한 상태의 VM을 제공합니다.
 
-### 컴퓨트 서비스 API EndPoint 제공
+#### 컴퓨트 서비스 API EndPoint 제공
 
 Nova 서비스는 컴퓨트 서비스의 주요 항목과 관련된 대단히 많은 API를 제공합니다. 주요 항목은 다음과 같습니다.
 
-### Servers
+#### Servers
 
 VM 인스턴스와 관련된 모든 API를 제공합니다. VM의 생성, 삭제, 재부팅 등과 같이 수명주기와 관련된 API 부터 RDP, Serial, VNC console 등과 같이 서버 접근 관련 API도 제공합니다.
 
-### Flavors
+#### Flavors
 
 Flavor는 vCPU의 갯수, vRAM의 크기, root volume 크기 등 VM의 하드웨어 설정을 의미하며, 컴퓨트 서비스는 Flavor로 정의된 설정으로만 VM을 생성할 수 있습니다. nova-scheduler는 Flavor 정보에 포함된 Extra Spec, Metadata 등의 정보를 참고하여 컴퓨트 노드를 결정합니다.
 
-### Keypairs
+#### Keypairs
 
 생성된 VM에 사용자가 SSH로 접근하기 위해 사용할 SSH Keypair를 관리할 수 있는 API를 제공합니다. 키를 생성하거나, 가져오기, 삭제하기 등의 API를 제공합니다.
 
-### Quota
+#### Quota
 
 Quota는 프로젝트에 할당된 자원의 제한을 의미하며, Quota와 관련된 API를 제공합니다.
 
-### 기타
+#### 기타
 
 이 외에도 Nova 서비스는 무수히 많은 API를 제공합니다. 자세한 내용은 다음의 API Reference에서 확인할 수 있습니다. 
 
 Nova Service API - [https://docs.openstack.org/api-ref/compute](https://docs.openstack.org/api-ref/compute)
 
-## Nova 서비스에서 VM을 생성하는 과정
+### Nova 서비스에서 VM을 생성하는 과정
 
 ![Untitled](img/Untitled%2019.png)
 
@@ -669,7 +667,7 @@ Nova Service API - [https://docs.openstack.org/api-ref/compute](https://docs.ope
 
 앞서 살펴본 코어 서비스들은 결국 클라우드 서비스를 위한 최소한의 필요 조건인 VM 인스턴스를 생성하기 위한 과정이라고 할 수 있습니다. 이후에, 다른 프로젝트를 추가해서 클라우드 서비스를 확장할 수 있습니다. 가령, 생성된 VM 인스턴스에 Database를 올려서 DBaaS를 서비스 하는 Trove 프로젝트를 추가하여 확장하거나, VM 인스턴스를 활용하는 자체 서비스를 개발하여 클라우드 서비스를 확장할 수도 있습니다.
 
-## 참고 자료
+### 참고 자료
 
 ---
 
