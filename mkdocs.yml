@@ -7,6 +7,9 @@ theme:
   name: material
   language: kr
 
+  font:
+    text: Roboto
+    
   features:
     - content.code.annotate
     - content.tooltips

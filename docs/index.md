@@ -348,10 +348,12 @@ Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제�
 ### 스토리지 유형
 
 !!! info "Ephemeral Storage vs Persistent Storage"
-    Ephemeral Storage는 VM 인스턴스의 수명 주기(Life-Cycle)을 따르는 휘발성 스토리지입니다. VM 인스턴스 생성과 함께 생성되었다가, VM 인스턴스의 삭제와 함께 삭제됩니다. <br/>Persistent Storage는 VM 인스턴스의 수명 주기와 무관하게 사용자 요청에 의해 생성/삭제되는 지속성 스토리지입니다. 또한, 사용자 요청에 의해 스냅샷을 생성하거나, VM 인스턴스에 장착/탈착이 가능합니다.
+    - Ephemeral Storage는 VM 인스턴스의 수명 주기(Life-Cycle)을 따르는 휘발성 스토리지입니다. VM 인스턴스 생성과 함께 생성되었다가, VM 인스턴스의 삭제와 함께 삭제됩니다. 
+    - Persistent Storage는 VM 인스턴스의 수명 주기와 무관하게 사용자 요청에 의해 생성/삭제되는 지속성 스토리지입니다. 또한, 사용자 요청에 의해 스냅샷을 생성하거나, VM 인스턴스에 장착/탈착이 가능합니다.
 
 !!! info "Block Storage vs Object Storage"
-    블록 스토리지는 일반적으로 우리가 하드 디스크라고 부르는 형태로, Block 단위로 저장소를 제공하는 스토리지 입니다. <br/>    오브젝트 스토리지는 고유 식별자(ID or Key), 데이터(파일), 메타데이터(권한 등) 등으로 구성된 개별 오브젝트 단위로 데이터를 관리하는 스토리지입니다. 대표적으로 AWS의 S3 서비스를 들 수 있습니다.
+    - 블록 스토리지는 일반적으로 우리가 하드 디스크라고 부르는 형태로, Block 단위로 저장소를 제공하는 스토리지 입니다. 
+    - 오브젝트 스토리지는 고유 식별자(ID or Key), 데이터(파일), 메타데이터(권한 등) 등으로 구성된 개별 오브젝트 단위로 데이터를 관리하는 스토리지입니다. 대표적으로 AWS의 S3 서비스를 들 수 있습니다.
 
 이러한 스토리지 유형중에서, Cinder 서비스는 Persistent Storage + Block Storage 형태로 VM에 볼륨을 제공합니다. 또한, Nova 서비스는 Ephemeral Storage + Block Storage 형태로 VM에 볼륨을 제공하고, Swift 서비스는 Persistent Storage + Object Storage 형태의 저장소를 제공합니다.
 
