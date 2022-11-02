@@ -2,10 +2,9 @@
 ---
 
 이 문서는 오픈스택을 처음 접하는 분들이 클라우드 서비스에서 오픈스택이 어떤 역할을 하는 지에 대한 이해를 돕기 위한 목적으로 작성되었습니다. 오픈스택을 구성하는 코어 서비스의 개념적인 역할을 중심으로 기술하기 때문에 정확한 내부 구조나 동작 방식은 실제와 다를 수 있고, 오픈스택의 상세 문서를 접하기 전에 미리 이해하면 좋을 것 같은 내용을 간략한 개요와 함께 기술합니다.
-
 2022년 10월 31일 기준 IXCloud에서 사용 중인 오픈스택 Rocky 버전을 기준으로 작성되었습니다.
 
-### 오픈스택 이란?
+## 오픈스택 이란?
 
 오픈스택은 컴퓨팅/네트워킹/스토리지 등의 자원을 가상화하여, 이를 API를 통해 End-User에게 On-Demand로 제공하는 오픈 소스 클라우드 운영체제입니다. 
 
@@ -15,6 +14,7 @@
 </figure>
 
 오픈스택은 CPU, RAM 등의 컴퓨팅 자원과, HDD, SSD 등의 스토리지 자원 및 L2 스위치, L3 라우터, IP 주소 등의 네트워크 자원 등을 가상화하여 관리하고, 이 자원들을 연결하여 최종 사용자에게 가상 머신을 제공하는 등의 클라우드 서비스를 제공하는 것을 목적으로 하는 플랫폼입니다.
+    
 
 <figure markdown>
   ![오픈스택 프로젝트들](img/Untitled%201.png)
@@ -26,6 +26,7 @@
 가령, 웹을 통해 대시 보드 서비스를 제공하고 싶다면 Horizon 프로젝트를 이용하고, 오브젝트 스토리지 기능을 제공하고 싶다면 Swift 프로젝트를 이용하여 서비스를 구성하면 됩니다. 또, 데이터베이스 서비스를 제공하고 싶다면 Trove 프로젝트를 추가해서 구성할 수 있습니다. 즉, 필요한 서비스들을 선택하여 자신만의 클라우드 서비스를 구성할 수 있다는 뜻입니다. 
 
 각각의 프로젝트는 완전히 독립적으로 동작하지만, Identity 서비스(Keystone)을 통해 하나의 플랫폼으로 동작할 수 있습니다.
+    
 
 <figure markdown>
   ![코어 서비스와 빅텐트](img/Untitled%202.png)
@@ -33,7 +34,8 @@
 </figure>
 
 오픈스택의 프로젝트는 최소한의 클라우드 서비스를 가능하게 하는 코어 서비스와, 클라우드 서비스 확장을 위한 빅텐트 서비스로 구분할 수 있습니다. 코어 서비스는 Keystone, Glance, Cinder, Neutron, Nova 의 5개 서비스로 구성됩니다. (오브젝트 스토리지도 코어 서비스에 포함하는 경우가 있지만, IXCloud에서 사용하지 않고 있기 때문에 경계선에…)
-
+    
+    
 | 서비스 | 주요 기능 | AWS Pair |
 | --- | --- | --- |
 | Keystone | 각 서비스의 API 요청에 대한 인증 기능을 제공하여, 적절한 권한으로 서비스들이 동작할 수 있는 통합 환경 제공 | IAM |
@@ -220,7 +222,7 @@ API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을
 
 오픈스택의 각 서비스는 독립적이지만, 서비스간 유기적으로 동작해야 하는 부분들이 있습니다. 가령, 사용자가 Compute 서비스에 VM 생성을 요청하게 되면, VM 생성을 위해 Image Service로 부터 OS 이미지를 제공받아야 하고, Storage 서비스로부터 볼륨, Network 서비스로부터 IP 주소 및 네트워크 정보 등을 제공 받아야 합니다. 이때, Compute 서비스가 Image, Storage, Network 서비스로 직접 API 요청을 하게 되는데, 이 요청에서는  Compute 서비스가 사용자 역할이 되어 위의 (1)-(5)의 과정을 비슷하게 거친다고 할 수 있습니다. 서비스도 사용자로 등록되어야 하는 이유라고 할 수 있습니다.
 
-#### 참고 자료
+### 참고 자료
 ---
 
 Keystone(Rocky) documents - [https://docs.openstack.org/keystone/rocky/index.html](https://docs.openstack.org/keystone/rocky/index.html)
@@ -418,7 +420,7 @@ Cinder 서비스를 통해 생성된 볼륨(/dev/hda)은 위 그림과 같이 iS
 
 <figure markdown>
   ![다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)](img/Untitled%2012.png)
-  <figcaption>다양한 블록 스토리지 드라이버: (https://wiki.openstack.org/wiki/CinderSupportMatrix)</figcaption>
+  <figcaption>블록 스토리지 드라이버 목록: https://wiki.openstack.org/wiki/CinderSupportMatrix</figcaption>
 </figure>
 
 
@@ -451,7 +453,7 @@ Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장�
 
 보다 개념적으로 이해하자면, 위 그림과 같이 물리적으로 분산된 네트워크 환경에서 동작하는 VM에게 논리적으로 구성된 오버레이 네트워크 환경을 제공하는 것이 주요 기능이라고 할 수 있습니다. 
 
-!!! note ""
+???+ note ""
     💡 Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. ( 그래서, 데브스택의 Neutron 관련 서비스 이름이 Nova 관련 서비스(devstack@n-*)와 네이밍 충돌을 피하기 위해 devstack@q-* 인듯? )
 
 ### Neutron 서비스 구성
@@ -621,8 +623,6 @@ Type 1 하이퍼바이저는 물리적 하드웨어를 직접 제어하기 때�
 
 오픈스택 Rocky 버전 기준으로 지원하는 하이퍼바이저 목록은 다음과 같습니다.
 
-[https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html](https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html)
-
 | 하이퍼바이저 | 설명 |
 | --- | --- |
 | KVM | Kernel-based Virtual Machine. The virtual disk formats that it supports is inherited from QEMU since it uses a modified QEMU program to launch the virtual machine. The supported formats include raw images, the qcow2, and VMware formats. |
@@ -635,6 +635,8 @@ Type 1 하이퍼바이저는 물리적 하드웨어를 직접 제어하기 때�
 | Virtuozzo 7.0.0 ↑ | OS Containers and Kernel-based Virtual Machines supported via libvirt virt_type=parallels. The supported formats include ploop and qcow2 images. |
 | PowerVM | Server virtualization with IBM PowerVM for AIX, IBM i, and Linux workloads on the Power Systems platform. |
 | zVM | Server virtualization on z Systems and IBM LinuxONE, it can run Linux, z/OS and more. |
+[https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html](https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html)
+
 
 Nova 서비스는 하이퍼바이저를 통해 생성한 VM과 Cinder, Neutron, Glance 서비스 등에서 할당받은 자원을 연결하여 최종 사용자에게 사용 가능한 상태의 VM을 제공합니다.
 
