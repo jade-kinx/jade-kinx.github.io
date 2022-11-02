@@ -217,9 +217,7 @@ API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을
 ---
 
 Keystone(Rocky) documents - [https://docs.openstack.org/keystone/rocky/index.html](https://docs.openstack.org/keystone/rocky/index.html)
-
 Keystone API - [https://docs.openstack.org/api-ref/identity/](https://docs.openstack.org/api-ref/identity/)
-
 Mapping of policy target to API - [https://docs.openstack.org/keystone/rocky/getting-started/policy_mapping.html](https://docs.openstack.org/keystone/rocky/getting-started/policy_mapping.html)
 
 ## Image Service - Glance
@@ -336,9 +334,7 @@ glance stores 에 저장된 이미지 파일을 컴퓨트 노드로 다운로드
 ---
 
 Glance(Rocky) documents - [https://docs.openstack.org/glance/rocky/](https://docs.openstack.org/glance/rocky/)
-
 Image v2 API - [https://docs.openstack.org/api-ref/image/v2/index.html](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=)
-
 Image Metadata v2 API - [https://docs.openstack.org/api-ref/image/v2/metadefs-index.html](https://docs.openstack.org/api-ref/image/v2/metadefs-index.html)
 
 ## Block Storage Service - Cinder
@@ -364,25 +360,23 @@ Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제�
   <figcaption>Cinder Service Architecture</figcaption>
 </figure>
 
-- cinder-api
+#### cinder-api
 
 cinder-api 컴포넌트는 사용자에게 API EndPoint를 제공하고, API 요청을 필요한 프로세스로 전달하는 역할을 수행하는 프로세스입니다. 가령, 볼륨 생성 요청을 받으면, 볼륨을 생성할 적절한 제공자 노드를 선택하기 위해 cinder-schduler 프로세스로 메세지를 보내고, cinder-scheduler는 적절한 스토리지 제공자 노드를 선택하여 cinder-volume 프로세스로 메세지를 보내 실제 볼륨을 생성할 수 있도록 합니다.
 
- 
-
-- cinder-scheduler
+#### cinder-scheduler
 
 cinder-scheduler 컴포넌트는 현재 스토리지 할당 현황, 메타데이터 등을 참고하여, 볼륨을 생성할 적절한 스토리지 노드를 결정하는 기능을 수행하는 프로세스입니다. nova-scheduler와 비슷하게 스토리지에 대해 provisioning 할 노드를 선택하는 기능이라고 할 수 있습니다. 
 
-- cinder-volume
+#### cinder-volume
 
 cinder-volume 컴포넌트는 다양한 스토리지 드라이버를 통해 물리적인 volume backend와 직접 상호작용 하는 컴포넌트입니다. cinder-scheduler가 볼륨을 생성할 스토리지 노드를 선택해 Message Broker를 통해 전달하면, cinder-volume 프로세스가 스토리지 노드에 볼륨을 생성하여 제공합니다.
 
-- cinder-backup
+#### cinder-backup
 
 cinder-backup 컴포넌트는 여러 유형의 볼륨을 볼륨 백업 저장소(volume backup repository)로 백업해 주는 기능을 제공하는 프로세스입니다. 
 
-- Message Broker ( Message Queue )
+#### Message Broker ( Message Queue )
 
 Message Broker는 Cinder 내부의 주요 프로세스 간 메세지를 전달하는 단일화된 창구역할을 하는 AMQP(Advanced Message Queing Protocol) 이며, 오픈스택에서는 주로 RabbitMQ 를 사용합니다. 가령, 사용자가 볼륨 생성 요청을 cinder-api로 보내면, cinder-api는 볼륨을 생성할 적당한 스토리지를 선택하기 위해 Message Broker를 통해 cinder-scheduler로 요청을 전달합니다. cinder-scheduler는 현재 스토리지 할당 현황을 참고하여 볼륨 생성 요청을 Message Broker를 통해 cinder-volume 프로세스로 전달하여 볼륨을 생성하도록 합니다. 만약, Message Broker가 존재하지 않는다면, cinder-api, cinder-scheduler, cinder-volume, cinder-backup 프로세스간 개별적으로 모두 연결해야 하기 때문에 연결 구조가 훨씬 복잡해 질 수 있지만, Message Broker를 통해 단일화 된 창구를 제공할 수 있습니다. 
 
@@ -420,12 +414,9 @@ Cinder 서비스는 볼륨에 대해 사본을 생성하거나(스냅샷), Volum
 ---
 
 Cinder(Rocky) documents - [https://docs.openstack.org/cinder/rocky/](https://docs.openstack.org/cinder/rocky/)
-
 Cinder V3 API References - [https://docs.openstack.org/api-ref/block-storage/v3/index.html](https://docs.openstack.org/api-ref/block-storage/v3/index.html)
 
 ## Network Service - Neutron
-
----
 
 Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장치를, 소프트웨어로 구현한 가상화 네트워크로 추상화하여(SDN, Software Defined Network), 사용자 요구에 맞게 구성된 가상 네트워크 인프라를 제공하는 서비스 컴포넌트입니다. 
 
