@@ -53,5 +53,9 @@ markdown_extensions:
       toc_depth: 3
     
 plugins:
-  - glightbox
-  
+  - glightbox:
+      effect: zoom
+      width: 100%
+      height: auto
+      auto_caption: true
+      caption_position: bottom
