@@ -1,4 +1,8 @@
 site_name: jade-kinx
+
+extra_css:
+  - css/extra.css
+
 theme:
   name: material
   language: kr
