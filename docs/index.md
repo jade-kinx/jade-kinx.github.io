@@ -101,7 +101,7 @@ Keystone은 SQLDB를 이용하여 구성되는 Assignments Backend를 통해 프
 
 Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭제 등의 관리 기능과, 사용자/그룹에게 역할을 부여하는 기능 등을 API 를 통해 제공합니다.  
 
-&nbsp;&nbsp;
+&nbsp;
 #### 정책(Policy) 관리
 
 각각의 오픈스택 서비스는 서비스 내 자원의 접근 권한에 대한 정책을 /etc/{service}/policy.json 파일을 통해 정의하고 있습니다. 
