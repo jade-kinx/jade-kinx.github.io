@@ -72,6 +72,9 @@ Keystone이 제공하는 주요 기능은 대략 다음과 같이 정리할 수 
   <figcaption>Keystone 구성</figcaption>
 </figure>
 
+/
+/
+
 #### 사용자/그룹 관리
 
 Keystone은 Identity Backend를 통해 사용자 및 그룹에 대한 정보를 관리하고 서비스를 제공합니다. 일반적으로 SQLDB를 통해 구성되며, LDAP을 이용하여 구성할 수도 있습니다. 
