@@ -117,7 +117,7 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
     "delete_image": "",
     "publicize_image": "role:admin",
 
-		...
+	...
 }
 ```
 
@@ -129,13 +129,13 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
 {
     "context_is_admin":  "role:admin",
     "default": "role:admin",
-		"manager_required": "role:manager",
+	"manager_required": "role:manager",
 
     "add_image": "",
     "delete_image": "",
     "publicize_image": "role:admin or manager_required",
 
-		...
+	...
 }
 ```
 
@@ -418,7 +418,7 @@ Cinder 서비스를 통해 생성된 볼륨(/dev/hda)은 위 그림과 같이 iS
 
 <figure markdown>
   ![다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)](img/Untitled%2012.png)
-  <figcaption>다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)</figcaption>
+  <figcaption>다양한 블록 스토리지 드라이버: (https://wiki.openstack.org/wiki/CinderSupportMatrix)</figcaption>
 </figure>
 
 
@@ -452,7 +452,7 @@ Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장�
 보다 개념적으로 이해하자면, 위 그림과 같이 물리적으로 분산된 네트워크 환경에서 동작하는 VM에게 논리적으로 구성된 오버레이 네트워크 환경을 제공하는 것이 주요 기능이라고 할 수 있습니다. 
 
 !!! note ""
-  💡 Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. ( 그래서, 데브스택의 Neutron 관련 서비스 이름이 Nova 관련 서비스(devstack@n-*)와 네이밍 충돌을 피하기 위해 devstack@q-* 인듯? )
+    💡 Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. ( 그래서, 데브스택의 Neutron 관련 서비스 이름이 Nova 관련 서비스(devstack@n-*)와 네이밍 충돌을 피하기 위해 devstack@q-* 인듯? )
 
 ### Neutron 서비스 구성
 
