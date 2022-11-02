@@ -420,7 +420,7 @@ Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장�
 보다 개념적으로 이해하자면, 위 그림과 같이 물리적으로 분산된 네트워크 환경에서 동작하는 VM에게 논리적으로 구성된 오버레이 네트워크 환경을 제공하는 것이 주요 기능이라고 할 수 있습니다. 
 
 ???+ note ""
-    Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. 그래서, 데브스택의 Nova 관련 서비스들은 devstack-q\* 입니다.
+    Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. 그래서, 데브스택의 Nova 관련 서비스들은 devstack-q\*(Quantum) 입니다.
 
 ### Neutron 서비스 구성
 
@@ -428,6 +428,15 @@ Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장�
   ![Neutron architecture](img/Untitled%2014.png)
   <figcaption>Neutron Architecture</figcaption>
 </figure>
+
+`neutron-server`
+
+:   Neutron 서비스의 API EndPoint 를 제공하고, 사용자의 API 요청을 처리하는 기능을 제공합니다. neutron-server는 message queue를 통해 L2 Agent, L3 Agent, DHCP Agent에게 필요한 자원의 할당을 요청할 수 있습니다.
+
+`neutron-l2-agent`
+
+:   L2-Switch(브릿지) 장치를 가상화하여 제공해 주는 Agent 입니다. ML2 플러그인을 이용하고, Linux Bridge, Open vSwitch 등의 메카니즘 드라이버를 이용하여 L2 Switch 가상화를 구현합니다. 
+
 
 #### neutron-server
 
