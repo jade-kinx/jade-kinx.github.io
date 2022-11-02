@@ -112,7 +112,7 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
     "delete_image": "",
     "publicize_image": "role:admin",
 
-	...
+	# ...
 }
 ```
 
@@ -130,13 +130,13 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
     "delete_image": "",
     "publicize_image": "role:admin or manager_required",
 
-	...
+	# ...
 }
 ```
 
 Keystone은 개별 서비스들의 정책 정보를 수집하여 Policy Backend 에 저장/관리하고, 각 API 요청이 있을 때 권한을 확인해 주는 기능을 제공합니다. policy.json 파일은 수정 즉시 서비스 재시작 없이도 정책에 반영되기 때문에 주의 깊게 다루어야 합니다.
 
-- 사용자, 그룹, 프로젝트, 도메인, 역할, 정책 관계
+##### 사용자, 그룹, 프로젝트, 도메인, 역할, 정책 관계
 
 <figure markdown>
   ![사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조](img/Untitled%204.png)
