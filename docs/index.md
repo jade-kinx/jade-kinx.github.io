@@ -72,9 +72,7 @@ Keystone이 제공하는 주요 기능은 대략 다음과 같이 정리할 수 
   <figcaption>Keystone 구성</figcaption>
 </figure>
 
-/
-/
-
+&nbsp;&nbsp;
 #### 사용자/그룹 관리
 
 Keystone은 Identity Backend를 통해 사용자 및 그룹에 대한 정보를 관리하고 서비스를 제공합니다. 일반적으로 SQLDB를 통해 구성되며, LDAP을 이용하여 구성할 수도 있습니다. 
@@ -86,8 +84,8 @@ Keystone은 Identity Backend를 통해 사용자 및 그룹에 대한 정보를 
     그룹은 사용자들의 집합을 의미하며, 관리자는 그룹 단위로 특정 역할을 부여하거나 프로젝트에 참여시킬 수 있습니다. 그룹은 사용자를 소유하는 관계가 아니고, 사용자는 여러 그룹에 포함될 수 있습니다.       
 
 사용자의 자격 증명 정보(id, password, api-key 등)는 Credentials Backend에 보관되며, 인증 서비스는 보관된 자격 증명 정보를 통해 사용자의 인증을 처리합니다. 
-<br/>
 
+&nbsp;&nbsp;
 #### 프로젝트, 도메인, 역할(Role) 관리
 
 Keystone은 SQLDB를 이용하여 구성되는 Assignments Backend를 통해 프로젝트, 도메인, 역할 및 역할 부여(Role Assignments)에 대한 정보를 관리하고 서비스를 제공합니다.
@@ -102,8 +100,8 @@ Keystone은 SQLDB를 이용하여 구성되는 Assignments Backend를 통해 프
     역할은 오픈스택 서비스의 동작들(set of operations)을 수행할 수 있는 권한들의 집합이며, 사용자/그룹에게 프로젝트/도메인에 대해 역할을 부여할 수 있습니다. 오픈스택 Rocky버전에서는 주어진 범위(scope: project, domain, system)에서 모든 권한을 가지는 관리자(admin) 역할과, 서비스 이용을 위한 이용자(member) 역할, read-only 권한만 가지는 reader 역할이 기본적으로 제공됩니다. 필요에 따라 특정 사용자 집단 또는 서비스에 대해 특정 권한을 행사할 수 있는 중간관리자(manager) 역할을 추가할 수도 있습니다. 역할에 따라 접근 권한을 제어하는 것을 RBAC(Role Based Access Control)이라고 하며, 역할에 부여된 권한은 각 서비스별 정책(Policy)에 의해 정의되고 제어됩니다.
 
 Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭제 등의 관리 기능과, 사용자/그룹에게 역할을 부여하는 기능 등을 API 를 통해 제공합니다.  
-<br/>
 
+&nbsp;&nbsp;
 #### 정책(Policy) 관리
 
 각각의 오픈스택 서비스는 서비스 내 자원의 접근 권한에 대한 정책을 /etc/{service}/policy.json 파일을 통해 정의하고 있습니다. 
@@ -141,6 +139,7 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
 
 Keystone은 개별 서비스들의 정책 정보를 수집하여 Policy Backend 에 저장/관리하고, 각 API 요청이 있을 때 권한을 확인해 주는 기능을 제공합니다. policy.json 파일은 수정 즉시 서비스 재시작 없이도 정책에 반영되기 때문에 주의 깊게 다루어야 합니다.
 
+&nbsp;&nbsp;
 ##### 사용자, 그룹, 프로젝트, 도메인, 역할, 정책 관계
 
 <figure markdown>
@@ -150,6 +149,7 @@ Keystone은 개별 서비스들의 정책 정보를 수집하여 Policy Backend 
 
 앞에서 살펴본 사용자, 그룹, 프로젝트, 도메인, 역할과 정책에 대한 관계는 위 그림과 같이 표현할 수 있습니다. 시스템에는 도메인 A가 존재하고, 도메인 A에는 User A 부터 User F까지 6명의 사용자와 프로젝트 A가 속해 있습니다. 프로젝트 A에는 User A와 User B가 Group A로서 Role A 역할을 부여 받아 참여하고 있고, User C도 Role A 역할을 부여 받아 참여하고 있습니다. User F는 Role B의 역할을 부여 받아 참여 하고 있습니다. Role A는 Policy A와 Policy B로 구성되어 있고, Role B는 Policy B와 Policy C로 구성되어 있습니다. 각각의 Policy는 Rule의 집합으로 정의됩니다.
 
+&nbsp;&nbsp;
 #### 서비스 목록(Catalog) 관리
 
 Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서비스의 EndPoint 목록을 제공하는 기능을 수행합니다. 오픈스택은 분산된 환경에서 서비스가 동작하기 때문에, 어떤 서비스가 등록되어 있으며, API EndPoint가 어디에 있는지 중앙 집중형으로 관리할 필요가 있습니다. 
@@ -195,6 +195,7 @@ Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서�
 
 추가적으로, 유일하게 등록된 모든 서비스의 API 목록을 가지고 있으므로, 각 API EndPoint에 대해 응답 여부를 확인하는 Health Check 기능을 수행하기도 합니다. 
 
+&nbsp;&nbsp;
 #### API 요청에 대한 인증/검증 제공
 
 API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을 서비스가 Keystone에 보내 검증하는 방식으로 진행됩니다. 아래는 API 요청에 대한 인증 과정을 개념적으로 단순화 하여 보여주는 그림입니다.
