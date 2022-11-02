@@ -11,6 +11,7 @@ theme:
     text: Roboto
 
   features:
+    - navigation.tabs
     - content.code.annotate
     - content.tooltips
     
