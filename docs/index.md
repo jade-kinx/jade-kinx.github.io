@@ -25,7 +25,10 @@
 
 각각의 프로젝트는 완전히 독립적으로 동작하지만, Identity 서비스(Keystone)을 통해 하나의 플랫폼으로 동작할 수 있습니다.
 
-![코어 서비스와 빅텐트](img/Untitled%202.png){ align=center }
+<figure markdown>
+    ![코어 서비스와 빅텐트](img/Untitled%202.png)
+    <figcaption>코어 서비스와 빅텐트</figcaption>
+</figure>
 
 코어 서비스와 빅텐트
 
