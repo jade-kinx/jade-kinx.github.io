@@ -586,8 +586,8 @@ Type 1 하이퍼바이저는 물리적 하드웨어를 직접 제어하기 때�
 | Virtuozzo 7.0.0 ↑ | OS Containers and Kernel-based Virtual Machines supported via libvirt virt_type=parallels. The supported formats include ploop and qcow2 images. |
 | PowerVM | Server virtualization with IBM PowerVM for AIX, IBM i, and Linux workloads on the Power Systems platform. |
 | zVM | Server virtualization on z Systems and IBM LinuxONE, it can run Linux, z/OS and more. |
-[https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html](https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html)
 
+[https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html](https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html)
 
 Nova 서비스는 하이퍼바이저를 통해 생성한 VM과 Cinder, Neutron, Glance 서비스 등에서 할당받은 자원을 연결하여 최종 사용자에게 사용 가능한 상태의 VM을 제공합니다.
 
