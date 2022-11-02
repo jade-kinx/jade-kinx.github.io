@@ -14,7 +14,7 @@ theme:
 #    - navigation.tabs
 #    - navigation.tabs.sticky
     - navigation.sections
-    - navigation.expand
+#    - navigation.expand
     - navigation.top
     - content.code.annotate
     - content.tooltips
@@ -76,4 +76,3 @@ plugins:
       auto_caption: true
       caption_position: bottom
   - search
-  
