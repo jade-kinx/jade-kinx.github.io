@@ -237,7 +237,7 @@ Glance 서비스는 다음과 같이 구성되어 있습니다.
 :   glance-api는 image service의 API EndPoint를 제공하며, 데이터베이스 계층을 추상화하여 접근하기 위해 glance-registry 를 이용해 데이터베이스에 접근합니다. 
     또한, 이미지 파일의 물리적 저장소로 로컬 디스크 뿐만 아니라, 네트워크 파일 시스템, 블록 스토리지, 오브젝트 스토리지 등 glance store driver가 지원하는 여러 형태의 storage backend를 사용할 수 있습니다.
 
-`glance-registry`
+#### glance-registry
 
 :   glance-registry는 데이터베이스에 대해 추상화된 접근 기능을 제공합니다. 
     그러나, use case 가 떨어지고, 버전의 유지 보수가 어려운 문제 때문에 openstack queens 버전부터 deprecated 되었고, stein 버전 부터 제거되어 glance-api 에서 직접 데이터베이스로 접근하도록 변경되었습니다.
