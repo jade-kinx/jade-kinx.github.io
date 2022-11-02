@@ -9,7 +9,7 @@ theme:
 
   font:
     text: Roboto
-    
+
   features:
     - content.code.annotate
     - content.tooltips
@@ -51,6 +51,9 @@ markdown_extensions:
   - pymdownx.keys
   - pymdownx.mark
   - pymdownx.tilde  
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.emoji:
