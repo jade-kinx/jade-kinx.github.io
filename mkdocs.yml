@@ -1,4 +1,11 @@
 site_name: jade-kinx
+markdown_extensions:
+  - attr_list
+  - admonition
+  - abbr
+  - toc:
+    toc_depth: 3
+    
 theme:
   name: material
   language: kr
