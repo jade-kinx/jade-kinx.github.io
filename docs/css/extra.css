@@ -3,3 +3,7 @@
   border-width: 0;
   border-left-width: 4px;
 }
+
+.md-grid {
+  max-width: 1440px;
+}

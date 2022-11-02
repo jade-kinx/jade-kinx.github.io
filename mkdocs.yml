@@ -75,3 +75,5 @@ plugins:
       height: auto
       auto_caption: true
       caption_position: bottom
+  - search
+  
