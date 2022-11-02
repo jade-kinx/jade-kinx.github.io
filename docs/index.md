@@ -120,15 +120,15 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
 
 `<target>: <rule>` 의 형식으로 되어 있으며, `target` 항목은 서비스에서 제공하는 API와 매핑되어 있습니다. 가령, `publicize_image`는 공용 이미지를 생성하거나 갱신할 수 있는 API와 매핑되어 있습니다 . 만약, 중간 관리자인 `manager` 라는 역할을 추가하고, `manager` 역할의 사용자에게 `publicize_image` API 권한을 주고 싶은 경우 아래와 같이 정책을 변경할 수 있습니다.
 
-```json
+```json hl_lines="4 8"
 {
     "context_is_admin":  "role:admin",
     "default": "role:admin",
-		*"manager_required": "role:manager",*
+		"manager_required": "role:manager",
 
     "add_image": "",
     "delete_image": "",
-    "publicize_image": "role:admin *or manager_required*",
+    "publicize_image": "role:admin or manager_required",
 
 		...
 }
