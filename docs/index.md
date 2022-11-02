@@ -97,7 +97,7 @@ Keystone은 SQLDB를 이용하여 구성되는 Assignments Backend를 통해 프
 !!! info "역할"
     역할은 오픈스택 서비스의 동작들(set of operations)을 수행할 수 있는 권한들의 집합이며, 사용자/그룹에게 프로젝트/도메인에 대해 역할을 부여할 수 있습니다. 오픈스택 Rocky버전에서는 주어진 범위(scope: project, domain, system)에서 모든 권한을 가지는 관리자(admin) 역할과, 서비스 이용을 위한 이용자(member) 역할, read-only 권한만 가지는 reader 역할이 기본적으로 제공됩니다. 필요에 따라 특정 사용자 집단 또는 서비스에 대해 특정 권한을 행사할 수 있는 중간관리자(manager) 역할을 추가할 수도 있습니다. 역할에 따라 접근 권한을 제어하는 것을 RBAC(Role Based Access Control)이라고 하며, 역할에 부여된 권한은 각 서비스별 정책(Policy)에 의해 정의되고 제어됩니다.
 
-Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭제 등의 관리 기능과, 사용자/그룹에게 역할을 부여하는 기능 등을 API 를 통해 제공합니다.
+Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭제 등의 관리 기능과, 사용자/그룹에게 역할을 부여하는 기능 등을 API 를 통해 제공합니다.    
 
 #### 정책(Policy) 관리
 
@@ -151,7 +151,7 @@ Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서�
 
 사용자는 여러 곳에 분산되어 있는 개별 서비스의 API EndPoint 위치를 알 수 없기 때문에, Keystone이 API EndPoint 목록을 사용자 권한에 맞게 정리해서 전달하여 사용자가 필요한 API EndPoint 에 요청을 보낼 수 있도록 해야합니다. 이러한 API EndPoint 목록은 인증 토큰 생성 또는 검증 요청에 대한 응답에 포함되어 전송되거나, 사용자가 `GET /v3/auth/catalog` API로 직접 요청할 수도 있습니다.
 
-```json linenums="1"
+```json linenums="1" title="GET /v3/auth/catalog Response Example"
 {
     "catalog": [
         {
@@ -187,8 +187,6 @@ Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서�
     }
 }
 ```
-
-GET /v3/auth/catalog 예
 
 추가적으로, 유일하게 등록된 모든 서비스의 API 목록을 가지고 있으므로, 각 API EndPoint에 대해 응답 여부를 확인하는 Health Check 기능을 수행하기도 합니다. 
 
