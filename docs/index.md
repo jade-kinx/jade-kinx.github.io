@@ -49,8 +49,7 @@
 
 ## Identity Service - Keystone
 Keystone은 사용자 및 오픈스택 서비스 접근에 대한 인증 관련 서비스를 제공하는 서비스 컴포넌트입니다.
-
-![[인증 기능 제공을 통해 서비스 통합]](img/keystone-1.png){.center}
+<br/><br/>
 
 <figure markdown>
   ![[인증 기능 제공을 통해 서비스 통합]](img/keystone-1.png)
