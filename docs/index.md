@@ -232,18 +232,15 @@ Glance 서비스는 다음과 같이 구성되어 있습니다.
 </figure>
 
 
-`glance-api`
-
+#### glance-api
 :   glance-api는 image service의 API EndPoint를 제공하며, 데이터베이스 계층을 추상화하여 접근하기 위해 glance-registry 를 이용해 데이터베이스에 접근합니다. 
     또한, 이미지 파일의 물리적 저장소로 로컬 디스크 뿐만 아니라, 네트워크 파일 시스템, 블록 스토리지, 오브젝트 스토리지 등 glance store driver가 지원하는 여러 형태의 storage backend를 사용할 수 있습니다.
 
 #### glance-registry
-
 :   glance-registry는 데이터베이스에 대해 추상화된 접근 기능을 제공합니다. 
     그러나, use case 가 떨어지고, 버전의 유지 보수가 어려운 문제 때문에 openstack queens 버전부터 deprecated 되었고, stein 버전 부터 제거되어 glance-api 에서 직접 데이터베이스로 접근하도록 변경되었습니다.
 
-`glance database`
-
+#### glance database
 :   이미지와 메타데이터 정의에 대한 정보 등을 저장하는 SQLDB 입니다. 
 
 <figure markdown>
@@ -357,27 +354,22 @@ Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제�
   <figcaption>Cinder Service Architecture</figcaption>
 </figure>
 
-`cinder-api`
-
+#### cinder-api
 :   cinder-api 컴포넌트는 사용자에게 API EndPoint를 제공하고, API 요청을 필요한 프로세스로 전달하는 역할을 수행하는 프로세스입니다. 
     가령, 볼륨 생성 요청을 받으면, 볼륨을 생성할 적절한 제공자 노드를 선택하기 위해 cinder-schduler 프로세스로 메세지를 보내고, cinder-scheduler는 적절한 스토리지 제공자 노드를 선택하여 cinder-volume 프로세스로 메세지를 보내 실제 볼륨을 생성할 수 있도록 합니다.
 
-`cinder-scheduler`
-
+#### cinder-scheduler
 :   cinder-scheduler 컴포넌트는 현재 스토리지 할당 현황, 메타데이터 등을 참고하여, 볼륨을 생성할 적절한 스토리지 노드를 결정하는 기능을 수행하는 프로세스입니다. 
     nova-scheduler와 비슷하게 스토리지에 대해 provisioning 할 노드를 선택하는 기능이라고 할 수 있습니다. 
 
-`cinder-volume`
-
+#### cinder-volume
 :   cinder-volume 컴포넌트는 다양한 스토리지 드라이버를 통해 물리적인 volume backend와 직접 상호작용 하는 컴포넌트입니다. 
     cinder-scheduler가 볼륨을 생성할 스토리지 노드를 선택해 Message Broker를 통해 전달하면, cinder-volume 프로세스가 스토리지 노드에 볼륨을 생성하여 제공합니다.
 
-`cinder-backup`
-
+#### cinder-backup
 :   cinder-backup 컴포넌트는 여러 유형의 볼륨을 볼륨 백업 저장소(volume backup repository)로 백업해 주는 기능을 제공하는 프로세스입니다. 
 
-`Message Broker`
-
+#### Message Broker
 :   Message Broker(Message Queue)는 Cinder 내부의 주요 프로세스 간 메세지를 전달하는 단일화된 창구역할을 하는 AMQP(Advanced Message Queing Protocol) 이며, 오픈스택에서는 주로 RabbitMQ 를 사용합니다. 
     가령, 사용자가 볼륨 생성 요청을 cinder-api로 보내면, cinder-api는 볼륨을 생성할 적당한 스토리지를 선택하기 위해 Message Broker를 통해 cinder-scheduler로 요청을 전달합니다. cinder-scheduler는 현재 스토리지 할당 현황을 참고하여 볼륨 생성 요청을 Message Broker를 통해 cinder-volume 프로세스로 전달하여 볼륨을 생성하도록 합니다. 
     만약, Message Broker가 존재하지 않는다면, cinder-api, cinder-scheduler, cinder-volume, cinder-backup 프로세스간 개별적으로 모두 연결해야 하기 때문에 연결 구조가 훨씬 복잡해 질 수 있지만, Message Broker를 통해 단일화 된 창구를 제공할 수 있습니다. 
@@ -436,21 +428,17 @@ Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장�
   <figcaption>Neutron Architecture</figcaption>
 </figure>
 
-`neutron-server`
-
+#### neutron-server
 :   Neutron 서비스의 API EndPoint 를 제공하고, 사용자의 API 요청을 처리하는 기능을 제공합니다. neutron-server는 message queue를 통해 L2 Agent, L3 Agent, DHCP Agent에게 필요한 자원의 할당을 요청할 수 있습니다.
 
-`neutron-l2-agent`
-
+#### neutron-l2-agent
 :   L2-Switch(브릿지) 장치를 가상화하여 제공해 주는 Agent 입니다. ML2 플러그인을 이용하고, Linux Bridge, Open vSwitch 등의 메카니즘 드라이버를 이용하여 L2 Switch 가상화를 구현합니다. 
 
 
-`neutron-l3-agent`
-
+#### neutron-l3-agent
 :   L3-Router 장치를 가상화하여 제공해 주는 Agent 입니다. 마찬가지로 Linux Bridge, Open vSwitch 등의 메카니즘 드라이버를 이용하여 L3 Router 가상화를 구현합니다.
 
-`neutron-dhcp-agent`
-
+#### neutron-dhcp-agent
 :   DHCP 서버를 제공하는 Agent 입니다.
 
 ### Neutron 서비스 주요 기능
@@ -553,20 +541,16 @@ Nova 서비스는 하이퍼바이저를 통해 CPU, RAM 등의 컴퓨팅 자원�
 Nova 서비스는 그림과 같이 nova-api, nova-scheduler, nova-conductor, nova-compute 를 주요 구성 요소로 동작하며, 대개 컨트롤러 노드와 다수의 컴퓨트 노드로 구성됩니다. 각 구성 요소의 주요 기능은 아래와 같습니다. 
 
 #### nova-api
-
-nova-api 모듈은 사용자에게 API EndPoint를 제공하며, API 요청에 대해 적절한 프로세스로 요청을 전달하는 등 API 요청에 대한 처리를 관장(Orchestration)합니다. 가령, 사용자가 VM 생성 요청을 보내면, nova-api가 이 요청을 수신하여 VM을 생성할 적절한 컴퓨트 노드를 결정하기 위해 nova-scheduler로 요청을 전달하고, 최종적으로 nova-compute로 요청이 전달되어 해당 컴퓨트 노드에 VM이 생성됩니다. nova-api 모듈은 컨트롤러 노드에 존재합니다.
+:   nova-api 모듈은 사용자에게 API EndPoint를 제공하며, API 요청에 대해 적절한 프로세스로 요청을 전달하는 등 API 요청에 대한 처리를 관장(Orchestration)합니다. 가령, 사용자가 VM 생성 요청을 보내면, nova-api가 이 요청을 수신하여 VM을 생성할 적절한 컴퓨트 노드를 결정하기 위해 nova-scheduler로 요청을 전달하고, 최종적으로 nova-compute로 요청이 전달되어 해당 컴퓨트 노드에 VM이 생성됩니다. nova-api 모듈은 컨트롤러 노드에 존재합니다.
 
 #### nova-compute
-
-nova-compute 모듈은 각 컴퓨트 노드 상에 존재하며, 하이퍼바이저와 직접 상호작용하며 VM의 수명 주기 등을 관리하는 기능을 제공합니다. 가령, 하이퍼바이저로 KVM을 사용하는 컴퓨트 노드의 nova-compute 모듈이 VM 생성 요청을 수신하면 KVM API인 libvirt-api 를 호출하여 VM을 생성합니다. 마찬가지로, VM의 삭제, 재부팅, 일시정지, 크기(Flavor) 변경 등의 작업도 하이퍼바이저 API 호출을 통해 관리할 수 있습니다. 
+:   nova-compute 모듈은 각 컴퓨트 노드 상에 존재하며, 하이퍼바이저와 직접 상호작용하며 VM의 수명 주기 등을 관리하는 기능을 제공합니다. 가령, 하이퍼바이저로 KVM을 사용하는 컴퓨트 노드의 nova-compute 모듈이 VM 생성 요청을 수신하면 KVM API인 libvirt-api 를 호출하여 VM을 생성합니다. 마찬가지로, VM의 삭제, 재부팅, 일시정지, 크기(Flavor) 변경 등의 작업도 하이퍼바이저 API 호출을 통해 관리할 수 있습니다. 
 
 #### nova-scheduler
-
-nova-scheduler 모듈은 2대 이상의 컴퓨트 노드가 존재할 때, CPU/RAM/Disk/메타데이터 등의 리소스 필터를 참고하여 VM을 생성할 적절한 컴퓨트 노드를 결정하는 기능을 제공합니다. nova-api 로부터 VM 생성 요청을 수신하면, 자원 할당 현황, 가용존, 메타데이터 정보를 참고하여 VM을 할당할 가장 적당한 컴퓨트 노드를 결정하고, 메세지 큐를 통해 해당 컴퓨트 노드의 nova-compute 모듈로 VM 생성 요청을 보내 VM을 생성하도록 합니다. nova-scheduler 모듈은 컨트롤러 노드에 존재합니다.
+:   nova-scheduler 모듈은 2대 이상의 컴퓨트 노드가 존재할 때, CPU/RAM/Disk/메타데이터 등의 리소스 필터를 참고하여 VM을 생성할 적절한 컴퓨트 노드를 결정하는 기능을 제공합니다. nova-api 로부터 VM 생성 요청을 수신하면, 자원 할당 현황, 가용존, 메타데이터 정보를 참고하여 VM을 할당할 가장 적당한 컴퓨트 노드를 결정하고, 메세지 큐를 통해 해당 컴퓨트 노드의 nova-compute 모듈로 VM 생성 요청을 보내 VM을 생성하도록 합니다. nova-scheduler 모듈은 컨트롤러 노드에 존재합니다.
 
 #### nova-conductor
-
-nova-conductor 모듈은 nova-compute 모듈이 데이터베이스에 접근할 수 있도록 proxy 기능을 제공합니다. 컴퓨트 노드가 외부 공격에 의해 해킹되더라도 전체 데이터베이스를 보호할 수 있도록 nova-compute 모듈은 데이터베이스에 직접 접근할 수 없도록 설계되었습니다. nova-compute는 nova-conductor가 제공하는 API를 통해서만 데이터베이스에 접근할 수 있으며, 같은 이유로 nova-conductor 모듈은 컴퓨트 노드에 설치되어서는 안되고, 컨트롤러 노드에 존재해야 합니다.
+:   nova-conductor 모듈은 nova-compute 모듈이 데이터베이스에 접근할 수 있도록 proxy 기능을 제공합니다. 컴퓨트 노드가 외부 공격에 의해 해킹되더라도 전체 데이터베이스를 보호할 수 있도록 nova-compute 모듈은 데이터베이스에 직접 접근할 수 없도록 설계되었습니다. nova-compute는 nova-conductor가 제공하는 API를 통해서만 데이터베이스에 접근할 수 있으며, 같은 이유로 nova-conductor 모듈은 컴퓨트 노드에 설치되어서는 안되고, 컨트롤러 노드에 존재해야 합니다.
 
 ### Nova 서비스 주요 기능
 
