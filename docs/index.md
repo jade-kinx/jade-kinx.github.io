@@ -214,8 +214,6 @@ API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을
 오픈스택의 각 서비스는 독립적이지만, 서비스간 유기적으로 동작해야 하는 부분들이 있습니다. 가령, 사용자가 Compute 서비스에 VM 생성을 요청하게 되면, VM 생성을 위해 Image Service로 부터 OS 이미지를 제공받아야 하고, Storage 서비스로부터 볼륨, Network 서비스로부터 IP 주소 및 네트워크 정보 등을 제공 받아야 합니다. 이때, Compute 서비스가 Image, Storage, Network 서비스로 직접 API 요청을 하게 되는데, 이 요청에서는  Compute 서비스가 사용자 역할이 되어 위의 (1)-(5)의 과정을 비슷하게 거친다고 할 수 있습니다. 서비스도 사용자로 등록되어야 하는 이유라고 할 수 있습니다.
 
 ### 참고 자료
----
-
 Keystone(Rocky) documents - [https://docs.openstack.org/keystone/rocky/index.html](https://docs.openstack.org/keystone/rocky/index.html)
 Keystone API - [https://docs.openstack.org/api-ref/identity/](https://docs.openstack.org/api-ref/identity/)
 Mapping of policy target to API - [https://docs.openstack.org/keystone/rocky/getting-started/policy_mapping.html](https://docs.openstack.org/keystone/rocky/getting-started/policy_mapping.html)
@@ -330,9 +328,6 @@ glance stores 에 저장된 이미지 파일을 컴퓨트 노드로 다운로드
 결론적으로, Glance 서비스는 Nova 서비스에 OS 이미지를 제공하는 것이 핵심 기능이고, 그 이미지들을 관리하는 기능을 포함하고 있는 서비스 컴포넌트라고 할 수 있습니다.
 
 ### 참고 자료
-
----
-
 Glance(Rocky) documents - [https://docs.openstack.org/glance/rocky/](https://docs.openstack.org/glance/rocky/)
 Image v2 API - [https://docs.openstack.org/api-ref/image/v2/index.html](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=)
 Image Metadata v2 API - [https://docs.openstack.org/api-ref/image/v2/metadefs-index.html](https://docs.openstack.org/api-ref/image/v2/metadefs-index.html)
@@ -410,9 +405,6 @@ cinder-api 가 제공하는 API EndPoint를 통해, 볼륨에 대해 CRUD(Create
 Cinder 서비스는 볼륨에 대해 사본을 생성하거나(스냅샷), Volume Backup Repository의 여러 장치로 백업할 수 있습니다. 
 
 ### 참고 자료
-
----
-
 Cinder(Rocky) documents - [https://docs.openstack.org/cinder/rocky/](https://docs.openstack.org/cinder/rocky/)
 Cinder V3 API References - [https://docs.openstack.org/api-ref/block-storage/v3/index.html](https://docs.openstack.org/api-ref/block-storage/v3/index.html)
 
@@ -436,7 +428,6 @@ Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장�
   ![Neutron architecture](img/Untitled%2014.png)
   <figcaption>Neutron Architecture</figcaption>
 </figure>
-
 
 #### neutron-server
 
@@ -470,7 +461,6 @@ ML2 플러그인은 사용자의 가상 L2 네트워크를 구현할 수 있도�
   ![ML2 Plugin Drivers](img/Untitled%2015.png)
   <figcaption>ML2 Plugin Drivers</figcaption>
 </figure>
-
 
 Type Driver는 L2 스위치 장비가 지원할 L2 네트워크 유형을 정의하며, Mechanism Driver는 실제로 L2 스위치 장비를 가상화하여 제공할 소프트웨어 드라이버를 의미합니다. 
 
@@ -539,14 +529,9 @@ Neutron 서비스를 이용한 사용자 네트워크 구성은 클라우드 서
 결론적으로, Neutron 서비스는 가상의 네트워크 장비를 통해, 분산 환경에서 사용자 네트워크 환경을 VM에게 제공하는 역할을 한다고 할 수 있습니다.
 
 ### 참고 자료
-
----
-
 Neutron(Rocky) documents - [https://docs.openstack.org/neutron/rocky/](https://docs.openstack.org/neutron/rocky/)
 
 ## Compute Service - Nova
-
----
 
 Nova 서비스는 하이퍼바이저를 통해 CPU, RAM 등의 컴퓨팅 자원을 할당하여 VM 인스턴스를 제공하고, VM을 관리할 수 있는 기능을 제공하는 서비스 컴포넌트입니다. Nova 서비스는 Glance 서비스로부터 OS 이미지, Cinder 서비스로 부터 볼륨, Neutron 서비스로 부터 네트워크를 제공 받아 최종적으로 사용자가 사용할 수 있는 VM 인스턴스를 생성하여 제공합니다. 클라우드 서비스를 위한 최소한의 필요 기능이며, 나머지 코어 서비스는 Nova 서비스를 위한 리소스 제공 서비스라고 할 수 있습니다.
 
@@ -672,7 +657,4 @@ Nova Service API - [https://docs.openstack.org/api-ref/compute](https://docs.ope
 앞서 살펴본 코어 서비스들은 결국 클라우드 서비스를 위한 최소한의 필요 조건인 VM 인스턴스를 생성하기 위한 과정이라고 할 수 있습니다. 이후에, 다른 프로젝트를 추가해서 클라우드 서비스를 확장할 수 있습니다. 가령, 생성된 VM 인스턴스에 Database를 올려서 DBaaS를 서비스 하는 Trove 프로젝트를 추가하여 확장하거나, VM 인스턴스를 활용하는 자체 서비스를 개발하여 클라우드 서비스를 확장할 수도 있습니다.
 
 ### 참고 자료
-
----
-
 Nova(Rocky) documents - [https://docs.openstack.org/nova/rocky/](https://docs.openstack.org/nova/rocky/)
