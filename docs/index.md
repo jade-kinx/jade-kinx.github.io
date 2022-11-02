@@ -103,7 +103,7 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
 
 각각의 오픈스택 서비스는 서비스 내 자원의 접근 권한에 대한 정책을 /etc/{service}/policy.json 파일을 통해 정의하고 있습니다. 
 
-```json
+```json title="/etc/glance/policy.json"
 {
     "context_is_admin":  "role:admin",
     "default": "role:admin",
