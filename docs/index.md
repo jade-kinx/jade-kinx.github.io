@@ -49,7 +49,6 @@
 
 ## Identity Service - Keystone
 Keystone은 사용자 및 오픈스택 서비스 접근에 대한 인증 관련 서비스를 제공하는 서비스 컴포넌트입니다.
-<br/><br/>
 
 <figure markdown>
   ![[인증 기능 제공을 통해 서비스 통합]](img/keystone-1.png)
@@ -84,6 +83,7 @@ Keystone은 Identity Backend를 통해 사용자 및 그룹에 대한 정보를 
     그룹은 사용자들의 집합을 의미하며, 관리자는 그룹 단위로 특정 역할을 부여하거나 프로젝트에 참여시킬 수 있습니다. 그룹은 사용자를 소유하는 관계가 아니고, 사용자는 여러 그룹에 포함될 수 있습니다.       
 
 사용자의 자격 증명 정보(id, password, api-key 등)는 Credentials Backend에 보관되며, 인증 서비스는 보관된 자격 증명 정보를 통해 사용자의 인증을 처리합니다. 
+<br/>
 
 #### 프로젝트, 도메인, 역할(Role) 관리
 
@@ -99,7 +99,7 @@ Keystone은 SQLDB를 이용하여 구성되는 Assignments Backend를 통해 프
     역할은 오픈스택 서비스의 동작들(set of operations)을 수행할 수 있는 권한들의 집합이며, 사용자/그룹에게 프로젝트/도메인에 대해 역할을 부여할 수 있습니다. 오픈스택 Rocky버전에서는 주어진 범위(scope: project, domain, system)에서 모든 권한을 가지는 관리자(admin) 역할과, 서비스 이용을 위한 이용자(member) 역할, read-only 권한만 가지는 reader 역할이 기본적으로 제공됩니다. 필요에 따라 특정 사용자 집단 또는 서비스에 대해 특정 권한을 행사할 수 있는 중간관리자(manager) 역할을 추가할 수도 있습니다. 역할에 따라 접근 권한을 제어하는 것을 RBAC(Role Based Access Control)이라고 하며, 역할에 부여된 권한은 각 서비스별 정책(Policy)에 의해 정의되고 제어됩니다.
 
 Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭제 등의 관리 기능과, 사용자/그룹에게 역할을 부여하는 기능 등을 API 를 통해 제공합니다.  
-  
+<br/>
 
 #### 정책(Policy) 관리
 
