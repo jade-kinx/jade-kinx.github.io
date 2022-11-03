@@ -9,7 +9,7 @@
 오픈스택은 컴퓨팅/네트워킹/스토리지 등의 자원을 가상화하여, 이를 API를 통해 End-User에게 On-Demand로 제공하는 오픈 소스 클라우드 운영체제입니다. 
 
 <figure markdown>
-  ![오픈스택 = 클라우드 운영체제](img/Untitled.png)
+  ![오픈스택 = 클라우드 운영체제](/img/openstack-is-cloudos.png)
   <figcaption>오픈스택 = 클라우드 운영체제</figcaption>
 </figure>
 
@@ -17,7 +17,7 @@
     
 
 <figure markdown>
-  ![오픈스택 프로젝트들](img/Untitled%201.png)
+  ![오픈스택 프로젝트들](/img/openstack-landscape.png)
   <figcaption>오픈스택 프로젝트들</figcaption>
 </figure>
 
@@ -29,7 +29,7 @@
     
 
 <figure markdown>
-  ![코어 서비스와 빅텐트](img/Untitled%202.png)
+  ![코어 서비스와 빅텐트](/img/openstack-core-services.png)
   <figcaption>코어 서비스와 빅텐트</figcaption>
 </figure>
 
@@ -47,11 +47,11 @@
 
 이 문서에서는 코어 서비스에 대해 간략한 개요를 소개합니다.
 
-## Identity Service - Keystone
+## KEYSTONE - Identity Service
 Keystone은 사용자 및 오픈스택 서비스 접근에 대한 인증 관련 서비스를 제공하는 서비스 컴포넌트입니다.
 
 <figure markdown>
-  ![[인증 기능 제공을 통해 서비스 통합]](img/keystone-1.png)
+  ![[인증 기능 제공을 통해 서비스 통합]](/img/keystone-provides-auth.png)
   <figcaption>인증 기능 제공을 통한 서비스 통합</figcaption>
 </figure>
 
@@ -68,7 +68,7 @@ Keystone이 제공하는 주요 기능은 대략 다음과 같이 정리할 수 
 - API 요청에 대한 인증/검증 제공
 
 <figure markdown>
-  ![Keystone 구성](img/Untitled%203.png)
+  ![Keystone 구성](/img/keystone-architecture.png)
   <figcaption>Keystone 구성</figcaption>
 </figure>
 
@@ -76,10 +76,10 @@ Keystone이 제공하는 주요 기능은 대략 다음과 같이 정리할 수 
 
 Keystone은 Identity Backend를 통해 사용자 및 그룹에 대한 정보를 관리하고 서비스를 제공합니다. 일반적으로 SQLDB를 통해 구성되며, LDAP을 이용하여 구성할 수도 있습니다. 
 
-!!! info "사용자"
+!!! abstract "사용자"
     사용자는 오픈스택 API 요청을 수행하는 주체를 대표하는 개념입니다. 일반적으로 우리가 사용하는 사용자 계정이라고 불리는 최종 사용자 개념을 포함해서 Nova, Neutron 등과 같은 오픈 스택 서비스도 API 요청을 수행하는 주체이기 때문에 사용자에 포함됩니다. 
 
-!!! info "그룹"
+!!! abstract "그룹"
     그룹은 사용자들의 집합을 의미하며, 관리자는 그룹 단위로 특정 역할을 부여하거나 프로젝트에 참여시킬 수 있습니다. 그룹은 사용자를 소유하는 관계가 아니고, 사용자는 여러 그룹에 포함될 수 있습니다.       
 
 사용자의 자격 증명 정보(id, password, api-key 등)는 Credentials Backend에 보관되며, 인증 서비스는 보관된 자격 증명 정보를 통해 사용자의 인증을 처리합니다. 
@@ -88,13 +88,13 @@ Keystone은 Identity Backend를 통해 사용자 및 그룹에 대한 정보를 
 
 Keystone은 SQLDB를 이용하여 구성되는 Assignments Backend를 통해 프로젝트, 도메인, 역할 및 역할 부여(Role Assignments)에 대한 정보를 관리하고 서비스를 제공합니다.
 
-!!! info "프로젝트"
+!!! abstract "프로젝트"
     프로젝트는 클라우드 자원이 할당되어 있는 작업 공간 영역입니다. 사용자는 관리자로부터 프로젝트에 대해 권한을 부여 받아 프로젝트에 참여하고, 프로젝트에 할당된 클라우드 자원을 이용할 수 있습니다. 프로젝트는 다른 프로젝트와 자원을 공유할 수 없도록 격리되어 있습니다. 프로젝트는 사용자를 소유하는 관계가 아니기 때문에, 사용자는 여러 프로젝트에 권한을 부여 받아 참여 할 수 있습니다. 
 
-!!! info "도메인"
+!!! abstract "도메인"
     도메인은 사용자, 프로젝트 등을 격리하여 사용자 조직을 구분하기 위한 최상위 개념입니다. 도메인은 사용자, 프로젝트, 클라우드 자원 등을 모두 소유하고 있으며, 다른 도메인과 완전히 격리됩니다. 가령, 사용자 ID는 도메인내에서 고유해야 하지만, 도메인 간에는 중복될 수 있습니다(동명이인).
 
-!!! info "역할"
+!!! abstract "역할"
     역할은 오픈스택 서비스의 동작들(set of operations)을 수행할 수 있는 권한들의 집합이며, 사용자/그룹에게 프로젝트/도메인에 대해 역할을 부여할 수 있습니다. 오픈스택 Rocky버전에서는 주어진 범위(scope: project, domain, system)에서 모든 권한을 가지는 관리자(admin) 역할과, 서비스 이용을 위한 이용자(member) 역할, read-only 권한만 가지는 reader 역할이 기본적으로 제공됩니다. 필요에 따라 특정 사용자 집단 또는 서비스에 대해 특정 권한을 행사할 수 있는 중간관리자(manager) 역할을 추가할 수도 있습니다. 역할에 따라 접근 권한을 제어하는 것을 RBAC(Role Based Access Control)이라고 하며, 역할에 부여된 권한은 각 서비스별 정책(Policy)에 의해 정의되고 제어됩니다.
 
 Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭제 등의 관리 기능과, 사용자/그룹에게 역할을 부여하는 기능 등을 API 를 통해 제공합니다.  
@@ -103,43 +103,46 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
 
 각각의 오픈스택 서비스는 서비스 내 자원의 접근 권한에 대한 정책을 /etc/{service}/policy.json 파일을 통해 정의하고 있습니다. 
 
-```json title="/etc/glance/policy.json"
-{
-    "context_is_admin":  "role:admin",
-    "default": "role:admin",
 
-    "add_image": "",
-    "delete_image": "",
-    "publicize_image": "role:admin",
+=== "디폴트"
 
-	# ...
-}
-```
+    ``` json title="/etc/glance/policy.json"
+    {
+        "context_is_admin":  "role:admin",
+        "default": "role:admin",
 
-위의 policy.json 은 이미지 서비스의 디폴트 정책 파일의 일부입니다. 
+        "add_image": "",
+        "delete_image": "",
+        "publicize_image": "role:admin",
 
-`<target>: <rule>` 의 형식으로 되어 있으며, `target` 항목은 서비스에서 제공하는 API와 매핑되어 있습니다. 가령, `publicize_image`는 공용 이미지를 생성하거나 갱신할 수 있는 API와 매핑되어 있습니다 . 만약, 중간 관리자인 `manager` 라는 역할을 추가하고, `manager` 역할의 사용자에게 `publicize_image` API 권한을 주고 싶은 경우 아래와 같이 정책을 변경할 수 있습니다.
+      # ...
+    }
+    ```
 
-```json title="/etc/glance/policy.json" hl_lines="4 8"
-{
-    "context_is_admin":  "role:admin",
-    "default": "role:admin",
-	"manager_required": "role:manager",
+=== "역할 추가"
 
-    "add_image": "",
-    "delete_image": "",
-    "publicize_image": "role:admin or manager_required",
+    ``` json title="/etc/glance/policy.json" hl_lines="4 8"
+    {
+        "context_is_admin":  "role:admin",
+        "default": "role:admin",
+        "manager_required": "role:manager",
 
-	# ...
-}
-```
+        "add_image": "",
+        "delete_image": "",
+        "publicize_image": "role:admin or manager_required",
+
+      # ...
+    }
+    ```
+
+위의 policy.json 은 Glance 서비스의 디폴트 정책 파일의 일부입니다.
+
+`<target>: <rule>` 의 형식으로 되어 있으며, `target` 항목은 서비스에서 제공하는 API와 매핑되어 있습니다. 가령, `publicize_image`는 공용 이미지를 생성하거나 갱신할 수 있는 API와 매핑되어 있습니다 . 만약, 중간 관리자인 `manager` 라는 역할을 추가하고, `manager` 역할의 사용자에게 `publicize_image` API 권한을 주고 싶은 경우 `역할 추가` 부분과 같이 정책을 변경할 수 있습니다.
 
 Keystone은 개별 서비스들의 정책 정보를 수집하여 Policy Backend 에 저장/관리하고, 각 API 요청이 있을 때 권한을 확인해 주는 기능을 제공합니다. policy.json 파일은 수정 즉시 서비스 재시작 없이도 정책에 반영되기 때문에 주의 깊게 다루어야 합니다.
 
-##### 사용자, 그룹, 프로젝트, 도메인, 역할, 정책 관계
-
 <figure markdown>
-  ![사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조](img/Untitled%204.png)
+  ![사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조](/img/keystone-relations.png)
   <figcaption>사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조</figcaption>
 </figure>
 
@@ -151,42 +154,44 @@ Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서�
 
 사용자는 여러 곳에 분산되어 있는 개별 서비스의 API EndPoint 위치를 알 수 없기 때문에, Keystone이 API EndPoint 목록을 사용자 권한에 맞게 정리해서 전달하여 사용자가 필요한 API EndPoint 에 요청을 보낼 수 있도록 해야합니다. 이러한 API EndPoint 목록은 인증 토큰 생성 또는 검증 요청에 대한 응답에 포함되어 전송되거나, 사용자가 `GET /v3/auth/catalog` API로 직접 요청할 수도 있습니다.
 
-```json linenums="1" title="GET /v3/auth/catalog Response Example"
-{
-    "catalog": [
-        {
-            "endpoints": [
-                {
-                    "id": "39dc322ce86c4111b4f06c2eeae0841b",
-                    "interface": "public",
-                    "region": "RegionOne",
-                    "url": "http://localhost:5000"
-                },
-                {
-                    "id": "ec642f27474842e78bf059f6c48f4e99",
-                    "interface": "internal",
-                    "region": "RegionOne",
-                    "url": "http://localhost:5000"
-                },
-                {
-                    "id": "c609fc430175452290b62a4242e8a7e8",
-                    "interface": "admin",
-                    "region": "RegionOne",
-                    "url": "http://localhost:5000"
-                }
-            ],
-            "id": "4363ae44bdf34a3981fde3b823cb9aa2",
-            "type": "identity",
-            "name": "keystone"
+???- example "Response Example"
+
+    ```json title="GET /v3/auth/catalog"
+    {
+        "catalog": [
+            {
+                "endpoints": [
+                    {
+                        "id": "39dc322ce86c4111b4f06c2eeae0841b",
+                        "interface": "public",
+                        "region": "RegionOne",
+                        "url": "http://localhost:5000"
+                    },
+                    {
+                        "id": "ec642f27474842e78bf059f6c48f4e99",
+                        "interface": "internal",
+                        "region": "RegionOne",
+                        "url": "http://localhost:5000"
+                    },
+                    {
+                        "id": "c609fc430175452290b62a4242e8a7e8",
+                        "interface": "admin",
+                        "region": "RegionOne",
+                        "url": "http://localhost:5000"
+                    }
+                ],
+                "id": "4363ae44bdf34a3981fde3b823cb9aa2",
+                "type": "identity",
+                "name": "keystone"
+            }
+        ],
+        "links": {
+            "self": "https://example.com/identity/v3/catalog",
+            "previous": null,
+            "next": null
         }
-    ],
-    "links": {
-        "self": "https://example.com/identity/v3/catalog",
-        "previous": null,
-        "next": null
     }
-}
-```
+    ```
 
 추가적으로, 유일하게 등록된 모든 서비스의 API 목록을 가지고 있으므로, 각 API EndPoint에 대해 응답 여부를 확인하는 Health Check 기능을 수행하기도 합니다. 
 
@@ -195,30 +200,27 @@ Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서�
 API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을 서비스가 Keystone에 보내 검증하는 방식으로 진행됩니다. 아래는 API 요청에 대한 인증 과정을 개념적으로 단순화 하여 보여주는 그림입니다.
 
 <figure markdown>
-  ![기본적인 API 인증/검증 과정](img/keystone-2.png)
+  ![기본적인 API 인증/검증 과정](/img/keystone-flows.png)
   <figcaption>기본적인 API 인증/검증 과정</figcaption>
 </figure>
 
-1) 사용자가 Keystone으로 자격 증명(id, passwd)과 함께 인증 토큰 생성 요청을 보내면 Keystone이 Credentials Backend 에 저장된 자격 증명과 비교하여 확인합니다.
-
-2) 자격 증명 확인이 성공적으로 수행된 경우, 인증 토큰을 생성하여 Token Backend에 저장하고, 사용자에게 인증 토큰을 전송합니다.
-
-3) 사용자는 원하는 서비스의 API EndPoint에 인증 토큰과 함께 원하는 요청을 전달합니다.
-
-4-1) API 요청을 받은 서비스는 사용자로부터 받은 인증 토큰을 Keystone으로 보내 검증을 요청합니다.
-
-4-2) Keystone은 서비스로 부터 받은 인증 토큰을 Token Backend에 저장된 인증 토큰과 비교/검증 후에 성공 여부를 응답합니다.
-
-5) Keystone으로 부터 성공 응답을 받은 서비스는 해당 요청을 수행하고, 결과를 사용자에게 전송합니다.
+1. 사용자가 Keystone으로 자격 증명(id, passwd)과 함께 인증 토큰 생성 요청을 보내면 Keystone이 Credentials Backend 에 저장된 자격 증명과 비교하여 확인합니다.
+2. 자격 증명 확인이 성공적으로 수행된 경우, 인증 토큰을 생성하여 Token Backend에 저장하고, 사용자에게 인증 토큰을 전송합니다.
+3. 사용자는 원하는 서비스의 API EndPoint에 인증 토큰과 함께 원하는 요청을 전달합니다.
+4. 
+    1. API 요청을 받은 서비스는 사용자로부터 받은 인증 토큰을 Keystone으로 보내 검증을 요청합니다.
+    2. Keystone은 서비스로 부터 받은 인증 토큰을 Token Backend에 저장된 인증 토큰과 비교/검증 후에 성공 여부를 응답합니다.
+5. Keystone으로 부터 성공 응답을 받은 서비스는 해당 요청을 수행하고, 결과를 사용자에게 전송합니다.
 
 오픈스택의 각 서비스는 독립적이지만, 서비스간 유기적으로 동작해야 하는 부분들이 있습니다. 가령, 사용자가 Compute 서비스에 VM 생성을 요청하게 되면, VM 생성을 위해 Image Service로 부터 OS 이미지를 제공받아야 하고, Storage 서비스로부터 볼륨, Network 서비스로부터 IP 주소 및 네트워크 정보 등을 제공 받아야 합니다. 이때, Compute 서비스가 Image, Storage, Network 서비스로 직접 API 요청을 하게 되는데, 이 요청에서는  Compute 서비스가 사용자 역할이 되어 위의 (1)-(5)의 과정을 비슷하게 거친다고 할 수 있습니다. 서비스도 사용자로 등록되어야 하는 이유라고 할 수 있습니다.
 
 ### 참고 자료
-Keystone(Rocky) documents - [https://docs.openstack.org/keystone/rocky/index.html](https://docs.openstack.org/keystone/rocky/index.html)
-Keystone API - [https://docs.openstack.org/api-ref/identity/](https://docs.openstack.org/api-ref/identity/)
+Keystone(Rocky) documents - [https://docs.openstack.org/keystone/rocky/index.html](https://docs.openstack.org/keystone/rocky/index.html)  
+Keystone API - [https://docs.openstack.org/api-ref/identity/](https://docs.openstack.org/api-ref/identity/)  
 Mapping of policy target to API - [https://docs.openstack.org/keystone/rocky/getting-started/policy_mapping.html](https://docs.openstack.org/keystone/rocky/getting-started/policy_mapping.html)
 
-## Image Service - Glance
+
+## GLANCE - Image Service
 
 Glance는 오픈스택의 다른 서비스(주로 가상 머신)에서 사용할 VM 이미지를 관리하고 제공하는 서비스 컴포넌트입니다. 이미지는 우리가 흔히 VirtualBox나 VMWare 등을 통해 OS를 설치할 때 사용하는 설치 이미지라기보다는 가상 머신에 탑재되어 부팅과 함께 바로 작동 가능한 OS가 이미 설치되어 있는 디스크 이미지를 의미합니다. 
 
@@ -227,7 +229,7 @@ Glance는 오픈스택의 다른 서비스(주로 가상 머신)에서 사용할
 Glance 서비스는 다음과 같이 구성되어 있습니다.
 
 <figure markdown>
-  ![Glance 구성](img/Untitled%205.png)
+  ![Glance 구성](/img/glance-architecture.png)
   <figcaption>Glance 구성</figcaption>
 </figure>
 
@@ -244,7 +246,7 @@ Glance 서비스는 다음과 같이 구성되어 있습니다.
 :   이미지와 메타데이터 정의에 대한 정보 등을 저장하는 SQLDB 입니다. 
 
 <figure markdown>
-  ![DATABASE schema](img/Untitled%206.png)
+  ![DATABASE schema](/img/glance-db-schema.png)
   <figcaption>DATABASE SCHEMA</figcaption>
 </figure>
 
@@ -299,7 +301,7 @@ Glance 서비스는 아래의 API를 통해 이미지의 업로드와 다운로�
 Glance 서비스는 다양한 종류의 클라우드 자원에서 사용할 수 있는 메타데이터를 정의하고 관리할 수 있는 기능을 API를 통해 제공합니다.
 
 <figure markdown>
-  ![Horizon Flavor metadata settings](img/Untitled%207.png)
+  ![Horizon Flavor metadata settings](/img/glance-metadata.png)
   <figcaption>Horizon Flavor Metadata Settings</figcaption>
 </figure>
 
@@ -308,7 +310,7 @@ Glance 서비스가 기본적으로 제공하는 메타데이터 정의 외에�
 메타데이터 정의 서비스는 메타데이터의 정의에 대한 관리를 할 뿐, 클라우드 자원 인스턴스의 실제 메타데이터 값을 관리하지는 않습니다. 클라우드 자원 인스턴스에 메타데이터 값을 설정하면, 해당 자원을 소유하고 있는 서비스에 저장됩니다. 위 그림과 같이 Flavor에 메타데이터를 설정하면 아래 그림과 같이 자원을 소유한 Nova 서비스의 데이터베이스에 저장됩니다. 
 
 <figure markdown>
-  ![metadata store for flavor](img/Untitled%208.png)
+  ![metadata store for flavor](/img/glance-metadata-store.png)
   <figcaption>metadata store for flavor</figcaption>
 </figure>
 
@@ -318,7 +320,7 @@ Glance 서비스가 기본적으로 제공하는 메타데이터 정의 외에�
 Nova 서비스는 아래 그림과 같이 Glance로 부터 이미지를 제공받아, VM 인스턴스를 생성합니다.
 
 <figure markdown>
-  ![Instance creation from an image](img/Untitled%209.png)
+  ![Instance creation from an image](/img/instance-creation.png)
   <figcaption>Instance creation from an image</figcaption>
 </figure>
 
@@ -327,11 +329,11 @@ glance stores 에 저장된 이미지 파일을 컴퓨트 노드로 다운로드
 결론적으로, Glance 서비스는 Nova 서비스에 OS 이미지를 제공하는 것이 핵심 기능이고, 그 이미지들을 관리하는 기능을 포함하고 있는 서비스 컴포넌트라고 할 수 있습니다.
 
 ### 참고 자료
-Glance(Rocky) documents - [https://docs.openstack.org/glance/rocky/](https://docs.openstack.org/glance/rocky/)
-Image v2 API - [https://docs.openstack.org/api-ref/image/v2/index.html](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=)
-Image Metadata v2 API - [https://docs.openstack.org/api-ref/image/v2/metadefs-index.html](https://docs.openstack.org/api-ref/image/v2/metadefs-index.html)
+Glance(Rocky) documents - [https://docs.openstack.org/glance/rocky/](https://docs.openstack.org/glance/rocky/)  
+Image v2 API - [https://docs.openstack.org/api-ref/image/v2/index.html](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=)  
+Image Metadata v2 API - [https://docs.openstack.org/api-ref/image/v2/metadefs-index.html](https://docs.openstack.org/api-ref/image/v2/metadefs-index.html)  
 
-## Block Storage Service - Cinder
+## CINDER - Block Storage Service
 
 Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제공하고, 제공된 볼륨을 효과적으로 관리하는 기능을 제공하는 서비스 컴포넌트입니다. HDD, SSD, LVM, iSCSI, NetApp, ZADARA 등의 여러 물리적 저장 장치, 컨트롤러, 벤더 사의 스토리지 장치를 추상화하여 VM에서 사용 가능한 볼륨 형태로 제공하는 것이 핵심 기능입니다.
 
@@ -350,7 +352,7 @@ Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제�
 ### Cinder 서비스 구성
 
 <figure markdown>
-  ![Cinder Service Architecture](img/Untitled%2010.png)
+  ![Cinder Service Architecture](/img/cinder-architecture.png)
   <figcaption>Cinder Service Architecture</figcaption>
 </figure>
 
@@ -383,14 +385,14 @@ Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제�
 #### VM 인스턴스에 볼륨 제공
 
 <figure markdown>
-  ![VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공](img/Untitled%2011.png)
+  ![VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공](/img/cinder-iscsi.png)
   <figcaption>VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공</figcaption>
 </figure>
 
 Cinder 서비스를 통해 생성된 볼륨(/dev/hda)은 위 그림과 같이 iSCSI 프로토콜을 이용해 원격지 호스트의 VM 인스턴스와 연결되어, 볼륨에 직접 읽고 쓰기가 가능해 집니다. 일반적으로, Cinder의 기본 블록 스토리지 드라이버는 iSCSI 기반의 LVM(Logical Volume Manager) 이지만, 아래 그림과 같이 다양한 블록 스토리지 드라이버를 사용할 수 있습니다.
 
 <figure markdown>
-  ![다양한 블록 스토리지 드라이버: [https://wiki.openstack.org/wiki/CinderSupportMatrix](https://wiki.openstack.org/wiki/CinderSupportMatrix)](img/Untitled%2012.png)
+  ![다양한 블록 스토리지 드라이버](/img/cinder-drivers.png)
   <figcaption>블록 스토리지 드라이버 목록: https://wiki.openstack.org/wiki/CinderSupportMatrix</figcaption>
 </figure>
 
@@ -404,27 +406,28 @@ cinder-api 가 제공하는 API EndPoint를 통해, 볼륨에 대해 CRUD(Create
 Cinder 서비스는 볼륨에 대해 사본을 생성하거나(스냅샷), Volume Backup Repository의 여러 장치로 백업할 수 있습니다. 
 
 ### 참고 자료
-Cinder(Rocky) documents - [https://docs.openstack.org/cinder/rocky/](https://docs.openstack.org/cinder/rocky/)
-Cinder V3 API References - [https://docs.openstack.org/api-ref/block-storage/v3/index.html](https://docs.openstack.org/api-ref/block-storage/v3/index.html)
+Cinder(Rocky) documents - [https://docs.openstack.org/cinder/rocky/](https://docs.openstack.org/cinder/rocky/)  
+Cinder V3 API References - [https://docs.openstack.org/api-ref/block-storage/v3/index.html](https://docs.openstack.org/api-ref/block-storage/v3/index.html)  
 
-## Network Service - Neutron
+## NEUTRON - Network Service
 
 Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장치를, 소프트웨어로 구현한 가상화 네트워크로 추상화하여(SDN, Software Defined Network), 사용자 요구에 맞게 구성된 가상 네트워크 인프라를 제공하는 서비스 컴포넌트입니다. 
 
 <figure markdown>
-  ![Physical Infrastructure to Virtual Networks(Overlay Networks)](img/Untitled%2013.png)
+  ![Physical Infrastructure to Virtual Networks(Overlay Networks)](/img/neutron-overlay-network.png)
   <figcaption>Physical Infrastructure to Virtual Networks(Overlay Networks)</figcaption>
 </figure>
 
 보다 개념적으로 이해하자면, 위 그림과 같이 물리적으로 분산된 네트워크 환경에서 동작하는 VM에게 논리적으로 구성된 오버레이 네트워크 환경을 제공하는 것이 주요 기능이라고 할 수 있습니다. 
 
-???+ note ""
-    Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. 그래서, 데브스택의 Nova 관련 서비스들은 devstack-q\*(Quantum) 입니다.
+> Neutron 서비스는 원래 Nova 서비스 내부에 Nova-Network 라는 서브 컴포넌트로 존재했지만, Nova의 하부 컴포넌트로는 다양한 네트워크 환경 요구를 수용할 수 없어, Folsom 버전부터 Quantum 이라는 이름의 독립된 서비스 컴포넌트로 릴리즈 됐습니다. 
+> 이후, 상표권 문제 등으로 Havana 버전부터 Neutron 으로 이름이 변경되었습니다. 
+> 그래서, 데브스택의 Nova 관련 서비스들은 devstack-q\*(Quantum) 입니다.
 
 ### Neutron 서비스 구성
 
 <figure markdown>
-  ![Neutron architecture](img/Untitled%2014.png)
+  ![Neutron architecture](/img/neutron-architecture.png)
   <figcaption>Neutron Architecture</figcaption>
 </figure>
 
@@ -454,7 +457,7 @@ Neutron 서비스는 네트워크의 생성/변경/삭제 등에 대한 API를 �
 ML2 플러그인은 사용자의 가상 L2 네트워크를 구현할 수 있도록 소프트웨어 L2 스위치(브릿지) 장비를 제공해주는 플러그인이며, 아래 그림은 대표적으로 지원하는 Type Driver와 Mechanism Driver를 나타냅니다.
 
 <figure markdown>
-  ![ML2 Plugin Drivers](img/Untitled%2015.png)
+  ![ML2 Plugin Drivers](/img/neutron-ml2-plugin.png)
   <figcaption>ML2 Plugin Drivers</figcaption>
 </figure>
 
@@ -505,7 +508,7 @@ DHCP 서버를 가상화하여 제공하는 DHCP Agent 입니다. 사용하는 �
 #### 결론: Neutron 서비스의 역할?
 
 <figure markdown>
-  ![컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )](img/Untitled%2016.png)
+  ![컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )](/img/neutron-network-example.png)
   <figcaption>컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )</figcaption>
 </figure>
 
@@ -525,16 +528,16 @@ Neutron 서비스를 이용한 사용자 네트워크 구성은 클라우드 서
 결론적으로, Neutron 서비스는 가상의 네트워크 장비를 통해, 분산 환경에서 사용자 네트워크 환경을 VM에게 제공하는 역할을 한다고 할 수 있습니다.
 
 ### 참고 자료
-Neutron(Rocky) documents - [https://docs.openstack.org/neutron/rocky/](https://docs.openstack.org/neutron/rocky/)
+Neutron(Rocky) documents - [https://docs.openstack.org/neutron/rocky/](https://docs.openstack.org/neutron/rocky/)  
 
-## Compute Service - Nova
+## NOVA - Compute Service
 
 Nova 서비스는 하이퍼바이저를 통해 CPU, RAM 등의 컴퓨팅 자원을 할당하여 VM 인스턴스를 제공하고, VM을 관리할 수 있는 기능을 제공하는 서비스 컴포넌트입니다. Nova 서비스는 Glance 서비스로부터 OS 이미지, Cinder 서비스로 부터 볼륨, Neutron 서비스로 부터 네트워크를 제공 받아 최종적으로 사용자가 사용할 수 있는 VM 인스턴스를 생성하여 제공합니다. 클라우드 서비스를 위한 최소한의 필요 기능이며, 나머지 코어 서비스는 Nova 서비스를 위한 리소스 제공 서비스라고 할 수 있습니다.
 
 ### Nova 서비스 구성
 
 <figure markdown>
-  ![Nova Service Architecture](img/Untitled%2017.png)
+  ![Nova Service Architecture](/img/nova-architecture.png)
   <figcaption>Nova Service Architecture</figcaption>
 </figure>
 
@@ -562,7 +565,7 @@ Nova 서비스는 그림과 같이 nova-api, nova-scheduler, nova-conductor, nov
 하이퍼바이저는 CPU, RAM, DISK, NIC 등의 물리 서버의 자원을 추상화하고, 논리적으로 공간을 분할하여 독립적인 가상 환경의 서버(VM)를 제공하는 소프트웨어입니다. 
 
 <figure markdown>
-  ![Native Hypervisor  & Hosted Hypervisor](img/Untitled%2018.png)
+  ![Native Hypervisor  & Hosted Hypervisor](/img/nova-hypervisor.png)
   <figcaption>Native Hypervisor  & Hosted Hypervisor</figcaption>
 </figure>
 
@@ -573,6 +576,7 @@ Type 2 하이퍼바이저로는 우리가 흔히 접할 수 있는 VirtualBox, V
 Type 1 하이퍼바이저는 물리적 하드웨어를 직접 제어하기 때문에 자원을 효율적으로 사용할 수 있어 클라우드 서비스에 적합한 방식이며, Xen, VMWare vSphere, Hyper-V 등이 이에 해당합니다. KVM(Kernel-based Virtual Machine)은 리눅스라는 호스트 OS에서 동작하지만 커널 수준에서 동작하기 때문에 Type 1 하이퍼바이저라고 할 수 있습니다. 또한, KVM과 QEMU는 상호보완적인 기능을 하기 때문에, KVM-QEMU를 함께 사용합니다.
 
 오픈스택 Rocky 버전 기준으로 지원하는 하이퍼바이저 목록은 다음과 같습니다.
+[https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html](https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html)
 
 | 하이퍼바이저 | 설명 |
 | --- | --- |
@@ -587,7 +591,6 @@ Type 1 하이퍼바이저는 물리적 하드웨어를 직접 제어하기 때�
 | PowerVM | Server virtualization with IBM PowerVM for AIX, IBM i, and Linux workloads on the Power Systems platform. |
 | zVM | Server virtualization on z Systems and IBM LinuxONE, it can run Linux, z/OS and more. |
 
-[https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html](https://docs.openstack.org/nova/rocky/admin/configuration/hypervisors.html)
 
 Nova 서비스는 하이퍼바이저를 통해 생성한 VM과 Cinder, Neutron, Glance 서비스 등에서 할당받은 자원을 연결하여 최종 사용자에게 사용 가능한 상태의 VM을 제공합니다.
 
@@ -615,38 +618,30 @@ Quota는 프로젝트에 할당된 자원의 제한을 의미하며, Quota와 �
 
 이 외에도 Nova 서비스는 무수히 많은 API를 제공합니다. 자세한 내용은 다음의 API Reference에서 확인할 수 있습니다. 
 
-Nova Service API - [https://docs.openstack.org/api-ref/compute](https://docs.openstack.org/api-ref/compute)
+!!! info "Nova Service API"
+    [https://docs.openstack.org/api-ref/compute](https://docs.openstack.org/api-ref/compute)
 
 ### Nova 서비스에서 VM을 생성하는 과정
 
 <figure markdown>
-  ![Untitled](img/Untitled%2019.png)
+  ![Untitled](/img/nova-vm-creation.png)
   <figcaption>VM 생성 과정</figcaption>
 </figure>
 
 그림은 Nova 서비스에서 사용자의 VM 생성 요청을 처리하는 과정을 간략하게 나타냅니다.
 
-(1) 사용자는 keystone에 credential을 제공하여 인증하고, 인증 토큰을 발급 받습니다.
-
-(2) 사용자는 1번 과정에서 받은 인증 토큰과 API EndPoint를 이용해 nova-api 로 VM 생성 요청을 보냅니다.
-
-(3) nova-api는 사용자로부터 받은 VM 생성 요청을 Keystone으로 보내 검증합니다.
-
-(4), (5) 검증이 완료되면, nova-api는 Message Queue를 통해 VM 생성 요청을 nova-scheduler에게 보냅니다.
-
-(6), (7) nova-scheduler는 현재 자원 할당 현황, 메타데이터 등을 참고하여 VM을 생성할 컴퓨트 노드를 결정하고, 결정된 노드의 nova-compute 로 Message Queue를 통해 VM 생성 요청을 전달합니다.
-
-(8), (10), (12) VM 생성 요청을 받은 nova-compute 는 VM에 연결할 볼륨과, 네트워크 자원, 이미지 등을 얻기 위해, cinder-api, neutron-server, glance-api 로 필요한 자원 할당을 요청합니다.
-
-(9), (11), (13) cinder-api, neutron-server, glance-api 는 nova-compute 가 보낸 자원 할당 요청을 Keystone을 통해 인증 후, 자원을 할당하여 nova-compute로 응답을 전송합니다.
-
-(14) 8번~13번의 과정을 통해 자원을 성공적으로 할당받으면, nova-compute는 하이퍼바이저 API를 호출하여 VM을 생성합니다.
-
-(15) 생성한 VM과 할당받은 자원을 연결하고, 최종적으로 사용 가능한 VM을 시작합니다.
-
-(16) 사용자는 VM에 할당된 Floating IP, Fixed IP 로 SSH로 접근하거나, VNC Console 등을 이용해 VM에 접근하여 사용할 수 있습니다.
+- ❶ - 사용자는 keystone에 credential을 제공하여 인증하고, 인증 토큰을 발급 받습니다.
+- ❷ - 사용자는 1번 과정에서 받은 인증 토큰과 API EndPoint를 이용해 nova-api 로 VM 생성 요청을 보냅니다.
+- ❸ - nova-api는 사용자로부터 받은 VM 생성 요청을 Keystone으로 보내 검증합니다.
+- ❹, ❺ - 검증이 완료되면, nova-api는 Message Queue를 통해 VM 생성 요청을 nova-scheduler에게 보냅니다.
+- ❻, ❼ - nova-scheduler는 현재 자원 할당 현황, 메타데이터 등을 참고하여 VM을 생성할 컴퓨트 노드를 결정하고, 결정된 노드의 nova-compute 로 Message Queue를 통해 VM 생성 요청을 전달합니다.
+- ❽, ❿, ⓬ - VM 생성 요청을 받은 nova-compute 는 VM에 연결할 볼륨과, 네트워크 자원, 이미지 등을 얻기 위해, cinder-api, neutron-server, glance-api 로 필요한 자원 할당을 요청합니다.
+- ❾, ⓫, ⓭ - cinder-api, neutron-server, glance-api 는 nova-compute 가 보낸 자원 할당 요청을 Keystone을 통해 인증 후, 자원을 할당하여 nova-compute로 응답을 전송합니다.
+- ⓮ - 8번~13번의 과정을 통해 자원을 성공적으로 할당받으면, nova-compute는 하이퍼바이저 API를 호출하여 VM을 생성합니다.
+- ⓯ - 생성한 VM과 할당받은 자원을 연결하고, 최종적으로 사용 가능한 VM을 시작합니다.
+- ⓰ - 사용자는 VM에 할당된 Floating IP, Fixed IP 로 SSH로 접근하거나, VNC Console 등을 이용해 VM에 접근하여 사용할 수 있습니다.
 
 앞서 살펴본 코어 서비스들은 결국 클라우드 서비스를 위한 최소한의 필요 조건인 VM 인스턴스를 생성하기 위한 과정이라고 할 수 있습니다. 이후에, 다른 프로젝트를 추가해서 클라우드 서비스를 확장할 수 있습니다. 가령, 생성된 VM 인스턴스에 Database를 올려서 DBaaS를 서비스 하는 Trove 프로젝트를 추가하여 확장하거나, VM 인스턴스를 활용하는 자체 서비스를 개발하여 클라우드 서비스를 확장할 수도 있습니다.
 
 ### 참고 자료
-Nova(Rocky) documents - [https://docs.openstack.org/nova/rocky/](https://docs.openstack.org/nova/rocky/)
+Nova(Rocky) documents - [https://docs.openstack.org/nova/rocky/](https://docs.openstack.org/nova/rocky/)  

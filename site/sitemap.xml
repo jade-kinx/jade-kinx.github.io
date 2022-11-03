@@ -6,12 +6,32 @@
          <changefreq>daily</changefreq>
     </url>
     <url>
+         <loc>https://jade-kinx.github.io/%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%84%9C/</loc>
+         <lastmod>2022-11-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
          <loc>https://jade-kinx.github.io/guide/getting-started/</loc>
          <lastmod>2022-11-03</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://jade-kinx.github.io/guide/writing-markdown/</loc>
+         <lastmod>2022-11-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://jade-kinx.github.io/ixcloud/</loc>
+         <lastmod>2022-11-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://jade-kinx.github.io/ixcloud/back-end/</loc>
+         <lastmod>2022-11-03</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://jade-kinx.github.io/ixcloud/front-end/</loc>
          <lastmod>2022-11-03</lastmod>
          <changefreq>daily</changefreq>
     </url>

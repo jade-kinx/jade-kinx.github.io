@@ -67,13 +67,7 @@ plugins:
         mkdocs-material/getting-started.md: https://squidfunk.github.io/mkdocs-material/getting-started/
         mkdocs-material/setup.md: https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
         mkdocs-material/references.md: https://squidfunk.github.io/mkdocs-material/reference/
-#        changelog/insiders.md: insiders/changelog.md
-#        conventions.md: philosophy.md
-#        reference/abbreviations.md: reference/tooltips.md
-#        reference/meta-tags.md: reference/index.md
-#        reference/variables.md: https://mkdocs-macros-plugin.readthedocs.io/
-#        sponsorship.md: insiders/index.md
-#        upgrading.md: upgrade.md
+        openstack/docs.md: https://docs.openstack.org
   - minify:
       minify_html: true
   - glightbox:
@@ -125,18 +119,25 @@ markdown_extensions:
       alternate_style: true
   - pymdownx.tasklist:
       custom_checkbox: true
+  - pymdownx.snippets:
+      auto_append:
+        - inc/glossary.md
   - pymdownx.tilde
    
 nav:
-  - Home: index.md
-  - MkDocs for Material:
-    - "Home": 'mkdocs-material/home.md'
-    - "Getting Started": 'mkdocs-material/getting-started.md'
-    - "Setup": 'mkdocs-material/setup.md'
-    - "Reference": 'mkdocs-material/references.md'
-  - 'User Guide':
-    - 'Getting Started': 'guide/getting-started.md'
-    - 'Writing with Markdown': 'guide/writing-markdown.md'
+  - Home:
+    - index.md
+    - test: test.md
+    - mkdocs-material:
+      - Home: 'mkdocs-material/home.md'
+      - Getting Started: 'mkdocs-material/getting-started.md'
+      - Setup: 'mkdocs-material/setup.md'
+      - Reference: 'mkdocs-material/references.md'
   - 'Open Stack':
     - '오픈스택 입문': 'openstack/openstack-fundamentals.md'
-    - '오픈스택 API': 'openstack/openstack-api.md'
+    - 'docs.openstack.org': 'openstack/docs.md'
+  - IXCloud:
+    - ixcloud/index.md
+    - Front End: ixcloud/front-end.md
+    - Back End: ixcloud/back-end.md
+    - Infra: ixcloud/infra.md
