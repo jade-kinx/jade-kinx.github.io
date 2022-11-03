@@ -59,18 +59,18 @@ def bubble_sort(items):
 root@controller:~# route -n
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-0.0.0.0         192.168.42.1    0.0.0.0         UG    0      0        0 ens3 #(1)!
+0.0.0.0         192.168.42.1    0.0.0.0         UG    0      0        0 ens3 # (1)!
 169.254.169.254 192.168.42.1    255.255.255.255 UGH   0      0        0 ens3
 192.168.42.0    0.0.0.0         255.255.255.0   U     0      0        0 ens3
 192.168.42.128  0.0.0.0         255.255.255.128 U     0      0        0 br-ex
 192.168.122.0   0.0.0.0         255.255.255.0   U     0      0        0 virbr0
 root@controller:~# ip netns
-qrouter-43a1b81b-93fa-4ddc-8f32-469c3dc8e7c7 #(2)!
+qrouter-43a1b81b-93fa-4ddc-8f32-469c3dc8e7c7 # (2)!
 qdhcp-267c5fb7-bcf4-4f42-bc70-ee89c88cb15f
 root@controller:~# ip netns exec qrouter-43a1b81b-93fa-4ddc-8f32-469c3dc8e7c7 route -n
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-0.0.0.0         192.168.42.129  0.0.0.0         UG    0      0        0 qg-7f32c975-1f #(3)!
+0.0.0.0         192.168.42.129  0.0.0.0         UG    0      0        0 qg-7f32c975-1f # (3)!
 172.16.0.0      0.0.0.0         255.255.255.192 U     0      0        0 qr-b856e3ac-ee
 192.168.42.128  0.0.0.0         255.255.255.128 U     0      0        0 qg-7f32c975-1f
 root@controller:~#
