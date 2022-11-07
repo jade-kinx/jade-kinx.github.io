@@ -1,3 +1,2 @@
-# Welcome to jade-kinx.github.io
-
-...
+# openstack-docs
+openstack documents repository

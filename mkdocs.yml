@@ -1,15 +1,13 @@
-site_name: Material for MkDocs
-site_url: https://jade-kinx.github.io/
+site_name: OpenStack Docs
+site_url: https://jade-kinx.github.io/openstack-docs/
 site_author: Jade Keith
-site_description: >-
-  Create a branded static site from a set of Markdown files to host the
-  documentation of your Open Source or commercial project
+site_description: Openstack documents repository for jade
 # Repository
-repo_name: jade-kinx/jade-kinx.github.io
-repo_url: https://github.com/jade-kinx/jade-kinx.github.io
+repo_name: jade-kinx/openstack-docs
+repo_url: https://github.com/jade-kinx/openstack-docs/
 
 extra_css:
-  - css/extra.css
+  - assets/css/extra.css
 
 copyright: KINX Inc. All Rights Reserved.
 extra:
@@ -61,13 +59,6 @@ theme:
 # Plugins
 plugins:
   - search
-  - redirects:
-      redirect_maps:
-        mkdocs-material/home.md: https://squidfunk.github.io/mkdocs-material/
-        mkdocs-material/getting-started.md: https://squidfunk.github.io/mkdocs-material/getting-started/
-        mkdocs-material/setup.md: https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
-        mkdocs-material/references.md: https://squidfunk.github.io/mkdocs-material/reference/
-        openstack/docs.md: https://docs.openstack.org
   - minify:
       minify_html: true
   - glightbox:
@@ -127,17 +118,16 @@ markdown_extensions:
 nav:
   - Home:
     - index.md
-    - test: test.md
+    - Usage: usage.md
+  - OpenStack:
+    - Overview: openstack/overview.md
+    - Installation: openstack/installation.md
+  - Useful Links:
+    - links.md
     - mkdocs-material:
-      - Home: 'mkdocs-material/home.md'
-      - Getting Started: 'mkdocs-material/getting-started.md'
-      - Setup: 'mkdocs-material/setup.md'
-      - Reference: 'mkdocs-material/references.md'
-  - 'Open Stack':
-    - '오픈스택 입문': 'openstack/openstack-fundamentals.md'
-    - 'docs.openstack.org': 'openstack/docs.md'
-  - IXCloud:
-    - ixcloud/index.md
-    - Front End: ixcloud/front-end.md
-    - Back End: ixcloud/back-end.md
-    - Infra: ixcloud/infra.md
+      - Home: https://squidfunk.github.io/mkdocs-material/
+      - Getting Started: https://squidfunk.github.io/mkdocs-material/getting-started/
+      - Setup: https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
+      - Reference: https://squidfunk.github.io/mkdocs-material/reference/
+    - OpenStack:
+      - docs.openstack.org: https://docs.openstack.org      

@@ -1,68 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://jade-kinx.github.io/</loc>
-         <lastmod>2022-11-03</lastmod>
+         <loc>https://jade-kinx.github.io/openstack-docs/</loc>
+         <lastmod>2022-11-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://jade-kinx.github.io/%EB%8B%A4%EB%A5%B8%EB%AC%B8%EC%84%9C/</loc>
-         <lastmod>2022-11-03</lastmod>
+         <loc>https://jade-kinx.github.io/openstack-docs/usage/</loc>
+         <lastmod>2022-11-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://jade-kinx.github.io/guide/getting-started/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/guide/writing-markdown/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/ixcloud/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/ixcloud/back-end/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/ixcloud/front-end/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/mkdocs-material/getting-started/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/mkdocs-material/home/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/mkdocs-material/references/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/mkdocs-material/setup/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/openstack/openstack-api/</loc>
-         <lastmod>2022-11-03</lastmod>
-         <changefreq>daily</changefreq>
-    </url>
-    <url>
-         <loc>https://jade-kinx.github.io/openstack/openstack-fundamentals/</loc>
-         <lastmod>2022-11-03</lastmod>
+         <loc>https://jade-kinx.github.io/openstack-docs/openstack/openstack-overview/</loc>
+         <lastmod>2022-11-06</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
