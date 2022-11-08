@@ -51,7 +51,7 @@ theme:
         name: Switch to dark mode
   font:
     text: Noto Sans KR
-    code: Roboto
+    code: Roboto Mono
   favicon: assets/favicon.png
   icon:
     logo: logo
@@ -86,6 +86,7 @@ markdown_extensions:
       smart_enable: all
   - pymdownx.caret
   - pymdownx.details
+  - pymdownx.critic
   - pymdownx.emoji:
       emoji_generator: !!python/name:materialx.emoji.to_svg
       emoji_index: !!python/name:materialx.emoji.twemoji
