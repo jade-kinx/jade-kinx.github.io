@@ -53,10 +53,15 @@ Accept-Encoding: gzip
 }
 ```
 
+!!! note
+    인증 방법은 `password` 방식이고, 유저네임이 `demo`, 패스워드가 `asdf`, 도메인이 `Default`이며, 프로젝트 스코프로 토큰 요청
+
+
+
 
 ## (2) Access Token 및 EndPoint Catalog 응답
 
-``` http title="header"
+``` http title="header" hl_lines="8"
 Connection: close
 Content-Length: 3878
 Content-Type: application/json
@@ -67,7 +72,10 @@ X-Openstack-Request-Id: req-7c5f10e2-211c-41a1-9336-0804e8ddb79b
 X-Subject-Token: gAAAAABjhGSikldzUl0rErkyM0Rh9xdbsR2tZllT6whmV-uTcX7yGtHCDymVXVekRYvQUy2WdB97yMxq-g5tXGfxulKamd_miuXiD2QxU9Xh2BvvWj5jU29RkAXcAgMrlK_0VHxVDnbJC9WCswPyGygs7VeQ1GZMrWzGr_NzL21577_dkj3PVnE
 ```
 
-``` json title="body"
+!!! note
+    Response 헤더의 `X-Subject-Token` 값에 토큰이 저장되어 응답으로 날라온다. `gAAAAABjhGSikldzUl0rErky...`
+
+``` json title="body" linenums="1" hl_lines="141"
 {
   "token": {
     "methods": [
@@ -277,10 +285,13 @@ X-Subject-Token: gAAAAABjhGSikldzUl0rErkyM0Rh9xdbsR2tZllT6whmV-uTcX7yGtHCDymVXVe
 }
 ```
 
+!!! note
+    Response Body에는 해당 프로젝트 스코프에서 사용 가능한 EndPoint 목록이 포함된다. 이 경우 `type`이 `database` 인 EndPoint를 찾아, 해당 EndPoint 로 Access Token 과 함께 요청할 수 있다. 이 경우는 141번 줄의 `http://10.0.0.24:8779/v1.0/2907622321664d088dba2c09a066593d`
+
 
 ## (3) 데이터베이스 인스턴스 목록 요청
 
-``` http title="header"
+``` http title="header" hl_lines="5"
 GET /v1.0/2907622321664d088dba2c09a066593d/instances HTTP/1.1
 Host: 10.0.0.24:8779
 User-Agent: go-troveclient/0.0.1
@@ -289,6 +300,8 @@ X-Auth-Token: gAAAAABjhGSikldzUl0rErkyM0Rh9xdbsR2tZllT6whmV-uTcX7yGtHCDymVXVekRY
 Accept-Encoding: gzip
 ```
 
+!!! note
+    데이터베이스 EndPoint인 `http://10.0.0.24:8779/v1.0/2907622321664d088dba2c09a066593d`에 인스턴스 목록 요청인 `GET {EndPoint}/instances` 요청을 Access Token(헤더: X-Auth-Token)과 함께 전송하여 인스턴스 목록을 요청한다.
 
 
 ### (4) 데이터베이스 인스턴스 목록 응답
@@ -362,4 +375,65 @@ Server: Apache/2.4.41 (Ubuntu)
     }
   ]
 }
+```
+
+
+## (5) 화면 출력
+
+``` json title="openstack database instance list -f json"
+[
+  {
+    "Flavor": {
+      "ID": "d2",
+      "Links": [
+        {
+          "href": "https://10.0.0.24:8779/v1.0/2907622321664d088dba2c09a066593d/flavors/d2",
+          "rel": "self"
+        },
+        {
+          "href": "https://10.0.0.24:8779/flavors/d2",
+          "rel": "bookmark"
+        }
+      ]
+    },
+    "Hostname": "",
+    "IP": [
+      "10.10.10.15",
+      "192.168.100.165"
+    ],
+    "ID": "be2fba1d-c160-4b22-ae4d-ebb29a78f926",
+    "Links": [
+      {
+        "href": "https://10.0.0.24:8779/v1.0/2907622321664d088dba2c09a066593d/instances/be2fba1d-c160-4b22-ae4d-ebb29a78f926",
+        "rel": "self"
+      },
+      {
+        "href": "https://10.0.0.24:8779/instances/be2fba1d-c160-4b22-ae4d-ebb29a78f926",
+        "rel": "bookmark"
+      }
+    ],
+    "Name": "mysql-instance",
+    "Status": "ACTIVE",
+    "Fault": null,
+    "Volume": {
+      "Size": 5,
+      "Used": 0
+    },
+    "Datastore": {
+      "Version": "5.7.29",
+      "Type": "mysql",
+      "version_id": ""
+    },
+    "Addresses": [
+      {
+        "Type": "private",
+        "Address": "10.10.10.15"
+      },
+      {
+        "Type": "public",
+        "Address": "192.168.100.165"
+      }
+    ]
+  }
+]
 ```
