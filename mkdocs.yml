@@ -126,8 +126,6 @@ nav:
       - Install Trove in DevStack: openstack/trove/install-trove-in-devstack.md
       - Commands: 
         - (sample)database instance list: openstack/trove/commands/database-instance-list.md
-        - database db list: openstack/trove/commands/database-db-list.md
-        - datastore list: openstack/trove/commands/datastore-list.md
         - database backup create: openstack/trove/commands/not-ready-yet.md
         - database backup delete: openstack/trove/commands/not-ready-yet.md
         - database backup execution delete: openstack/trove/commands/not-ready-yet.md
@@ -156,6 +154,9 @@ nav:
         - database configuration list: openstack/trove/commands/not-ready-yet.md
         - database configuration set: openstack/trove/commands/not-ready-yet.md
         - database configuration show: openstack/trove/commands/not-ready-yet.md
+        - database configuration parameter list: openstack/trove/commands/not-ready-yet.md
+        - database configuration parameter set: openstack/trove/commands/not-ready-yet.md
+        - database configuration parameter show: openstack/trove/commands/not-ready-yet.md
         - database db create: openstack/trove/commands/not-ready-yet.md
         - database db delete: openstack/trove/commands/not-ready-yet.md
         - database db list: openstack/trove/commands/not-ready-yet.md
@@ -178,6 +179,13 @@ nav:
         - database instance update: openstack/trove/commands/not-ready-yet.md
         - database instance upgrade: openstack/trove/commands/not-ready-yet.md
         - database limit list: openstack/trove/commands/not-ready-yet.md
+        - database log list: openstack/trove/commands/not-ready-yet.md
+        - database log save: openstack/trove/commands/not-ready-yet.md
+        - database log set: openstack/trove/commands/not-ready-yet.md
+        - database log show: openstack/trove/commands/not-ready-yet.md
+        - database log tail: openstack/trove/commands/not-ready-yet.md
+        - database quota show: openstack/trove/commands/not-ready-yet.md
+        - database quota update: openstack/trove/commands/not-ready-yet.md
         - database user create: openstack/trove/commands/not-ready-yet.md
         - database user delete: openstack/trove/commands/not-ready-yet.md
         - database user grant access: openstack/trove/commands/not-ready-yet.md
