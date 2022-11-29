@@ -24,4 +24,4 @@
 * `mkdocs build` - Build the documentation site.
 * `mkdocs -h` - Print help message and exit.
 
-
+* `python -m mkdocs serve -a localhost:8080` - live-server on port 8080
