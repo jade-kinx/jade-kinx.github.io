@@ -286,7 +286,7 @@ X-Subject-Token: gAAAAABjhGSikldzUl0rErkyM0Rh9xdbsR2tZllT6whmV-uTcX7yGtHCDymVXVe
 ```
 
 !!! note
-    Response Body에는 해당 프로젝트 스코프에서 사용 가능한 EndPoint 목록이 포함된다. 이 경우 `type`이 `database` 인 EndPoint를 찾아, 해당 EndPoint 로 Access Token 과 함께 요청할 수 있다. 이 경우는 141번 줄의 `http://10.0.0.24:8779/v1.0/2907622321664d088dba2c09a066593d`
+    Response Body에는 해당 프로젝트 스코프에서 사용 가능한 EndPoint 목록(`catalog`)이 포함된다. 이 경우 `type`이 `database` 인 EndPoint를 찾아, 해당 EndPoint 로 Access Token 과 함께 요청할 수 있다. 이 경우는 141번 줄의 `http://10.0.0.24:8779/v1.0/2907622321664d088dba2c09a066593d`
 
 
 ## (3) 데이터베이스 인스턴스 목록 요청
@@ -304,7 +304,7 @@ Accept-Encoding: gzip
     데이터베이스 EndPoint인 `http://10.0.0.24:8779/v1.0/2907622321664d088dba2c09a066593d`에 인스턴스 목록 요청인 `GET {EndPoint}/instances` 요청을 Access Token(헤더: X-Auth-Token)과 함께 전송하여 인스턴스 목록을 요청한다.
 
 
-### (4) 데이터베이스 인스턴스 목록 응답
+## (4) 데이터베이스 인스턴스 목록 응답
 
 ``` http title="header"
 HTTP/1.1 200 OK
