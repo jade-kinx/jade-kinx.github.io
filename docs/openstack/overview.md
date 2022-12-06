@@ -9,7 +9,7 @@
 오픈스택은 컴퓨팅/네트워킹/스토리지 등의 자원을 가상화하여, 이를 API를 통해 End-User에게 On-Demand로 제공하는 오픈 소스 클라우드 운영체제입니다. 
 
 <figure markdown>
-  ![오픈스택 = 클라우드 운영체제](../assets/img/openstack-is-cloudos.png)
+  ![오픈스택 = 클라우드 운영체제](img/openstack-is-cloudos.png)
   <figcaption>오픈스택 = 클라우드 운영체제</figcaption>
 </figure>
 
@@ -17,7 +17,7 @@
     
 
 <figure markdown>
-  ![오픈스택 프로젝트들](../assets/img/openstack-landscape.png)
+  ![오픈스택 프로젝트들](img/openstack-landscape.png)
   <figcaption>오픈스택 프로젝트들</figcaption>
 </figure>
 
@@ -29,7 +29,7 @@
     
 
 <figure markdown>
-  ![코어 서비스와 빅텐트](../assets/img/openstack-core-services.png)
+  ![코어 서비스와 빅텐트](img/openstack-core-services.png)
   <figcaption>코어 서비스와 빅텐트</figcaption>
 </figure>
 
@@ -51,7 +51,7 @@
 Keystone은 사용자 및 오픈스택 서비스 접근에 대한 인증 관련 서비스를 제공하는 서비스 컴포넌트입니다.
 
 <figure markdown>
-  ![[인증 기능 제공을 통해 서비스 통합]](../assets/img/keystone-provides-auth.png)
+  ![[인증 기능 제공을 통해 서비스 통합]](img/keystone-provides-auth.png)
   <figcaption>인증 기능 제공을 통한 서비스 통합</figcaption>
 </figure>
 
@@ -68,7 +68,7 @@ Keystone이 제공하는 주요 기능은 대략 다음과 같이 정리할 수 
 - API 요청에 대한 인증/검증 제공
 
 <figure markdown>
-  ![Keystone 구성](../assets/img/keystone-architecture.png)
+  ![Keystone 구성](img/keystone-architecture.png)
   <figcaption>Keystone 구성</figcaption>
 </figure>
 
@@ -142,7 +142,7 @@ Keystone은 프로젝트/도메인/역할 등에 대해 생성/목록/변경/삭
 Keystone은 개별 서비스들의 정책 정보를 수집하여 Policy Backend 에 저장/관리하고, 각 API 요청이 있을 때 권한을 확인해 주는 기능을 제공합니다. policy.json 파일은 수정 즉시 서비스 재시작 없이도 정책에 반영되기 때문에 주의 깊게 다루어야 합니다.
 
 <figure markdown>
-  ![사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조](../assets/img/keystone-relations.png)
+  ![사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조](img/keystone-relations.png)
   <figcaption>사용자, 그룹, 프로젝트, 도메인, 역할, 정책 구조</figcaption>
 </figure>
 
@@ -200,7 +200,7 @@ Keystone은 오픈스택에 등록된 서비스 목록을 관리하고, 각 서�
 API 요청에 대한 인증은 사용자가 서비스로 보낸 인증 토큰을 서비스가 Keystone에 보내 검증하는 방식으로 진행됩니다. 아래는 API 요청에 대한 인증 과정을 개념적으로 단순화 하여 보여주는 그림입니다.
 
 <figure markdown>
-  ![기본적인 API 인증/검증 과정](../assets/img/keystone-flows.png)
+  ![기본적인 API 인증/검증 과정](img/keystone-flows.png)
   <figcaption>기본적인 API 인증/검증 과정</figcaption>
 </figure>
 
@@ -229,7 +229,7 @@ Glance는 오픈스택의 다른 서비스(주로 가상 머신)에서 사용할
 Glance 서비스는 다음과 같이 구성되어 있습니다.
 
 <figure markdown>
-  ![Glance 구성](../assets/img/glance-architecture.png)
+  ![Glance 구성](img/glance-architecture.png)
   <figcaption>Glance 구성</figcaption>
 </figure>
 
@@ -246,7 +246,7 @@ Glance 서비스는 다음과 같이 구성되어 있습니다.
 :   이미지와 메타데이터 정의에 대한 정보 등을 저장하는 SQLDB 입니다. 
 
 <figure markdown>
-  ![DATABASE schema](../assets/img/glance-db-schema.png)
+  ![DATABASE schema](img/glance-db-schema.png)
   <figcaption>DATABASE SCHEMA</figcaption>
 </figure>
 
@@ -301,7 +301,7 @@ Glance 서비스는 아래의 API를 통해 이미지의 업로드와 다운로�
 Glance 서비스는 다양한 종류의 클라우드 자원에서 사용할 수 있는 메타데이터를 정의하고 관리할 수 있는 기능을 API를 통해 제공합니다.
 
 <figure markdown>
-  ![Horizon Flavor metadata settings](../assets/img/glance-metadata.png)
+  ![Horizon Flavor metadata settings](img/glance-metadata.png)
   <figcaption>Horizon Flavor Metadata Settings</figcaption>
 </figure>
 
@@ -310,7 +310,7 @@ Glance 서비스가 기본적으로 제공하는 메타데이터 정의 외에�
 메타데이터 정의 서비스는 메타데이터의 정의에 대한 관리를 할 뿐, 클라우드 자원 인스턴스의 실제 메타데이터 값을 관리하지는 않습니다. 클라우드 자원 인스턴스에 메타데이터 값을 설정하면, 해당 자원을 소유하고 있는 서비스에 저장됩니다. 위 그림과 같이 Flavor에 메타데이터를 설정하면 아래 그림과 같이 자원을 소유한 Nova 서비스의 데이터베이스에 저장됩니다. 
 
 <figure markdown>
-  ![metadata store for flavor](../assets/img/glance-metadata-store.png)
+  ![metadata store for flavor](img/glance-metadata-store.png)
   <figcaption>metadata store for flavor</figcaption>
 </figure>
 
@@ -320,7 +320,7 @@ Glance 서비스가 기본적으로 제공하는 메타데이터 정의 외에�
 Nova 서비스는 아래 그림과 같이 Glance로 부터 이미지를 제공받아, VM 인스턴스를 생성합니다.
 
 <figure markdown>
-  ![Instance creation from an image](../assets/img/instance-creation.png)
+  ![Instance creation from an image](img/instance-creation.png)
   <figcaption>Instance creation from an image</figcaption>
 </figure>
 
@@ -352,7 +352,7 @@ Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제�
 ### Cinder 서비스 구성
 
 <figure markdown>
-  ![Cinder Service Architecture](../assets/img/cinder-architecture.png)
+  ![Cinder Service Architecture](img/cinder-architecture.png)
   <figcaption>Cinder Service Architecture</figcaption>
 </figure>
 
@@ -385,14 +385,14 @@ Cinder 서비스는 VM, bare metal, container 등에 영구적인 볼륨을 제�
 #### VM 인스턴스에 볼륨 제공
 
 <figure markdown>
-  ![VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공](../assets/img/cinder-iscsi.png)
+  ![VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공](img/cinder-iscsi.png)
   <figcaption>VM 인스턴스에 iSCSI 프로토콜을 이용해 볼륨 제공</figcaption>
 </figure>
 
 Cinder 서비스를 통해 생성된 볼륨(/dev/hda)은 위 그림과 같이 iSCSI 프로토콜을 이용해 원격지 호스트의 VM 인스턴스와 연결되어, 볼륨에 직접 읽고 쓰기가 가능해 집니다. 일반적으로, Cinder의 기본 블록 스토리지 드라이버는 iSCSI 기반의 LVM(Logical Volume Manager) 이지만, 아래 그림과 같이 다양한 블록 스토리지 드라이버를 사용할 수 있습니다.
 
 <figure markdown>
-  ![다양한 블록 스토리지 드라이버](../assets/img/cinder-drivers.png)
+  ![다양한 블록 스토리지 드라이버](img/cinder-drivers.png)
   <figcaption>블록 스토리지 드라이버 목록: https://wiki.openstack.org/wiki/CinderSupportMatrix</figcaption>
 </figure>
 
@@ -414,7 +414,7 @@ Cinder V3 API References - [https://docs.openstack.org/api-ref/block-storage/v3/
 Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장치를, 소프트웨어로 구현한 가상화 네트워크로 추상화하여(SDN, Software Defined Network), 사용자 요구에 맞게 구성된 가상 네트워크 인프라를 제공하는 서비스 컴포넌트입니다. 
 
 <figure markdown>
-  ![Physical Infrastructure to Virtual Networks(Overlay Networks)](../assets/img/neutron-overlay-network.png)
+  ![Physical Infrastructure to Virtual Networks(Overlay Networks)](img/neutron-overlay-network.png)
   <figcaption>Physical Infrastructure to Virtual Networks(Overlay Networks)</figcaption>
 </figure>
 
@@ -427,7 +427,7 @@ Neutron 서비스는 L2-Switch, L3-Router 등의 물리적인 네트워크 장�
 ### Neutron 서비스 구성
 
 <figure markdown>
-  ![Neutron architecture](../assets/img/neutron-architecture.png)
+  ![Neutron architecture](img/neutron-architecture.png)
   <figcaption>Neutron Architecture</figcaption>
 </figure>
 
@@ -457,7 +457,7 @@ Neutron 서비스는 네트워크의 생성/변경/삭제 등에 대한 API를 �
 ML2 플러그인은 사용자의 가상 L2 네트워크를 구현할 수 있도록 소프트웨어 L2 스위치(브릿지) 장비를 제공해주는 플러그인이며, 아래 그림은 대표적으로 지원하는 Type Driver와 Mechanism Driver를 나타냅니다.
 
 <figure markdown>
-  ![ML2 Plugin Drivers](../assets/img/neutron-ml2-plugin.png)
+  ![ML2 Plugin Drivers](img/neutron-ml2-plugin.png)
   <figcaption>ML2 Plugin Drivers</figcaption>
 </figure>
 
@@ -508,7 +508,7 @@ DHCP 서버를 가상화하여 제공하는 DHCP Agent 입니다. 사용하는 �
 #### 결론: Neutron 서비스의 역할?
 
 <figure markdown>
-  ![컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )](../assets/img/neutron-network-example.png)
+  ![컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )](img/neutron-network-example.png)
   <figcaption>컨트롤러 노드 네트워크 연결 구조 ( Open vSwitch, VxLan )</figcaption>
 </figure>
 
@@ -537,7 +537,7 @@ Nova 서비스는 하이퍼바이저를 통해 CPU, RAM 등의 컴퓨팅 자원�
 ### Nova 서비스 구성
 
 <figure markdown>
-  ![Nova Service Architecture](../assets/img/nova-architecture.png)
+  ![Nova Service Architecture](img/nova-architecture.png)
   <figcaption>Nova Service Architecture</figcaption>
 </figure>
 
@@ -565,7 +565,7 @@ Nova 서비스는 그림과 같이 nova-api, nova-scheduler, nova-conductor, nov
 하이퍼바이저는 CPU, RAM, DISK, NIC 등의 물리 서버의 자원을 추상화하고, 논리적으로 공간을 분할하여 독립적인 가상 환경의 서버(VM)를 제공하는 소프트웨어입니다. 
 
 <figure markdown>
-  ![Native Hypervisor  & Hosted Hypervisor](../assets/img/nova-hypervisor.png)
+  ![Native Hypervisor  & Hosted Hypervisor](img/nova-hypervisor.png)
   <figcaption>Native Hypervisor  & Hosted Hypervisor</figcaption>
 </figure>
 
@@ -624,7 +624,7 @@ Quota는 프로젝트에 할당된 자원의 제한을 의미하며, Quota와 �
 ### Nova 서비스에서 VM을 생성하는 과정
 
 <figure markdown>
-  ![Untitled](../assets/img/nova-vm-creation.png)
+  ![Untitled](img/nova-vm-creation.png)
   <figcaption>VM 생성 과정</figcaption>
 </figure>
 

@@ -3,7 +3,7 @@
 ## Requirements
 
 * Ubuntu 20.04
-* 8GB 이상 RAM
+* 16GB 이상 RAM ( 8GB에서는 guest image build시 memory 부족 )
 * 50GB 이상 HDD
 
 !!! warning
@@ -38,50 +38,10 @@ $ git checkout stable/zed
 
 ## local.conf 설정
 
-```ini title="local.conf"
+``` ini title="local.conf"
 [[local|localrc]]
 RECLONE=False
-HOST_IP=10.0.0.24
-IP_VERSION=4
-
-# TROVE
-TROVE_BRANCH=stable/zed
-enable_plugin trove https://opendev.org/openstack/trove $TROVE_BRANCH
-enable_plugin trove-dashboard https://opendev.org/openstack/trove-dashboard $TROVE_BRANCH
-LIBS_FROM_GIT+=,python-troveclient
-
-# PASSWORDS
-ADMIN_PASSWORD=asdf
-DATABASE_PASSWORD=$ADMIN_PASSWORD
-RABBIT_PASSWORD=$ADMIN_PASSWORD
-SERVICE_PASSWORD=$ADMIN_PASSWORD
-SERVICE_TOKEN=$ADMIN_PASSWORD
-
-# LOGS
-ENABLE_DEBUG_LOG_LEVEL=True
-VERBOSE=True
-LOG_COLOR=True
-LOGFILE=$DEST/logs/stack.sh.log
-LOGDAYS=1
-
-# NETWORK
-IPV4_ADDRS_SAFE_TO_USE=10.10.10.0/24
-NETWORK_GATEWAY=10.10.10.1
-FLOATING_RANGE=192.168.100.0/24
-PUBLIC_NETWORK_GATEWAY=192.168.100.1
-#FLAT_INTERFACE=ens3
-
-# Swift
-ENABLED_SERVICES+=,swift
-SWIFT_HASH=66a3d6b56c1f479c8b4e70ab5c2000f5
-SWIFT_REPLICAS=1```
-
-## Another configuration
-
-```ini title="local.conf"
-[[local|localrc]]
-RECLONE=False
-HOST_IP=10.0.0.24
+HOST_IP=182.161.114.100
 IP_VERSION=4
 
 # TROVE
