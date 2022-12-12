@@ -37,18 +37,18 @@ theme:
     - toc.follow
     # - toc.integrate
   palette:
-    - scheme: slate
-      primary: teal
-      accent: teal
-      toggle:
-        icon: material/brightness-4
-        name: Switch to light mode
     - scheme: default
       primary: teal
       accent: teal
       toggle:
         icon: material/brightness-7
         name: Switch to dark mode
+    - scheme: slate
+      primary: teal
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   font:
     text: Noto Sans KR
     code: Roboto Mono
@@ -96,10 +96,10 @@ markdown_extensions:
       auto_title: true
   - pymdownx.inlinehilite
   - pymdownx.keys
-  - pymdownx.magiclink:
-      repo_url_shorthand: true
-      user: squidfunk
-      repo: mkdocs-material
+#  - pymdownx.magiclink:
+#      repo_url_shorthand: true
+#      user: squidfunk
+#      repo: mkdocs-material
   - pymdownx.mark
   - pymdownx.smartsymbols
   - pymdownx.superfences:
@@ -120,6 +120,14 @@ nav:
   - Home:
     - index.md
     - Usage: usage.md
+    - Useful Links: 
+      - mkdocs-material:
+        - Home: https://squidfunk.github.io/mkdocs-material/
+        - Getting Started: https://squidfunk.github.io/mkdocs-material/getting-started/
+        - Setup: https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
+        - Reference: https://squidfunk.github.io/mkdocs-material/reference/
+      - OpenStack:
+        - docs.openstack.org: https://docs.openstack.org      
   - OpenStack:
     - Overview: openstack/overview.md
     - Debugging:
@@ -129,13 +137,9 @@ nav:
       - trove-api: openstack/debugging/trove-api.md
     - Trove: 
       - Install Trove on DevStack: openstack/trove/install-trove-on-devstack.md
-      - (sample)database instance list: openstack/trove/commands/database-instance-list.md
-  - Useful Links:
-    - links.md
-    - mkdocs-material:
-      - Home: https://squidfunk.github.io/mkdocs-material/
-      - Getting Started: https://squidfunk.github.io/mkdocs-material/getting-started/
-      - Setup: https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/
-      - Reference: https://squidfunk.github.io/mkdocs-material/reference/
-    - OpenStack:
-      - docs.openstack.org: https://docs.openstack.org      
+  - OpenStack CLI Sequence:
+    - database Service:
+      - (sample)database instance list: openstack/sequence/database/instance-list.md
+    - Image Service:
+      - image create: openstack/sequence/image/create.md
+      - image delete: openstack/sequence/image/delete.md

@@ -261,8 +261,10 @@ def beautify_json(data):
     if data is None:
         return '{}'
 
-    return json.dumps(json.loads(data), indent=2)
-
+    try:
+        return json.dumps(json.loads(data), indent=2)
+    except:
+        return str(data)
 ```
 
 ``` cmd title="build package"
