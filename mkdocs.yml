@@ -141,5 +141,7 @@ nav:
     - Image Service:
       - image create: openstack/sequence/image/create.md
       - image delete: openstack/sequence/image/delete.md
+      - image list: openstack/sequence/image/list.md
+      - image show: openstack/sequence/image/show.md
     - database Service:
       - (sample)database instance list: openstack/sequence/database/instance-list.md
