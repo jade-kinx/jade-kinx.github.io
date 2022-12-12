@@ -253,7 +253,7 @@ def format_response(response, req_counter):
             reqhdrs=format_headers(req.headers), 
             reshdrs=format_headers(res.headers), 
             body=beautify_json(req.body),
-            text=beautify_json(res.text),
+            text="<FILE>" if "octet-stream" in res.headers.get('content-type') else beautify_json(res.text),
         )
 
 # beautify json string

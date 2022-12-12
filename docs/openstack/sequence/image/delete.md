@@ -1,6 +1,6 @@
 # openstack image delete
 
-이미지를 삭제한다.  
+`id` 또는 `name`으로 이미지를 삭제한다.  
 
 OpenStack Command Line Client 참고: [openstack image delete](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-delete)
 

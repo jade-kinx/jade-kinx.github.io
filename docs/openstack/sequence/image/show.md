@@ -1,6 +1,6 @@
 # openstack image show
 
-이미지 상세 정보를 출력한다.
+`id` 또는 `name`에 해당하는 이미지 상세 정보를 출력한다.
 
 OpenStack Command Line Client 참고: [openstack image show](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-show)
 

@@ -143,5 +143,6 @@ nav:
       - image delete: openstack/sequence/image/delete.md
       - image list: openstack/sequence/image/list.md
       - image show: openstack/sequence/image/show.md
+      - image save: openstack/sequence/image/save.md
     - database Service:
       - (sample)database instance list: openstack/sequence/database/instance-list.md
