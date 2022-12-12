@@ -18,7 +18,7 @@ $ openstack image create \
 
 ``` json title="configuration .vscode/launch.json"
 {
-    "name": "Python: openstack create image",
+    "name": "Python: openstack image create",
     "type": "python",
     "request": "launch",
     "program": "Scripts/openstack.exe",
@@ -726,3 +726,4 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
     none
     ```
 
+`DevStack`을 `Swift`와 함께 설치한 경우, `glance-store`의 기본값은 `swift`이고, 이미지 파일은 오브젝트 스토리지에 저장된다.
