@@ -169,37 +169,50 @@ setuptools.setup(
 ``` python title="observer.py"
 import os
 import sys
+from pathlib import Path
+import platform
 import logging
 import uuid
 import textwrap
 import json
 from functools import wraps
-from pathlib import Path
+
+# syslog exists?
+try:
+    import syslog
+except:
+    syslog = None
 
 # unique id of logger
-UID = str(uuid.uuid1())[:8]
+uid = str(uuid.uuid1())[:8]
 
 # request counter
-req_counter = 0
+req_idx = 0
 
-# log path
-log_path = os.path.expanduser(os.path.join('~', "logs"))
-if not os.path.exists(log_path):
-    os.mkdir(log_path)
+# get log file path
+def get_log_path():
+    global uid
 
-# set logger
-logger = logging.getLogger(UID)
-logger.addHandler(logging.FileHandler("{path}/({uid}){exec} {args}.log".format(
-    path=log_path, uid=UID, 
-    exec=Path(sys.argv[0]).stem, 
-    args=" ".join(sys.argv[1:])
-    )))
-logger.setLevel(logging.DEBUG)
+    # create log path if not exists
+    log_path = os.path.expanduser(os.path.join('~', "logs")) if platform.system() == 'Windows' else '/var/log/requests-observer'
+    if not os.path.exists(log_path):
+        os.mkdir(log_path)
 
+    return os.path.join(log_path, "{0}-{1}_{2}.log".format(uid, Path(sys.argv[0]).stem, "_".join(sys.argv[1:])))
+
+# print error message
+def print_error(err):
+    if syslog is not None:
+        syslog.syslog(syslog.LOG_ERR, "requests-observer: {0}".format(err))
+    else:
+        logging.error("requests-observer: {0}".format(err))
 
 # print log message
 def print_log(message):
-    logger.debug(message)
+
+    # write log message
+    with open(get_log_path(), "a") as logger:
+        logger.write("{0}\n".format(message))
 
 # observer decorator
 def observe(f):
@@ -209,62 +222,70 @@ def observe(f):
         # original method call
         response = f(*args, **kwargs)
 
-        # increment request counter
-        global req_counter
-        req_counter += 1
-
         # trace response
         try:
+            # increment request counter
+            global req_idx
+            req_idx += 1
+
             # print log message
-            print_log(format_response(response, req_counter))
+            print_log(format_response(response, req_idx))
 
         except Exception as ex:
-            logging.exception(str(ex))
+            print_error(repr(ex))
 
         # original response
         return response
     
     return decorator
 
-# get formatted string of requests.response
-def format_response(response, req_counter):
+# beautify json string with indent 2 space
+def beautify_json(s):
+    try:
+        return json.dumps(json.loads(s), indent=2)
+    except:
+        return str(s)
+
+# format requests.response
+def format_response(response, req_idx):
     format_headers = lambda d: '\n'.join(f'{k}: {v}' for k, v in d.items())
 
-    req = response.request
-    res = response
-
-    return textwrap.dedent("""
-        ----- REQUEST [{reqidx}] ------------------------------
-        {req.method} {req.url}
-        {reqhdrs}
-
-        DATA={body}
-
-        ----- RESPONSE [{reqidx}] -----------------------------
-        {res.status_code} {res.reason} {res.url}
-        {reshdrs}
-
-        DATA={text}
-        ----- END OF REQUEST [{reqidx}] -----------------------
-        """).format(
-            reqidx=req_counter,
-            req=req, 
-            res=res, 
-            reqhdrs=format_headers(req.headers), 
-            reshdrs=format_headers(res.headers), 
-            body=beautify_json(req.body),
-            text="<FILE>" if "octet-stream" in res.headers.get('content-type') else beautify_json(res.text),
-        )
-
-# beautify json string
-def beautify_json(data):
-    if data is None:
-        return '{}'
-
     try:
-        return json.dumps(json.loads(data), indent=2)
-    except:
-        return str(data)
+        resp = response
+        req = response.request
+
+        # content-type
+        content_type = resp.headers.get('content-type')
+
+        # parse response.body
+        if not content_type:
+            resp_body = resp.text
+        elif 'json' in content_type:
+            resp_body = beautify_json(resp.text)
+        elif 'octet-stream' in content_type:
+            resp_body = '<octet-stream> 0x{0}...'.format(''.join('{:02x}'.format(c) for c in resp.content[:32]))
+        else:
+            resp_body = resp.text
+
+        return textwrap.dedent("""
+            *** REQ[{req_idx}]: {req.method} {req.url}
+            {req_header}
+            Body: {req_body}
+
+            *** RESP[{req_idx}]: {resp.status_code} {resp.reason} {resp.url}
+            {resp_header}
+            Body: {resp_body}
+        """).format(
+            resp = resp,
+            req = req,
+            req_header = format_headers(req.headers),
+            resp_header = format_headers(resp.headers),
+            req_body = beautify_json(req.body),
+            resp_body = resp_body,
+            req_idx = req_idx
+        )
+    except Exception as ex:
+        return repr(ex)
 ```
 
 ``` cmd title="build package"
