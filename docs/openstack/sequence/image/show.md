@@ -43,23 +43,24 @@ sequenceDiagram
   participant client as openstack-client
   participant keystone as keystone-api
   participant glance as glance-api
-  client->>keystone: GET http://devstack-debug/identity
+  client->>keystone: GET /identity
   keystone-->>client: Response: 300 MULTIPLE CHOICES
-  client->>keystone: POST http://devstack-debug/identity/v3/auth/tokens
+  client->>keystone: POST /identity/v3/auth/tokens
   keystone-->>client: Response: 201 CREATED
-  client->>glance: GET http://182.161.114.101/image
+  client->>glance: GET /image
   glance-->>client: Response: 300 Multiple Choices
-  client->>glance: GET http://182.161.114.101/image/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405
+  client->>glance: GET /image/v2/images/{image_id}
   glance-->>client: Response: 200 OK
 ```
 
 이미지 목록 요청을 보낼 때의 시퀀스 다이어그램이다.  
 
 각 과정에 대한 간략한 설명은 다음과 같다.   
-(1),(2)번 과정은 Identity 서비스의 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
-(3),(4)번 과정은 Identity 서비스에 Access Token 발급 및 서비스 EndPoint의 카탈로그를 요청하고 수신하는 과정이다.  
-(5),(6)번 과정은 Image 서비스에 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
-(7),(8)번 과정은 Image 서비스에 이미지 상세 정보를 요청하고 결과를 수신하는 과정이다.
+
+- (1),(2)번 과정은 Identity 서비스의 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
+- (3),(4)번 과정은 Identity 서비스에 Access Token 발급 및 서비스 EndPoint의 카탈로그를 요청하고 수신하는 과정이다.  
+- (5),(6)번 과정은 Image 서비스에 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
+- (7),(8)번 과정은 Image 서비스에 이미지 상세 정보를 요청하고 결과를 수신하는 과정이다.
 
 ## Request/Response
 
@@ -67,13 +68,12 @@ sequenceDiagram
     (1)-(6)의 과정은 [image create](./create.md) 과정과 동일하므로, 여기서는 생략한다.
 
 
-### (7) GET http://182.161.114.101/image/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405
+### (7) GET /image/v2/images/{image_id}
 
 `GET` 메소드로 `/image/v2/images` API에 `id`로 이미지 목록을 요청한다.  
 
 === "Header"
-    ``` http title=""
-    GET http://182.161.114.101/image/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405
+    ``` http title="GET http://182.161.114.101/image/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: */*
@@ -82,7 +82,7 @@ sequenceDiagram
     ```
     
 === "Body"
-    ``` http title=""
+    ``` json title=""
     none
     ```
 
@@ -90,13 +90,12 @@ sequenceDiagram
     `name` 속성으로 요청하면(가령, `cirros-0.5.2-x86_64-disk`) 이 요청은 실패하고, `/v2/images?name=cirros-0.5.2-x86_64-disk`으로 다시 요청하여 이미지 상세 정보를 수신하게 된다.  
 
 
-### (8) 200 OK
+### (8) 200 OK /image/v2/images/{image_id}
 
 `Body`에서 이미지 상세 정보를 확인할 수 있다.  
 
 === "Header"
-    ``` http title=""
-    200 OK http://182.161.114.101/image/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405
+    ``` http title="200 OK http://182.161.114.101/image/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405"
     Date: Mon, 12 Dec 2022 08:37:10 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Length: 976
@@ -170,3 +169,5 @@ sequenceDiagram
   "visibility": "public"
 }
 ```
+
+`--format json` 인자를 사용하여 `json` 포맷으로 출력

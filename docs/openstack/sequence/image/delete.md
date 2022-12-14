@@ -42,17 +42,17 @@ sequenceDiagram
   participant client as openstack-client
   participant keystone as keystone-api
   participant glance as glance-api
-  client->>keystone: GET http://devstack-debug/identity
+  client->>keystone: GET /identity
   keystone-->>client: Response: 300 MULTIPLE CHOICES
-  client->>keystone: POST http://devstack-debug/identity/v3/auth/tokens
+  client->>keystone: POST /identity/v3/auth/tokens
   keystone-->>client: Response: 201 CREATED
-  client->>glance: GET http://182.161.114.101/image
+  client->>glance: GET /image
   glance-->>client: Response: 300 Multiple Choices
-  client->>glance: GET http://182.161.114.101/image/v2/images/cirros-0.6.1-x86_64-disk
+  client->>glance: GET /image/v2/images/cirros-0.6.1-x86_64-disk
   glance-->>client: Response: 404 Not Found
-  client->>glance: GET http://182.161.114.101/image/v2/images?name=cirros-0.6.1-x86_64-disk
+  client->>glance: GET /image/v2/images?name=cirros-0.6.1-x86_64-disk
   glance-->>client: Response: 200 OK
-  client->>glance: DELETE http://182.161.114.101/image/v2/images/057e34b9-720e-4e1d-903d-5ecfdc67aa77
+  client->>glance: DELETE /image/v2/images/{image_id}
   glance-->>client: Response: 204 No Content
 ```
 
@@ -60,12 +60,13 @@ sequenceDiagram
 
 
 각 과정에 대한 간략한 설명은 다음과 같다.  
-(1),(2)번 과정은 Identity 서비스의 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
-(3),(4)번 과정은 Identity 서비스에 Access Token 발급 및 서비스 EndPoint의 카탈로그를 요청하고 수신하는 과정이다.  
-(5),(6)번 과정은 Image 서비스에 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
-(7),(8)번 과정은 이미지 정보를 확인하는 과정이다. 입력 인자로 이미지 `name` 을 사용하였기 때문에, 여기서는 `404 Not Found`가 발생한다.  
-(9),(10)번 과정은 (7),(8)번 과정이 실패하였기 때문에, `name`으로 이미지 정보를 다시 한번 확인한다.  
-(11),(12)번 과정은 Image 서비스에 이미지 삭제를 요청하고, 결과를 수신하는 과정이다.  
+
+- (1),(2)번 과정은 Identity 서비스의 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
+- (3),(4)번 과정은 Identity 서비스에 Access Token 발급 및 서비스 EndPoint의 카탈로그를 요청하고 수신하는 과정이다.  
+- (5),(6)번 과정은 Image 서비스에 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
+- (7),(8)번 과정은 이미지 정보를 확인하는 과정이다. 입력 인자로 이미지 `name` 을 사용하였기 때문에, 여기서는 `404 Not Found`가 발생한다.  
+- (9),(10)번 과정은 (7),(8)번 과정이 실패하였기 때문에, `name`으로 이미지 정보를 다시 한번 확인한다.  
+- (11),(12)번 과정은 Image 서비스에 이미지 삭제를 요청하고, 결과를 수신하는 과정이다.  
 
 ## Request/Response
 
@@ -73,13 +74,12 @@ sequenceDiagram
     (1)-(6)의 과정은 [image create](./create.md) 과정과 동일하므로, 여기서는 생략한다.
 
 
-### (7) GET http://182.161.114.101/image/v2/images/cirros-0.6.1-x86_64-disk
+### (7) GET /image/v2/images/cirros-0.6.1-x86_64-disk
 
 입력 인자로 받은 값`<image>`은 기본적으로 `id`로 간주되고, 해당 URL로 이미지 정보를 요청한다.  
 
 === "Header"
-    ``` http title=""
-    GET http://182.161.114.101/image/v2/images/cirros-0.6.1-x86_64-disk
+    ``` http title="GET http://182.161.114.101/image/v2/images/cirros-0.6.1-x86_64-disk"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: */*
@@ -88,17 +88,16 @@ sequenceDiagram
     ```
     
 === "Body"
-    ``` http title=""
+    ``` json title=""
     none
     ```
 
-### (8) 404 Not Found
+### (8) 404 Not Found /image/v2/images/cirros-0.6.1-x86_64-disk
 
 입력 인자로 이미지의 `name` 속성을 사용하였으므로, 이 요청은 실패하고, 404 Not Found를 반환한다.
 
 === "Header"
-    ``` http title=""
-    404 Not Found http://182.161.114.101/image/v2/images/cirros-0.6.1-x86_64-disk
+    ``` http title="404 Not Found http://182.161.114.101/image/v2/images/cirros-0.6.1-x86_64-disk"
     Date: Mon, 12 Dec 2022 07:18:19 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Length: 169
@@ -123,13 +122,12 @@ sequenceDiagram
     </html>
     ```
 
-### (9) GET http://182.161.114.101/image/v2/images?name=cirros-0.6.1-x86_64-disk
+### (9) GET /image/v2/images?name=cirros-0.6.1-x86_64-disk
 
 `id` 속성으로 실패한 경우, `name` 속성으로 다시 한번 요청한다.  
 
 === "Header"
-    ``` http title=""
-    GET http://182.161.114.101/image/v2/images?name=cirros-0.6.1-x86_64-disk
+    ``` http title="GET http://182.161.114.101/image/v2/images?name=cirros-0.6.1-x86_64-disk"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: application/json
@@ -138,17 +136,16 @@ sequenceDiagram
     ```
     
 === "Body"
-    ``` html title=""
+    ``` json title=""
     none
     ```
 
-### (10) 200 OK
+### (10) 200 OK /image/v2/images?name=cirros-0.6.1-x86_64-disk
 
 `Body`에 이미지 파일의 정보(`id`, `file` 등)가 잘 수신되었음을 확인할 수 있다.  
 
 === "Header"
-    ``` http title=""
-    200 OK http://182.161.114.101/image/v2/images?name=cirros-0.6.1-x86_64-disk
+    ``` http title="200 OK http://182.161.114.101/image/v2/images?name=cirros-0.6.1-x86_64-disk"
     Date: Mon, 12 Dec 2022 07:18:19 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Length: 1049
@@ -194,13 +191,12 @@ sequenceDiagram
     }
     ```
 
-### (11) DELETE http://182.161.114.101/image/v2/images/057e34b9-720e-4e1d-903d-5ecfdc67aa77
+### (11) DELETE /image/v2/images/{image_id}
 
-`DELETE` 메소드를 이용하여, 이미지 삭제 요청을 보낸다.   
+`DELETE` 메소드를 이용하여, 이미지(`057e34b9-720e-4e1d-903d-5ecfdc67aa77`) 삭제 요청을 보낸다.   
 
 === "Header"
-    ``` http title=""
-    DELETE http://182.161.114.101/image/v2/images/057e34b9-720e-4e1d-903d-5ecfdc67aa77
+    ``` http title="DELETE http://182.161.114.101/image/v2/images/057e34b9-720e-4e1d-903d-5ecfdc67aa77"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: */*
@@ -210,16 +206,15 @@ sequenceDiagram
     ```
     
 === "Body"
-    ``` http title=""
+    ``` json title=""
     none
     ```
 
 
-### (12) 204 No Content
+### (12) 204 No Content /image/v2/images/{image_id}
 
 === "Header"
-    ``` http title=""
-    204 No Content http://182.161.114.101/image/v2/images/057e34b9-720e-4e1d-903d-5ecfdc67aa77
+    ``` http title="204 No Content http://182.161.114.101/image/v2/images/057e34b9-720e-4e1d-903d-5ecfdc67aa77"
     Date: Mon, 12 Dec 2022 07:18:19 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: text/html; charset=UTF-8
@@ -228,7 +223,7 @@ sequenceDiagram
     ```
     
 === "Body"
-    ``` http title=""
+    ``` json title=""
     none
     ```
 

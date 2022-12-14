@@ -52,16 +52,16 @@ sequenceDiagram
   participant client as openstack-client
   participant keystone as keystone-api
   participant glance as glance-api
-  client->>keystone: GET http://devstack-debug/identity
+  client->>keystone: GET /identity
   keystone-->>client: Response: 300 MULTIPLE CHOICES
-  client->>keystone: POST http://devstack-debug/identity/v3/auth/tokens
+  client->>keystone: POST /identity/v3/auth/tokens
   keystone-->>client: Response: 201 CREATED
-  client->>glance: GET http://182.161.114.101/image
+  client->>glance: GET /image
   glance-->>client: Response: 300 Multiple Choices
-  client->>glance: POST http://182.161.114.101/image/v2/images
+  client->>glance: POST /image/v2/images
   glance-->>client: Response: 201 Created
   Note right of glance: status: queued
-  client->>glance: PUT http://182.161.114.101/image/v2/images/c36393e2-6f61-433f-8ead-66e932948d98/file
+  client->>glance: PUT /image/v2/images/{image_id}/file
   glance-->>client: Response: 204 No Content
   Note right of glance: status: active
 ```
@@ -69,11 +69,12 @@ sequenceDiagram
 이미지 서비스에 qcow2 포맷의 로컬 이미지 파일 등록 요청을 보낼 때의 시퀀스 다이어그램이다.  
 
 각 과정에 대한 간략한 설명은 다음과 같다.   
-(1),(2)번 과정은 Identity 서비스의 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
-(3),(4)번 과정은 Identity 서비스에 Access Token 발급 및 서비스 EndPoint의 카탈로그를 요청하고 수신하는 과정이다.  
-(5),(6)번 과정은 Image 서비스에 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
-(7),(8)번 과정은 Image 서비스에 새로운 이미지 생성을 요청하고, 결과를 수신하는 과정이다. 이때는 아직 이미지 파일은 업로드 하지 않음  
-(9),(10)번 과정은 (7),(8)번 과정에서 생성한 이미지에 대해 실제 파일을 업로드 하는 과정이다.  
+
+- (1),(2)번 과정은 Identity 서비스의 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
+- (3),(4)번 과정은 Identity 서비스에 Access Token 발급 및 서비스 EndPoint의 카탈로그를 요청하고 수신하는 과정이다.  
+- (5),(6)번 과정은 Image 서비스에 버전별 EndPoint 목록을 요청하고 수신하는 과정이다.  
+- (7),(8)번 과정은 Image 서비스에 새로운 이미지 생성을 요청하고, 결과를 수신하는 과정이다. 이때는 아직 이미지 파일은 업로드 하지 않음  
+- (9),(10)번 과정은 (7),(8)번 과정에서 생성한 이미지에 대해 실제 파일을 업로드 하는 과정이다.  
 
 !!! note
     `devstack-debug`는 로컬머신의 호스트에 등록된 호스트 이름이고, `182.161.114.101`은 EndPoint에 등록된 URL이며 두 아이피는 동일하다.  
@@ -84,14 +85,13 @@ sequenceDiagram
 
 ## Request/Response
 
-### (1) GET http://devstack-debug/identity
+### (1) GET /identity
 
 환경변수 `OS_AUTH_URL` 에 정의된 URL(`http://devstack-debug/identity`)로 Identity 서비스의 버전별 EndPoint 목록을 요청한다.  
 이 요청에 대한 결과로 받은 EndPoint 중 적당한 EndPoint를 선택하여 Access Token 발급 및 서비스 API 카탈로그를 요청하게 된다.  
 
 === "Header"
-    ``` http title=""
-    GET http://devstack-debug/identity
+    ``` http title="GET http://devstack-debug/identity"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: application/json
@@ -99,19 +99,18 @@ sequenceDiagram
     ```
     
 === "Body"
-    ``` http title=""
+    ``` json title=""
     none
     ```
 
 
-### (2) 300 MULTIPLE CHOICES
+### (2) 300 MULTIPLE CHOICES /identity
 
 (1)번 요청에 대한 응답이다.  
-Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버전이며, url은 `http://182.161.114.101/identity/v3/` 인 것을 확인할 수 있다.  
+`Body`의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버전이며, url은 `http://182.161.114.101/identity/v3/` 인 것을 확인할 수 있다.  
 
 === "Header"
-    ``` http title=""
-    300 MULTIPLE CHOICES http://devstack-debug/identity
+    ``` http title="300 MULTIPLE CHOICES http://devstack-debug/identity"
     Date: Mon, 12 Dec 2022 01:50:37 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
@@ -150,14 +149,13 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
     ```
 
 
-### (3) POST http://devstack-debug/identity/v3/auth/tokens
+### (3) POST /identity/v3/auth/tokens
 
 `Access Token` 발급 및 `서비스 카탈로그` 요청한다.  
 `Body`는 `admin` 사용자가 `admin` 프로젝트 스코프로 `패스워드` 방식으로(패스워드=`asdf`) 인증 요청을 담고 있다.  
 
 === "Header"
-    ``` http title=""
-    POST http://devstack-debug/identity/v3/auth/tokens
+    ``` http title="POST http://devstack-debug/identity/v3/auth/tokens"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: application/json
@@ -198,17 +196,16 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
 
 !!! question
     (1),(2) 과정에서 얻은 EndPoint인 `http://182.161.114.101/identity/v3/` 를 사용하지 않고 `http://devstack-debug/identity/v3`를 사용하고 있다.  
-    `OS_AUTH_URL` 환경 변수와 (1),(2) 과정에서 얻은 `API Version 3`를 조합해서 만든 EndPoint로 보이는데, 굳이 왜???
+    `OS_AUTH_URL`, `OS_IDENTITY_API_VERSION` 환경변수를 이용해서 조합할 수 있는데, 굳이 왜???
 
 
-### (4) 201 CREATED
+### (4) 201 CREATED /identity/v3/auth/tokens
 
 토큰 발급 요청이 성공하면, Response Header에 `X-Subject-Token` 이름으로 Access Token이 발급된다.  
 `Body`에는 `user` 정보, `project` 정보, `roles` 정보, `catalog` 정보가 포함되어 있다.  
 
 === "Header"
-    ``` http title="" hl_lines="6"
-    201 CREATED http://devstack-debug/identity/v3/auth/tokens
+    ``` http title="201 CREATED http://devstack-debug/identity/v3/auth/tokens" hl_lines="5"
     Date: Mon, 12 Dec 2022 01:50:37 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
@@ -433,14 +430,13 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
 서비스 `catalog` 중, 원하는 서비스 EndPoint URL을 선택하여 해당 URL로 요청을 전송하게 된다.  
 `type`이 `image`인 endpoint `http://182.161.114.101/image` 를 이용하여 이미지 생성 요청을 보낼 것이다.  
 
-### (5) GET http://182.161.114.101/image
+### (5) GET /image
 
 (4)과정에서 얻은 `http://182.161.114.101/image` API URL로 이미지 서비스의 버전별 API EndPoint 목록을 요청한다.  
 ( 이미지 서비스 API는 현재 v2.0이고, v1.0은 deprecated 되었다 )    
 
 === "Header"
-    ``` http title=""
-    GET http://182.161.114.101/image
+    ``` http title="GET http://182.161.114.101/image"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: application/json
@@ -452,15 +448,14 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
     none
     ```
 
-### (6) 300 Multiple Choices
+### (6) 300 Multiple Choices /image
 
 이미지 서비스의 API 버전 및 EndPoint 목록을 얻는다.  
 `Body`를 통해 현재 버전이 `v2.16`이고, url은 `http://182.161.114.101/image/v2/` 임을 확인할 수 있다.  
 또한, `v2.15`, `v2.14`, `v2.9`, `v2.7`, `v2.6`, `v2.5`, `v2.4`, `v2.3`, `v2.2`, `v2.1`, `v2.0` 까지 지원하고 있음을 확인할 수 있다.  
 
 === "Header"
-    ``` http title=""
-    300 Multiple Choices http://182.161.114.101/image
+    ``` http title="300 Multiple Choices http://182.161.114.101/image"
     Date: Mon, 12 Dec 2022 01:50:37 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
@@ -597,7 +592,7 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
     ```
 
 
-### (7) POST http://182.161.114.101/image/v2/images
+### (7) POST /image/v2/images
 
 발급 받은 `Access Token`을 Header의 `X-Auth-Token` 항목으로 입력하여 이미지 생성을 요청한다.  
 `Body`에는 `disk_format=qcow2`, `container_format=bare`, `visibility=public`, `name=cirros-0.6.1-x86_64-disk` 와 같은 이미지 정보를 포함한다.  
@@ -605,8 +600,7 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
 이 요청은 데이터베이스에 이미지 항목을 생성한다. (id 등...) 실제 이미지 파일 업로드는 아래의 (9),(10)과정을 통해서 진행된다.   
 
 === "Header"
-    ``` http title="" hl_lines="6"
-    POST http://182.161.114.101/image/v2/images
+    ``` http title="POST http://182.161.114.101/image/v2/images" hl_lines="5"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: */*
@@ -629,14 +623,13 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
     }
     ```
 
-### (8) 201 Created
+### (8) 201 Created /image/v2/images
 
 (7)번 이미지 생성 요청에 대한 응답이다.  
 `Body`에는 이미지에 대한 정보를 포함하고 있고, `status`가 `queued` 상태임을 확인할 수 있다.  
 
 === "Header"
-    ``` http title=""
-    201 Created http://182.161.114.101/image/v2/images
+    ``` http title="201 Created http://182.161.114.101/image/v2/images"
     Date: Mon, 12 Dec 2022 01:50:37 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Length: 781
@@ -680,14 +673,13 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
 `status`가 `queued` 상태에서 `file` 접근 경로 `/v2/images/c36393e2-6f61-433f-8ead-66e932948d98/file` URL을 통해 이미지 파일을 업로드 할 수 있다.  
 
 
-### (9) PUT http://182.161.114.101/image/v2/images/c36393e2-6f61-433f-8ead-66e932948d98/file
+### (9) PUT /image/v2/images/{image_id}/file
 
 `Identity` 서비스 EndPoint와 (8)과정에서 얻은 파일 접근 경로 `/v2/images/c36393e2-6f61-433f-8ead-66e932948d98/file` 를 이용하여, `PUT` 메소드로 이미지 파일을 업로드한다.  
 이 과정에서 인증 토큰이 필요하고, 파일 업로드를 위해 `Content-Type`을 `application/octet-stream`으로 요청한다.  
 
 === "Header"
-    ``` http title="" hl_lines="6 7"
-    PUT http://182.161.114.101/image/v2/images/c36393e2-6f61-433f-8ead-66e932948d98/file
+    ``` http title="PUT http://182.161.114.101/image/v2/images/c36393e2-6f61-433f-8ead-66e932948d98/file" hl_lines="5 6"
     User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
     Accept-Encoding: gzip, deflate
     Accept: 
@@ -705,15 +697,14 @@ Body의 내용을 통해 Identity 서비스의 EndPoint 는 현재 `v3.14` 버�
 `body`는 `requests` 패키지의 `PreparedRequest`를 통해 파일을 업로드하고 있음을 확인할 수 있다.(파일명만 표시)  
 
 
-### (10) 204 No Content
+### (10) 204 No Content /image/v2/images/{image_id}/file
 
 파일 업로드가 성공하면 `204 No Content` 응답을 전송 받는다.  
 이 과정이 완료되면, 이미지의 `status` 가 `active` 상태가 된다.  
 다만, 이때 업로드된 파일의 `disk_format` 체크라거나, 올바른 이미지 형식인지 등은 별도로 검사하지 않는다.  
 
 === "Header"
-    ``` http title=""
-    204 No Content http://182.161.114.101/image/v2/images/c36393e2-6f61-433f-8ead-66e932948d98/file
+    ``` http title="204 No Content http://182.161.114.101/image/v2/images/c36393e2-6f61-433f-8ead-66e932948d98/file"
     Date: Mon, 12 Dec 2022 01:50:38 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: text/html; charset=UTF-8
