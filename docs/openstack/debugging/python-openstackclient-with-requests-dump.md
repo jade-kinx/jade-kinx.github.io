@@ -167,12 +167,13 @@ setuptools.setup(
 ```
 
 ``` python title="observer.py"
+"""tracing requests.response for debugging ( only private studying purpose )"""
+
 import os
 import sys
 from pathlib import Path
 import platform
 import logging
-import uuid
 import textwrap
 import json
 from functools import wraps
@@ -183,22 +184,20 @@ try:
 except:
     syslog = None
 
-# unique id of logger
-uid = str(uuid.uuid1())[:8]
-
 # request counter
 req_idx = 0
 
 # get log file path
-def get_log_path():
-    global uid
+# on linux: /var/log/requests-observer/request.log
+# on windows: C:\Users\{UserId}\logs\requests.log on windows
+def get_log_filepath():
 
     # create log path if not exists
     log_path = os.path.expanduser(os.path.join('~', "logs")) if platform.system() == 'Windows' else '/var/log/requests-observer'
     if not os.path.exists(log_path):
         os.mkdir(log_path)
 
-    return os.path.join(log_path, "{0}-{1}_{2}.log".format(uid, Path(sys.argv[0]).stem, "_".join(sys.argv[1:])))
+    return os.path.join(log_path, "requests.log")
 
 # print error message
 def print_error(err):
@@ -211,7 +210,7 @@ def print_error(err):
 def print_log(message):
 
     # write log message
-    with open(get_log_path(), "a") as logger:
+    with open(get_log_filepath(), "a") as logger:
         logger.write("{0}\n".format(message))
 
 # observer decorator
@@ -234,8 +233,9 @@ def observe(f):
         except Exception as ex:
             print_error(repr(ex))
 
-        # original response
-        return response
+        finally:
+            # original response
+            return response
     
     return decorator
 
@@ -247,17 +247,18 @@ def beautify_json(s):
         return str(s)
 
 # format requests.response
-def format_response(response, req_idx):
+def format_response(response, seq):
     format_headers = lambda d: '\n'.join(f'{k}: {v}' for k, v in d.items())
 
     try:
         resp = response
         req = response.request
 
-        # content-type
-        content_type = resp.headers.get('content-type')
+        # entry point name ( ex: openstack, glance-api, trove-api )
+        ep = Path(sys.argv[0]).stem
 
-        # parse response.body
+        # parse response.body by content-type
+        content_type = resp.headers.get('content-type')
         if not content_type:
             resp_body = resp.text
         elif 'json' in content_type:
@@ -268,21 +269,24 @@ def format_response(response, req_idx):
             resp_body = resp.text
 
         return textwrap.dedent("""
-            *** REQ[{req_idx}]: {req.method} {req.url}
+            __{ep}__ -> Request [{seq}] {req.method} {req.url}
             {req_header}
-            Body: {req_body}
+            
+            {req_body}
 
-            *** RESP[{req_idx}]: {resp.status_code} {resp.reason} {resp.url}
+            __{ep}__ <- Response [{seq}] {resp.status_code} {resp.reason} {resp.url}
             {resp_header}
-            Body: {resp_body}
+            
+            {resp_body}
         """).format(
+            ep = ep,
+            seq = seq,
             resp = resp,
             req = req,
             req_header = format_headers(req.headers),
             resp_header = format_headers(resp.headers),
             req_body = beautify_json(req.body),
-            resp_body = resp_body,
-            req_idx = req_idx
+            resp_body = resp_body
         )
     except Exception as ex:
         return repr(ex)
@@ -323,31 +327,34 @@ Successfully installed requestsObserver-0.0.1
 
 이제 가상환경에서 openstack.exe 를 실행하면 사용자의 홈 디렉토리의 logs 폴더에 API 요청에 대한 로그 파일이 생성된다.
 
-![log files](img/requests-observer-log-files.png)
+!!! note
+    아래 로그와 시퀀스 다이어그램은 `devstack`이 설치된 우분투 환경에서 `openstack image list`를 실행한 결과이다
 
-``` text title=".log"
+``` bash title=""
+$ openstack image list
+```
 
------ REQUEST [1] ------------------------------
-GET http://devstack-zed/identity
-User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
+``` text title="/var/log/requests-observer/requests.log"
+
+__openstack__ -> Request [1] GET http://182.161.114.101/identity
+User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
 Accept-Encoding: gzip, deflate
 Accept: application/json
 Connection: keep-alive
 
-DATA={}
+None
 
------ RESPONSE [1] -----------------------------
-300 MULTIPLE CHOICES http://devstack-zed/identity
-Date: Tue, 06 Dec 2022 07:42:38 GMT
+__openstack__ <- Response [1] 300 MULTIPLE CHOICES http://182.161.114.101/identity
+Date: Thu, 15 Dec 2022 09:23:40 GMT
 Server: Apache/2.4.41 (Ubuntu)
 Content-Type: application/json
 Content-Length: 274
-Location: http://182.161.114.200/identity/v3/
+Location: http://182.161.114.101/identity/v3/
 Vary: X-Auth-Token
-x-openstack-request-id: req-54f62e8a-f548-463e-9da7-2ddca0ae445d
+x-openstack-request-id: req-0b9cef33-0236-4ef8-8952-248405aa88ac
 Connection: close
 
-DATA={
+{
   "versions": {
     "values": [
       {
@@ -357,7 +364,7 @@ DATA={
         "links": [
           {
             "rel": "self",
-            "href": "http://182.161.114.200/identity/v3/"
+            "href": "http://182.161.114.101/identity/v3/"
           }
         ],
         "media-types": [
@@ -370,19 +377,17 @@ DATA={
     ]
   }
 }
------ END OF REQUEST [1] -----------------------
 
 
------ REQUEST [2] ------------------------------
-POST http://devstack-zed/identity/v3/auth/tokens
-User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
+__openstack__ -> Request [2] POST http://182.161.114.101/identity/v3/auth/tokens
+User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
 Accept-Encoding: gzip, deflate
 Accept: application/json
 Connection: keep-alive
 Content-Type: application/json
-Content-Length: 213
+Content-Length: 209
 
-DATA={
+{
   "auth": {
     "identity": {
       "methods": [
@@ -393,7 +398,7 @@ DATA={
           "password": "asdf",
           "name": "admin",
           "domain": {
-            "name": "Default"
+            "id": "default"
           }
         }
       }
@@ -402,25 +407,24 @@ DATA={
       "project": {
         "name": "admin",
         "domain": {
-          "name": "Default"
+          "id": "default"
         }
       }
     }
   }
 }
 
------ RESPONSE [2] -----------------------------
-201 CREATED http://devstack-zed/identity/v3/auth/tokens
-Date: Tue, 06 Dec 2022 07:42:38 GMT
+__openstack__ <- Response [2] 201 CREATED http://182.161.114.101/identity/v3/auth/tokens
+Date: Thu, 15 Dec 2022 09:23:40 GMT
 Server: Apache/2.4.41 (Ubuntu)
 Content-Type: application/json
 Content-Length: 3952
-X-Subject-Token: gAAAAABjjvJvFithsEZSZWYsoXATzVpygYGj8VKeuH-lBIxC6lZucV2BboO2lLU13QKRg6DLwacsvLCpp-xqHd311C1YN9ESNXEREpy3jhGcsqrriIrm7bu7AKAARC9Tl337FzySxXDAnU-6pv5WXyc9lvjgQDNNNzJXubBX0AuTdFKfxLf8i2E
+X-Subject-Token: gAAAAABjmuecYFmRPQsVsMQG0ISfxCu8my-78UFyTsH3pvEyXoED6xdWFniwmGex1QGimVH2utjSxyxDJI9Rso6QFflEjaDgWoO3KzZ_8C3oVzpLp9nBxlPhn97YNn01BT7UFubQucRARWUGTdSXeLK_KqKAhy4080GkUXHIal2SUQcqhrhC1yA
 Vary: X-Auth-Token
-x-openstack-request-id: req-c1d6c868-3d25-4565-a50d-489f4ac4f62f
+x-openstack-request-id: req-6ea1f0e1-7ffc-4640-83fb-71fd68c1b58e
 Connection: close
 
-DATA={
+{
   "token": {
     "methods": [
       "password"
@@ -430,35 +434,35 @@ DATA={
         "id": "default",
         "name": "Default"
       },
-      "id": "e128b83ac09e4f78abd0a65789e2376b",
+      "id": "8221f17fbf934d309ba96cf2218be3ff",
       "name": "admin",
       "password_expires_at": null
     },
     "audit_ids": [
-      "3_qA8wlkTNSyfSF9DWXUQQ"
+      "gU0UDl2MSOeHLxUg2DBN0A"
     ],
-    "expires_at": "2022-12-06T10:42:39.000000Z",
-    "issued_at": "2022-12-06T07:42:39.000000Z",
+    "expires_at": "2022-12-15T12:23:40.000000Z",
+    "issued_at": "2022-12-15T09:23:40.000000Z",
     "project": {
       "domain": {
         "id": "default",
         "name": "Default"
       },
-      "id": "c7f2154d360440abb922f2b16fdd96c6",
+      "id": "a5362cbd04fd4783a038d5a342d58e87",
       "name": "admin"
     },
     "is_domain": false,
     "roles": [
       {
-        "id": "536c34d179c740da8da1afdb78d5f6a3",
-        "name": "reader"
-      },
-      {
-        "id": "cf7c50f65e4c479283952a306931d5f6",
+        "id": "9ec297ce89234ce6bf2813e5e0166e4d",
         "name": "member"
       },
       {
-        "id": "d2fbbd096b134919b61a5cec28584213",
+        "id": "dbf0266266eb4ea885528545e3eb59ec",
+        "name": "reader"
+      },
+      {
+        "id": "89efad03325b4fb9a021bd88e534bbad",
         "name": "admin"
       }
     ],
@@ -466,263 +470,670 @@ DATA={
       {
         "endpoints": [
           {
-            "id": "0df3ffa72a9d4eecb8532947a0ccfe6c",
+            "id": "06b2a46d96e349d08631686ab53d7e83",
             "interface": "public",
             "region_id": "RegionOne",
-            "url": "http://182.161.114.200/volume/v3/c7f2154d360440abb922f2b16fdd96c6",
+            "url": "http://182.161.114.101/compute/v2/a5362cbd04fd4783a038d5a342d58e87",
             "region": "RegionOne"
           }
         ],
-        "id": "5b8ca1f50e9b49cfb97f390dba863409",
-        "type": "block-storage",
-        "name": "cinder"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "60b65ed57a5c45a5ba366b6e568f56b7",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.200/compute/v2/c7f2154d360440abb922f2b16fdd96c6",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "7d1c8a389bc14e8290ea123243f9464d",
+        "id": "1ca87647ab754599b632a643e5b02c7c",
         "type": "compute_legacy",
         "name": "nova_legacy"
       },
       {
         "endpoints": [
           {
-            "id": "5301066c86694a1199d280a02e7779b1",
+            "id": "254257a27e574069b9510cc4f218afa1",
             "interface": "public",
             "region_id": "RegionOne",
-            "url": "http://182.161.114.200/image",
+            "url": "http://182.161.114.101/identity",
             "region": "RegionOne"
           }
         ],
-        "id": "8c0b78823bff49bebb862a71f7374210",
-        "type": "image",
-        "name": "glance"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "ea00c484dbd34f65b25644eb7b434275",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.200/identity",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "92367ef462ad444099a58fdf18ee3c9e",
+        "id": "2241c852ef204ee5bd4f4092ae9b5c7d",
         "type": "identity",
         "name": "keystone"
       },
       {
         "endpoints": [
           {
-            "id": "85150c222ffe4ebe9984d495d2c7c63a",
+            "id": "a49d989ec6dd4e8f9399cf8a5caf519b",
             "interface": "public",
             "region_id": "RegionOne",
-            "url": "http://182.161.114.200/placement",
+            "url": "http://182.161.114.101/volume/v3/a5362cbd04fd4783a038d5a342d58e87",
             "region": "RegionOne"
           }
         ],
-        "id": "98fd02ee808f42f898c1abaa4dd2cd80",
-        "type": "placement",
-        "name": "placement"
+        "id": "2baac711c03b4da1abaabe4e0f0f3575",
+        "type": "volumev3",
+        "name": "cinderv3"
       },
       {
         "endpoints": [
           {
-            "id": "9b20e57f012143fd840524df0c5b238d",
+            "id": "3195d06aa49541009838146ab9072997",
             "interface": "public",
             "region_id": "RegionOne",
-            "url": "http://182.161.114.200/compute/v2.1",
+            "url": "http://182.161.114.101/image",
             "region": "RegionOne"
           }
         ],
-        "id": "a8ab86dce16643ffa9eae6e9c90347f8",
-        "type": "compute",
-        "name": "nova"
+        "id": "4134c089d54f40c4bff6629c9b3c8b17",
+        "type": "image",
+        "name": "glance"
       },
       {
         "endpoints": [
           {
-            "id": "02fbefaa51fb479e9f6cb893cb4899c6",
+            "id": "be657c3c268e49c08bb0d31aa7b79b01",
             "interface": "public",
             "region_id": "RegionOne",
-            "url": "http://182.161.114.200:8779/v1.0/c7f2154d360440abb922f2b16fdd96c6",
-            "region": "RegionOne"
-          },
-          {
-            "id": "260b6f99ba374171b321adb2f45bb0e8",
-            "interface": "admin",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.200:8779/v1.0/c7f2154d360440abb922f2b16fdd96c6",
-            "region": "RegionOne"
-          },
-          {
-            "id": "8a853656239042d39c61d505c329908b",
-            "interface": "internal",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.200:8779/v1.0/c7f2154d360440abb922f2b16fdd96c6",
+            "url": "http://182.161.114.101:9696/networking",
             "region": "RegionOne"
           }
         ],
-        "id": "b3e07f2e55954e04806d42729b586292",
-        "type": "database",
-        "name": "trove"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "743a13b0b9284db080875ea036b4cda7",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.200:9696/networking",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "c676387f25de48ad8193740155820f21",
+        "id": "59d326ea519d4ad58dcc784330c372a4",
         "type": "network",
         "name": "neutron"
       },
       {
         "endpoints": [
           {
-            "id": "705fce83fcce42dea7628db2bff7d995",
+            "id": "64319e2274594aca8b7ff17be26f1306",
             "interface": "admin",
             "region_id": "RegionOne",
-            "url": "http://182.161.114.200:8080",
+            "url": "http://182.161.114.101:8080",
             "region": "RegionOne"
           },
           {
-            "id": "7a1461c2265a47feb314225f086d2d2f",
+            "id": "721a5750cf0448729c85f21749859ec0",
             "interface": "public",
             "region_id": "RegionOne",
-            "url": "http://182.161.114.200:8080/v1/AUTH_c7f2154d360440abb922f2b16fdd96c6",
+            "url": "http://182.161.114.101:8080/v1/AUTH_a5362cbd04fd4783a038d5a342d58e87",
             "region": "RegionOne"
           }
         ],
-        "id": "ecec68cc3a3b448b9716a5728be1dec5",
+        "id": "5b4f3dd567054612914e94f37e396d05",
         "type": "object-store",
         "name": "swift"
       },
       {
         "endpoints": [
           {
-            "id": "b241b0ea1ce0444e9014d2efe87ac46d",
+            "id": "dac7532e7f2547d59c42be1309388076",
             "interface": "public",
             "region_id": "RegionOne",
-            "url": "http://182.161.114.200/volume/v3/c7f2154d360440abb922f2b16fdd96c6",
+            "url": "http://182.161.114.101/placement",
             "region": "RegionOne"
           }
         ],
-        "id": "f3ceb4a56c9d4a699e7831f94ab2b9c7",
-        "type": "volumev3",
-        "name": "cinderv3"
+        "id": "5f8648439aa0443588164675566362a4",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "0d3a0c91848845ddb1794791ceeed1db",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          },
+          {
+            "id": "d4e369995c8847d9aaeeab1824dc3a02",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          },
+          {
+            "id": "de625690480c40878f484c10f0cc21c3",
+            "interface": "internal",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "985cf9347e11431bbbc8640d3c73e064",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "ce7d3f34c48d4c1a877222ca8403bcbc",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "ec5120d847b7457485bbbafc555df0af",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82bfd276ae734c3788bc66159b0c6d39",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "fa5e4dfaffbe476c88be86bbc10f092e",
+        "type": "compute",
+        "name": "nova"
       }
     ]
   }
 }
------ END OF REQUEST [2] -----------------------
 
 
------ REQUEST [3] ------------------------------
-GET http://182.161.114.200:8779/v1.0/c7f2154d360440abb922f2b16fdd96c6/instances?include_clustered=False
-User-Agent: openstacksdk/0.103.0 keystoneauth1/5.1.0 python-requests/2.28.1 CPython/3.11.0
+__openstack__ -> Request [3] GET http://182.161.114.101/image
+User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
 Accept-Encoding: gzip, deflate
 Accept: application/json
 Connection: keep-alive
-X-Auth-Token: gAAAAABjjvJvFithsEZSZWYsoXATzVpygYGj8VKeuH-lBIxC6lZucV2BboO2lLU13QKRg6DLwacsvLCpp-xqHd311C1YN9ESNXEREpy3jhGcsqrriIrm7bu7AKAARC9Tl337FzySxXDAnU-6pv5WXyc9lvjgQDNNNzJXubBX0AuTdFKfxLf8i2E
 
-DATA={}
+None
 
------ RESPONSE [3] -----------------------------
-200 OK http://182.161.114.200:8779/v1.0/c7f2154d360440abb922f2b16fdd96c6/instances?include_clustered=False
-Date: Tue, 06 Dec 2022 07:42:39 GMT
+__openstack__ <- Response [3] 300 Multiple Choices http://182.161.114.101/image
+Date: Thu, 15 Dec 2022 09:23:41 GMT
 Server: Apache/2.4.41 (Ubuntu)
-Content-Length: 1086
-Connection: close
 Content-Type: application/json
+Content-Length: 1347
+Connection: close
 
-DATA={
-  "instances": [
+{
+  "versions": [
     {
-      "id": "02799d72-2389-4c8e-a4c6-970b6796a561",
-      "name": "mydb",
-      "status": "ACTIVE",
-      "operating_status": "HEALTHY",
+      "id": "v2.16",
+      "status": "CURRENT",
       "links": [
         {
-          "href": "https://182.161.114.200:8779/v1.0/c7f2154d360440abb922f2b16fdd96c6/instances/02799d72-2389-4c8e-a4c6-970b6796a561",
-          "rel": "self"
-        },
-        {
-          "href": "https://182.161.114.200:8779/instances/02799d72-2389-4c8e-a4c6-970b6796a561",
-          "rel": "bookmark"
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
         }
-      ],
-      "flavor": {
-        "id": "77883c8b-9308-4635-820c-bb5ec25b1e26",
-        "links": [
-          {
-            "href": "https://182.161.114.200:8779/v1.0/c7f2154d360440abb922f2b16fdd96c6/flavors/77883c8b-9308-4635-820c-bb5ec25b1e26",
-            "rel": "self"
-          },
-          {
-            "href": "https://182.161.114.200:8779/flavors/77883c8b-9308-4635-820c-bb5ec25b1e26",
-            "rel": "bookmark"
-          }
-        ]
-      },
-      "datastore": {
-        "type": "mysql",
-        "version": "5.7.29"
-      },
-      "region": "RegionOne",
-      "access": {
-        "is_public": true
-      },
-      "tenant_id": "c7f2154d360440abb922f2b16fdd96c6",
-      "volume": {
-        "size": 1
-      },
-      "ip": [
-        "10.10.0.15",
-        "192.168.100.82"
-      ],
-      "addresses": [
+      ]
+    },
+    {
+      "id": "v2.15",
+      "status": "SUPPORTED",
+      "links": [
         {
-          "address": "10.10.0.15",
-          "type": "private",
-          "network": "a75a79d8-56b3-4cf6-a28d-4190d43a97bd"
-        },
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.14",
+      "status": "SUPPORTED",
+      "links": [
         {
-          "address": "192.168.100.82",
-          "type": "public"
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.9",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.7",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.6",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.5",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.4",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.3",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.2",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.1",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
+        }
+      ]
+    },
+    {
+      "id": "v2.0",
+      "status": "SUPPORTED",
+      "links": [
+        {
+          "rel": "self",
+          "href": "http://182.161.114.101/image/v2/"
         }
       ]
     }
   ]
 }
------ END OF REQUEST [3] -----------------------
 
+
+__glance-api__ -> Request [4] GET http://182.161.114.101/identity/v3/auth/tokens
+User-Agent: python-keystoneclient
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Subject-Token: gAAAAABjmuecYFmRPQsVsMQG0ISfxCu8my-78UFyTsH3pvEyXoED6xdWFniwmGex1QGimVH2utjSxyxDJI9Rso6QFflEjaDgWoO3KzZ_8C3oVzpLp9nBxlPhn97YNn01BT7UFubQucRARWUGTdSXeLK_KqKAhy4080GkUXHIal2SUQcqhrhC1yA
+OpenStack-Identity-Access-Rules: 1
+X-Auth-Token: gAAAAABjmuI-z7IINEe2nD9Ekm2B_uSPktIkGnwWwMU40ulNziBvPCEqdSoCKM-DjHxIM_-ph6Qfc6kldbn0a7EQDcfUTp7VLw68MKEleCNuwNI3IAid89k1r6VUPev0X61hu-xB5ihRZZFiwiC8tSleEO8O07mKRQOMt8rRfCHjiYR2VZ-uMHU
+
+None
+
+__glance-api__ <- Response [4] 200 OK http://182.161.114.101/identity/v3/auth/tokens
+Date: Thu, 15 Dec 2022 09:23:41 GMT
+Server: Apache/2.4.41 (Ubuntu)
+Content-Type: application/json
+Content-Length: 3952
+X-Subject-Token: gAAAAABjmuecYFmRPQsVsMQG0ISfxCu8my-78UFyTsH3pvEyXoED6xdWFniwmGex1QGimVH2utjSxyxDJI9Rso6QFflEjaDgWoO3KzZ_8C3oVzpLp9nBxlPhn97YNn01BT7UFubQucRARWUGTdSXeLK_KqKAhy4080GkUXHIal2SUQcqhrhC1yA
+Vary: X-Auth-Token
+x-openstack-request-id: req-5cf38014-99f6-4134-87f9-e8a52191e5d3
+Connection: close
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "8221f17fbf934d309ba96cf2218be3ff",
+      "name": "admin",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "gU0UDl2MSOeHLxUg2DBN0A"
+    ],
+    "expires_at": "2022-12-15T12:23:40.000000Z",
+    "issued_at": "2022-12-15T09:23:40.000000Z",
+    "project": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "a5362cbd04fd4783a038d5a342d58e87",
+      "name": "admin"
+    },
+    "is_domain": false,
+    "roles": [
+      {
+        "id": "9ec297ce89234ce6bf2813e5e0166e4d",
+        "name": "member"
+      },
+      {
+        "id": "dbf0266266eb4ea885528545e3eb59ec",
+        "name": "reader"
+      },
+      {
+        "id": "89efad03325b4fb9a021bd88e534bbad",
+        "name": "admin"
+      }
+    ],
+    "catalog": [
+      {
+        "endpoints": [
+          {
+            "id": "06b2a46d96e349d08631686ab53d7e83",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "1ca87647ab754599b632a643e5b02c7c",
+        "type": "compute_legacy",
+        "name": "nova_legacy"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "254257a27e574069b9510cc4f218afa1",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/identity",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "2241c852ef204ee5bd4f4092ae9b5c7d",
+        "type": "identity",
+        "name": "keystone"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "a49d989ec6dd4e8f9399cf8a5caf519b",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "2baac711c03b4da1abaabe4e0f0f3575",
+        "type": "volumev3",
+        "name": "cinderv3"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "3195d06aa49541009838146ab9072997",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/image",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "4134c089d54f40c4bff6629c9b3c8b17",
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "be657c3c268e49c08bb0d31aa7b79b01",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:9696/networking",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "59d326ea519d4ad58dcc784330c372a4",
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "64319e2274594aca8b7ff17be26f1306",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080",
+            "region": "RegionOne"
+          },
+          {
+            "id": "721a5750cf0448729c85f21749859ec0",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080/v1/AUTH_a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "5b4f3dd567054612914e94f37e396d05",
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "dac7532e7f2547d59c42be1309388076",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/placement",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "5f8648439aa0443588164675566362a4",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "0d3a0c91848845ddb1794791ceeed1db",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          },
+          {
+            "id": "d4e369995c8847d9aaeeab1824dc3a02",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          },
+          {
+            "id": "de625690480c40878f484c10f0cc21c3",
+            "interface": "internal",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "985cf9347e11431bbbc8640d3c73e064",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "ce7d3f34c48d4c1a877222ca8403bcbc",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/a5362cbd04fd4783a038d5a342d58e87",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "ec5120d847b7457485bbbafc555df0af",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82bfd276ae734c3788bc66159b0c6d39",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "fa5e4dfaffbe476c88be86bbc10f092e",
+        "type": "compute",
+        "name": "nova"
+      }
+    ]
+  }
+}
+
+
+__openstack__ -> Request [4] GET http://182.161.114.101/image/v2/images
+User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Auth-Token: gAAAAABjmuecYFmRPQsVsMQG0ISfxCu8my-78UFyTsH3pvEyXoED6xdWFniwmGex1QGimVH2utjSxyxDJI9Rso6QFflEjaDgWoO3KzZ_8C3oVzpLp9nBxlPhn97YNn01BT7UFubQucRARWUGTdSXeLK_KqKAhy4080GkUXHIal2SUQcqhrhC1yA
+
+None
+
+__openstack__ <- Response [4] 200 OK http://182.161.114.101/image/v2/images
+Date: Thu, 15 Dec 2022 09:23:41 GMT
+Server: Apache/2.4.41 (Ubuntu)
+Content-Length: 2985
+Content-Type: application/json
+X-Openstack-Request-Id: req-3e68af9b-78b8-4ae9-b068-a4afdc7b79c4
+Connection: close
+
+{
+  "images": [
+    {
+      "owner_specified.openstack.md5": "",
+      "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk",
+      "owner_specified.openstack.sha256": "",
+      "name": "cirros-0.6.1-x86_64-disk",
+      "disk_format": "qcow2",
+      "container_format": "bare",
+      "visibility": "public",
+      "size": 21233664,
+      "virtual_size": 117440512,
+      "status": "active",
+      "checksum": "0c839612eb3f2469420f2ccae990827f",
+      "protected": false,
+      "min_ram": 0,
+      "min_disk": 0,
+      "owner": "d34b18d2e5934d7d84900220483ad8b7",
+      "os_hidden": false,
+      "os_hash_algo": "sha512",
+      "os_hash_value": "df88bac2791254f68941229792539621516bd480aa3d6fe4c0ca16057393d024a4944d644959f323dc01a25e3417c0b581776ab3c8db8da542039f2a67230579",
+      "id": "9faa6fd5-b254-4184-80c0-66b7c062315e",
+      "created_at": "2022-12-13T08:35:27Z",
+      "updated_at": "2022-12-14T07:13:16Z",
+      "tags": [],
+      "self": "/v2/images/9faa6fd5-b254-4184-80c0-66b7c062315e",
+      "file": "/v2/images/9faa6fd5-b254-4184-80c0-66b7c062315e/file",
+      "schema": "/v2/schemas/image"
+    },
+    {
+      "hw_rng_model": "virtio",
+      "owner_specified.openstack.md5": "",
+      "owner_specified.openstack.object": "images/trove-guest-ubuntu-focal",
+      "owner_specified.openstack.sha256": "",
+      "name": "trove-guest-ubuntu-focal",
+      "disk_format": "qcow2",
+      "container_format": "bare",
+      "visibility": "shared",
+      "size": 1033043968,
+      "virtual_size": 5368709120,
+      "status": "active",
+      "checksum": "a68f5d086d6dd6cbe341dee9911412c8",
+      "protected": false,
+      "min_ram": 0,
+      "min_disk": 0,
+      "owner": "3a16cadd069e4a70b95f71316ec6f3e8",
+      "os_hidden": false,
+      "os_hash_algo": "sha512",
+      "os_hash_value": "50e0e621db571157f5962cefeb9181cf93e9007ff023dbac31d66bf5eb50d51ba53c5634d4dfaf78fbdba631413f0b81cc216d26640c2d540aeedb6a59b839b4",
+      "id": "53713cd4-241d-4b87-8dee-7619615f05e3",
+      "created_at": "2022-12-06T05:20:41Z",
+      "updated_at": "2022-12-06T05:22:31Z",
+      "tags": [
+        "trove"
+      ],
+      "self": "/v2/images/53713cd4-241d-4b87-8dee-7619615f05e3",
+      "file": "/v2/images/53713cd4-241d-4b87-8dee-7619615f05e3/file",
+      "schema": "/v2/schemas/image"
+    },
+    {
+      "hw_rng_model": "virtio",
+      "owner_specified.openstack.md5": "",
+      "owner_specified.openstack.object": "images/cirros-0.5.2-x86_64-disk",
+      "owner_specified.openstack.sha256": "",
+      "name": "cirros-0.5.2-x86_64-disk",
+      "disk_format": "qcow2",
+      "container_format": "bare",
+      "visibility": "public",
+      "size": 16300544,
+      "virtual_size": 117440512,
+      "status": "active",
+      "checksum": "b874c39491a2377b8490f5f1e89761a4",
+      "protected": false,
+      "min_ram": 0,
+      "min_disk": 0,
+      "owner": "a5362cbd04fd4783a038d5a342d58e87",
+      "os_hidden": false,
+      "os_hash_algo": "sha512",
+      "os_hash_value": "6b813aa46bb90b4da216a4d19376593fa3f4fc7e617f03a92b7fe11e9a3981cbe8f0959dbebe36225e5f53dc4492341a4863cac4ed1ee0909f3fc78ef9c3e869",
+      "id": "9c31f2c6-f22c-440e-b670-d8d5a5cc0405",
+      "created_at": "2022-12-06T04:47:33Z",
+      "updated_at": "2022-12-13T02:32:48Z",
+      "tags": [],
+      "self": "/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405",
+      "file": "/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405/file",
+      "schema": "/v2/schemas/image"
+    }
+  ],
+  "first": "/v2/images",
+  "schema": "/v2/schemas/images"
+}
 ```
 
-`openstack database instance list --format json --all` 커맨드를 실행했을 때의 로그 파일이다.  
-로그 파일에 의하면, `openstack.exe`는 총 3번의 API CALL을 요청하고(keystone에 2번, trove-api에 1번),
-이 관계를 Diagram으로 표현하면 아래와 같다.
+`openstack image list` 커맨드를 실행했을 때의 로그 파일이다.  
+이 로그 파일에 따른 API 요청 관계를 Diagram으로 표현하면 아래와 같다.
 
 ``` mermaid
 sequenceDiagram
-  openstack-client->>keystone-api: (1) keystone EndPoint 목록 요청
-  keystone-api->>openstack-client: (2) keystone EndPoint 목록 응답
-  openstack-client->>keystone-api: (3) access token 발급 요청
-  keystone-api->>openstack-client: (4) access Token 및 service EndPoint Catalog
-  openstack-client->>trove-api: (5) 데이터베이스 인스턴스 목록 요청
-  trove-api->>openstack-client: (6) 데이터베이스 인스턴스 목록 응답
+  autonumber
+  participant client as openstack-client
+  participant keystone as keystone-api
+  participant glance as glance-api
+  client->>keystone: keystone endpoint 목록 요청
+  keystone-->>client: keystone endpoint 목록 응답
+  client->>keystone: access token 발급 요청
+  keystone-->>client: access token 및 service catalog
+  client->>glance: glance endpoint 목록 요청
+  glance-->>client: glance endpoint 목록 응답
+  client->>glance: 이미지 목록 요청
+  glance->>keystone: 클라이언트 토큰 검증 요청
+  keystone-->>glance: 클라이언트 토큰 검증 응답
+  glance-->>client: 이미지 목록 응답
 ```
 
+!!! note
+    로그 파일에는 (7) 이미지 목록 요청이 (9) 클라이언트 토큰 검증 응답 후에 나오지만 로그 파일을 기록하는 시점 상의 문제이며, 실제로는 이미지 목록 요청을 받은 `glance-api`가 `keystone-api`로 사용자 토큰 검증을 요청하고 응답을 받은 후에, 최종적으로 이미지 목록을 응답한다.

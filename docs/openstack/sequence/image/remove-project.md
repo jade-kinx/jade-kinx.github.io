@@ -252,4 +252,6 @@ sequenceDiagram
 
 ## Output
 
-출력값은 없다.
+``` bash title=""
+none
+```
