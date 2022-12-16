@@ -1130,10 +1130,15 @@ sequenceDiagram
   client->>glance: glance endpoint 목록 요청
   glance-->>client: glance endpoint 목록 응답
   client->>glance: 이미지 목록 요청
-  glance->>keystone: 클라이언트 토큰 검증 요청
-  keystone-->>glance: 클라이언트 토큰 검증 응답
+  opt 사용자 토큰 검증
+      glance->>keystone: 클라이언트 토큰 검증 요청
+      keystone-->>glance: 클라이언트 토큰 검증 응답
+  end
   glance-->>client: 이미지 목록 응답
 ```
 
 !!! note
-    로그 파일에는 (7) 이미지 목록 요청이 (9) 클라이언트 토큰 검증 응답 후에 나오지만 로그 파일을 기록하는 시점 상의 문제이며, 실제로는 이미지 목록 요청을 받은 `glance-api`가 `keystone-api`로 사용자 토큰 검증을 요청하고 응답을 받은 후에, 최종적으로 이미지 목록을 응답한다.
+    로그 파일에는 (7) 이미지 목록 요청이 (9) 클라이언트 토큰 검증 응답 후에 나오지만, Response를 받은 후에 로그 파일을 기록하는 시점 상의 문제이며, 실제로는 (7)이미지 목록 요청을 받은 `glance-api`가 `keystone-api`로 (8)사용자 토큰 검증을 요청하고, (9)사용자 토큰 검증 응답을 받은 후에, 최종적으로 (10)이미지 목록을 응답한다.
+
+!!! note
+    로그 파일에 `openstack`의 request sequence number는 순차적으로 출력되지만, `glance-api`의 reqeust sequence number는 [3]에서 시작하는데, 이것은 `glance-api`는 지속적으로 실행되고 있는 프로세스이며 이전 요청에 의해 sequence number(`req_idx`)가 이미 증가한 상태이기 때문이다.  

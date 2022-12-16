@@ -2,9 +2,7 @@
 
 이미지를 생성하고 업로드한다.
 
-OpenStack Command Line Client 참고: [openstack image create](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-create)
-
-
+CLI 참조: [openstack image create](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-create)
 
 ## OpenStack Client Command
 
@@ -60,10 +58,10 @@ sequenceDiagram
   glance-->>client: Response: 300 Multiple Choices
   client->>glance: POST /image/v2/images
   glance-->>client: Response: 201 Created
-  Note right of glance: status: queued
+  Note right of glance: status=queued
   client->>glance: PUT /image/v2/images/{image_id}/file
   glance-->>client: Response: 204 No Content
-  Note right of glance: status: active
+  Note right of glance: status=active
 ```
 
 이미지 서비스에 qcow2 포맷의 로컬 이미지 파일 등록 요청을 보낼 때의 시퀀스 다이어그램이다.  
@@ -194,7 +192,7 @@ sequenceDiagram
       }
     ```
 
-!!! question
+??? question
     (1),(2) 과정에서 얻은 EndPoint인 `http://182.161.114.101/identity/v3/` 를 사용하지 않고 `http://devstack-debug/identity/v3`를 사용하고 있다.  
     `OS_AUTH_URL`, `OS_IDENTITY_API_VERSION` 환경변수를 이용해서 조합할 수 있는데, 굳이 왜???
 

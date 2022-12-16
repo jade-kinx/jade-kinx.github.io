@@ -140,6 +140,7 @@ nav:
   - OpenStack CLI API Sequence:
     - Image Service:
       - image create: openstack/sequence/image/create.md
+      - image create 2: openstack/sequence/image/create2.md
       - image delete: openstack/sequence/image/delete.md
       - image list: openstack/sequence/image/list.md
       - image show: openstack/sequence/image/show.md
