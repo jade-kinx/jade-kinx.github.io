@@ -29,3 +29,10 @@
 .md-grid {
   max-width: 1440px;
 }
+
+/* wrap in code block */
+code {
+  white-space: pre-wrap !important;
+  word-break: normal;
+  word-wrap: break-word;
+}

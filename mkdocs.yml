@@ -112,6 +112,7 @@ markdown_extensions:
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.snippets:
+      base_path: ['docs']
       auto_append:
         - inc/glossary.md
   - pymdownx.tilde
@@ -140,7 +141,7 @@ nav:
   - OpenStack CLI API Sequence:
     - Image Service:
       - image create: openstack/sequence/image/create.md
-      - image create 2: openstack/sequence/image/create2.md
+      - image create(with service-api): openstack/sequence/image/create-with-service-api.md
       - image delete: openstack/sequence/image/delete.md
       - image list: openstack/sequence/image/list.md
       - image show: openstack/sequence/image/show.md
