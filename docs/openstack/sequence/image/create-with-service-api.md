@@ -109,22 +109,36 @@ sequenceDiagram
   glance-->>osc: 204 No Content /image/v2/images/{image_id}/file
 ```
 
-이미지 서비스(`glance`)에 `cirros-0.6.1-x86_64-disk.qcow2` 이미지 파일 생성 요청에 대한 시퀀스 다이어그램 요약본이다. (쿼터 부분 제외)  
-보다 상세한 시퀀스 다이어그램은 [Sequence Diagram(with limits)](#sequence-diagram-with-limits) 확인할 수 있다.  
+이미지 서비스(`glance`)에 `cirros-0.6.1-x86_64-disk.qcow2` 이미지 파일 생성 요청에 대한 시퀀스 다이어그램이다.  
 
-!!! info
-    시퀀스 다이어그램을 간략하게 요약하면 아래와 같다.  
+시퀀스 다이어그램을 간략하게 요약하면 아래와 같다.  
 
-    * `Identity` 서비스에 `credential`을 제공하여 사용자 `access token` 발급 및 서비스 카탈로그 수신(`Image` 서비스 EndPoint)
-    * `Image` 서비스에 이미지 생성 요청
-    * `Image` 서비스가 사용자 `access token` 검증 (to `Identity` 서비스)
-    * 사용자가 `Image` 서비스에 이미지 파일 업로드
-    * `Image` 서비스가 `object-store` 서비스 요청에 사용할 `access token` 발급
-    * 사용자가 업로드 한 이미지 파일을 `object-store`에 등록
-    * 사용자에게 이미지 등록 성공 응답
+* (1)-(4): `Identity` 서비스에 `credential`을 제공하여 사용자 `access token` 발급 및 서비스 카탈로그 수신(`Image` 서비스 EndPoint)  
+* (5)-(6): `Image` 서비스 버전별 EndPoint 목록 요청  
+* (7): `Image` 서비스에 이미지 생성 요청  
+* (8)-(11): `Image` 서비스 `access token` 발급 (project-scope)  
+* (12)-(13): `Image` 서비스가 사용자 `access token` 검증 (to `Identity` 서비스)  
+* (14)-(17): `Image` 서비스 `access token` 발급 (system-scope)  
+* (18)-(25): 요청에 대한 `quota` 체크  
+* (26): (7)번 요청에 대해, 이미지 생성 성공 응답  
+* (27): 이미지 파일 업로드  
+* (28)-(43): `quota` 체크  
+* (44)-(45): `object-store` 서비스(`swift`)에 대해 사용할 `accecss token` 발급  
+* (46)-(49): 사용자가 업로드한 이미지 파일을 `object-store`에 등록  
+* (50): 사용자에게 이미지 생성 결과 응답(27번 요청)  
 
+!!! question
+    `사용자` -> `이미지` 서비스로 이미지 파일 업로드 요청(27)에 대해 `access token` validation 과정이 없는 것은???  
+    있는데 빠진 것인지, 캐싱된 토큰으로 처리하는 지 확인해 보자  
+    (동일한 `access token` 요청에 대해 `expire at` 까지는 캐싱된 토큰으로 처리하는 게 아닐까 추측된다.)  
+
+!!! note
+    (46)-(49) 과정에서 `Image` 서비스의 요청에 대해 `access token` validation 과정이 있을 것을 짐작할 수 있다.  
+    여기서 빠져 있는 이유는, `interested modules`에 `swift` 서비스를 포함시키지 않았기 때문에 log에서 빠져 있다.  
 
 ### (1) GET /identity
+
+`python3-openstackclient` -> `keystone`
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity"
