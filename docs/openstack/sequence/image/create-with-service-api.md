@@ -45,68 +45,64 @@ $ openstack image create \
 ## Sequence Diagram
 
 !!! note "variables"
-    `image_id`: `e6167145-7865-4d3d-ad19-2a59fb3f1870`  
+    `image_id`: `5f0f89ee-9472-4df0-afdf-546157734351`  
     `image_endpoint_id`: `3195d06aa49541009838146ab9072997`  
     `service_id`: `3a16cadd069e4a70b95f71316ec6f3e8`  
 
 ``` mermaid
 sequenceDiagram
   autonumber
-  participant osc as openstack-client
-  participant keystone as keystone-api
-  participant glance as glance-api
-  participant swift as swift-proxy-server
+  openstack->>keystone: GET /identity
+  keystone-->>openstack: 300 MULTIPLE CHOICES /identity
+  openstack->>keystone: POST /identity/v3/auth/tokens
+  keystone-->>openstack: 201 CREATED /identity/v3/auth/tokens
+  openstack->>glance-api: GET /image
+  glance-api-->>openstack: 300 Multiple Choices /image
+  openstack->>glance-api: POST /image/v2/images
+    glance-api->>keystone: GET /identity
+    keystone-->>glance-api: 300 MULTIPLE CHOICES /identity
+    glance-api->>keystone: POST /identity/v3/auth/tokens
+    keystone-->>glance-api: 201 CREATED /identity/v3/auth/tokens
+    glance-api->>keystone: GET /identity/v3/auth/tokens
+    keystone-->>glance-api: 200 OK /identity/v3/auth/tokens
+    glance-api->>keystone: GET /identity
+    keystone-->>glance-api: 300 MULTIPLE CHOICES /identity
+    glance-api->>keystone: POST /identity/v3/auth/tokens
+    keystone-->>glance-api: 201 CREATED /identity/v3/auth/tokens
+    glance-api->>keystone: GET /identity/v3/limits/model
+    keystone-->>glance-api: 200 OK /identity/v3/limits/model
+    glance-api->>keystone: GET /identity/v3/endpoints/{image_endpoint_id}
+    keystone-->>glance-api: 200 OK /identity/v3/endpoints/{image_endpoint_id}
+    glance-api->>keystone: GET /identity/v3/limits
+    keystone-->>glance-api: 200 OK /identity/v3/limits
+    glance-api->>keystone: GET /identity/v3/registered_limits
+    keystone-->>glance-api: 200 OK /identity/v3/registered_limits
+  glance-api-->>openstack: 201 Created /image/v2/images
+  openstack->>glance-api: PUT /image/v2/images/{image_id}/file
+    glance-api->>keystone: GET /identity/v3/limits/model
+    keystone-->>glance-api: 200 OK /identity/v3/limits/model
+    glance-api->>keystone: GET /identity/v3/endpoints/{image_endpoint_id}
+    keystone-->>glance-api: 200 OK /identity/v3/endpoints/{image_endpoint_id}
+    glance-api->>keystone: GET /identity/v3/limits
+    keystone-->>glance-api: 200 OK /identity/v3/limits
+    glance-api->>keystone: GET /identity/v3/registered_limits
+    keystone-->>glance-api: 200 OK /identity/v3/registered_limits
+    glance-api->>keystone: GET /identity/v3/limits/model
+    keystone-->>glance-api: 200 OK /identity/v3/limits/model
+    glance-api->>keystone: GET /identity/v3/endpoints/{image_endpoint_id}
+    keystone-->>glance-api: 200 OK /identity/v3/endpoints/{image_endpoint_id}
+    glance-api->>keystone: GET /identity/v3/limits
+    keystone-->>glance-api: 200 OK /identity/v3/limits
+    glance-api->>keystone: GET /identity/v3/registered_limits
+    keystone-->>glance-api: 200 OK /identity/v3/registered_limits
+    glance-api->>keystone: POST /identity/v3/auth/tokens
+    keystone-->>glance-api: 201 CREATED /identity/v3/auth/tokens
+      glance-api->>swift-proxy-server: HEAD /v1/AUTH_{service_id}/glance
+      swift-proxy-server-->>glance-api: 204 No Content /v1/AUTH_{service_id}/glance
+      glance-api->>swift-proxy-server: PUT /v1/AUTH_{service_id}/glance/{image_id}
+      swift-proxy-server-->>glance-api: 201 Created /v1/AUTH_{service_id}/glance/{image_id}
+  glance-api-->>openstack: 204 No Content /image/v2/images/{image_id}/file
 
-  osc->>keystone: GET /identity
-  keystone-->>osc: 300 MULTIPLE CHOICES /identity
-  osc->>keystone: POST /identity/v3/auth/tokens
-  keystone-->>osc: 201 CREATED /identity/v3/auth/tokens
-  osc->>glance: GET /image
-  glance-->>osc: 300 Multiple Choices /image
-  osc->>glance: POST /image/v2/images
-  glance->>keystone: GET /identity
-  keystone-->>glance: 300 MULTIPLE CHOICES /identity
-  glance->>keystone: POST /identity/v3/auth/tokens
-  keystone-->>glance: 201 CREATED /identity/v3/auth/tokens
-  glance->>keystone: GET /identity/v3/auth/tokens
-  keystone-->>glance: 200 OK /identity/v3/auth/tokens
-  glance->>keystone: GET /identity
-  keystone-->>glance: 300 MULTIPLE CHOICES /identity
-  glance->>keystone: POST /identity/v3/auth/tokens
-  keystone-->>glance: 201 CREATED /identity/v3/auth/tokens
-  glance->>keystone: GET /identity/v3/limits/model
-  keystone-->>glance: 200 OK /identity/v3/limits/model
-  glance->>keystone: GET /identity/v3/endpoints/{image_endpoint_id}
-  keystone-->>glance: 200 OK /identity/v3/endpoints/{image_endpoint_id}
-  glance->>keystone: GET /identity/v3/limits
-  keystone-->>glance: 200 OK /identity/v3/limits
-  glance->>keystone: GET /identity/v3/registered_limits
-  keystone-->>glance: 200 OK /identity/v3/registered_limits
-  glance-->>osc: 201 Created /image/v2/images
-  osc->>glance: PUT /image/v2/images/{image_id}/file
-  glance->>keystone: GET /identity/v3/limits/model
-  keystone-->>glance: 200 OK /identity/v3/limits/model
-  glance->>keystone: GET /identity/v3/endpoints/{image_endpoint_id}
-  keystone-->>glance: 200 OK /identity/v3/endpoints/{image_endpoint_id}
-  glance->>keystone: GET /identity/v3/limits
-  keystone-->>glance: 200 OK /identity/v3/limits
-  glance->>keystone: GET /identity/v3/registered_limits
-  keystone-->>glance: 200 OK /identity/v3/registered_limits
-  glance->>keystone: GET /identity/v3/limits/model
-  keystone-->>glance: 200 OK /identity/v3/limits/model
-  glance->>keystone: GET /identity/v3/endpoints/{image_endpoint_id}
-  keystone-->>glance: 200 OK /identity/v3/endpoints/{image_endpoint_id}
-  glance->>keystone: GET /identity/v3/limits
-  keystone-->>glance: 200 OK /identity/v3/limits
-  glance->>keystone: GET /identity/v3/registered_limits
-  keystone-->>glance: 200 OK /identity/v3/registered_limits
-  glance->>keystone: POST /identity/v3/auth/tokens
-  keystone-->>glance: 201 CREATED /identity/v3/auth/tokens
-  glance->>swift: HEAD /v1/AUTH_{service_id}/glance
-  swift-->>glance: 204 No Content /v1/AUTH_{service_id}/glance
-  glance->>swift: PUT /v1/AUTH_{service_id}/glance/{image_id}
-  swift-->>glance: 201 Created /v1/AUTH_{service_id}/glance/{image_id}
-  glance-->>osc: 204 No Content /image/v2/images/{image_id}/file
 ```
 
 이미지 서비스(`glance`)에 `cirros-0.6.1-x86_64-disk.qcow2` 이미지 파일 생성 요청에 대한 시퀀스 다이어그램이다.  
@@ -134,11 +130,11 @@ sequenceDiagram
 
 !!! note
     (46)-(49) 과정에서 `Image` 서비스의 요청에 대해 `access token` validation 과정이 있을 것을 짐작할 수 있다.  
-    여기서 빠져 있는 이유는, `interested modules`에 `swift` 서비스를 포함시키지 않았기 때문에 log에서 빠져 있다.  
+    여기서 빠져 있는 이유는, `swift` 서비스는 `requests.send()`를 사용하지 않기 때문일 것으로 짐작된다.  
+
 
 ### (1) GET /identity
-
-`python3-openstackclient` -> `keystone`
+openstack --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity"
@@ -149,27 +145,28 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (2) 300 MULTIPLE CHOICES /identity
+openstack <-- keystone
 
 === "Header"
-    ``` http title="300 MULTIPLE CHOICES http://182.161.114.101/identity"
-    Date: Mon, 19 Dec 2022 09:51:26 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:56 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 274
     Location: http://182.161.114.101/identity/v3/
     Vary: X-Auth-Token
-    x-openstack-request-id: req-f25a8398-94e5-40f6-9cb4-98c822604674
+    x-openstack-request-id: req-c5b51b6c-8282-449d-b55b-8548924f860f
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "versions": {
         "values": [
@@ -197,6 +194,7 @@ sequenceDiagram
 
 
 ### (3) POST /identity/v3/auth/tokens
+openstack --> keystone
 
 === "Header"
     ``` http title="POST http://182.161.114.101/identity/v3/auth/tokens"
@@ -209,7 +207,7 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "auth": {
         "identity": {
@@ -240,21 +238,22 @@ sequenceDiagram
 
 
 ### (4) 201 CREATED /identity/v3/auth/tokens
+openstack <-- keystone
 
 === "Header"
-    ``` http title="201 CREATED http://182.161.114.101/identity/v3/auth/tokens"
-    Date: Mon, 19 Dec 2022 09:51:26 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:56 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 3952
-    X-Subject-Token: gAAAAABjoDQeumRrUWzsXDWpG2h6Q3lrRNlkJuuzll_i60p4u3V2yoe_5n2CZi5O1EZnvsD40w72bhDpuTPe1ZSQMPOO19Jtkq5cckilgQnO1XSmesyBZrupbA2xqiB2S2esNiC0fhBPQC5bbQzMDVYwio1n7oBYng9e9Z-FOAcTy9xz78Ukj_0
+    X-Subject-Token: gAAAAABjoXL82HrnIHunE9nn8sJshiB_b-JPsVXlfe-62TL2UDohLQHPnQnGfNht8J8wDIqvKr_qJLX8Dwa1ODoLMYzM18P5Iantj4P_V_PBQmi87PR_NWHJ0aV454PNymS1FcmoJhiGlT-IM-GAJkPgpI_2o371xMPlYAlTaBlQMU9gBOAPKks
     Vary: X-Auth-Token
-    x-openstack-request-id: req-45332e6e-c3c8-4b1a-a687-6b3bc9927c8f
+    x-openstack-request-id: req-ea05d523-fac2-48bd-8bf1-b540db479445
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "token": {
         "methods": [
@@ -270,10 +269,10 @@ sequenceDiagram
           "password_expires_at": null
         },
         "audit_ids": [
-          "xk5jCmWBThmVkA2wQKFTKA"
+          "mPoeaEJJSTOXZUw_2UyqLA"
         ],
-        "expires_at": "2022-12-19T12:51:26.000000Z",
-        "issued_at": "2022-12-19T09:51:26.000000Z",
+        "expires_at": "2022-12-20T11:31:56.000000Z",
+        "issued_at": "2022-12-20T08:31:56.000000Z",
         "project": {
           "domain": {
             "id": "default",
@@ -466,6 +465,7 @@ sequenceDiagram
 
 
 ### (5) GET /image
+openstack --> glance-api
 
 === "Header"
     ``` http title="GET http://182.161.114.101/image"
@@ -476,16 +476,17 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (6) 300 Multiple Choices /image
+openstack <-- glance-api
 
 === "Header"
-    ``` http title="300 Multiple Choices http://182.161.114.101/image"
-    Date: Mon, 19 Dec 2022 09:51:27 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:56 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 1347
@@ -493,7 +494,7 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "versions": [
         {
@@ -622,6 +623,7 @@ sequenceDiagram
 
 
 ### (7) POST /image/v2/images
+openstack --> glance-api
 
 === "Header"
     ``` http title="POST http://182.161.114.101/image/v2/images"
@@ -629,26 +631,27 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: */*
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQeumRrUWzsXDWpG2h6Q3lrRNlkJuuzll_i60p4u3V2yoe_5n2CZi5O1EZnvsD40w72bhDpuTPe1ZSQMPOO19Jtkq5cckilgQnO1XSmesyBZrupbA2xqiB2S2esNiC0fhBPQC5bbQzMDVYwio1n7oBYng9e9Z-FOAcTy9xz78Ukj_0
+    X-Auth-Token: gAAAAABjoXL82HrnIHunE9nn8sJshiB_b-JPsVXlfe-62TL2UDohLQHPnQnGfNht8J8wDIqvKr_qJLX8Dwa1ODoLMYzM18P5Iantj4P_V_PBQmi87PR_NWHJ0aV454PNymS1FcmoJhiGlT-IM-GAJkPgpI_2o371xMPlYAlTaBlQMU9gBOAPKks
     Content-Type: application/json
     Content-Length: 260
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "container_format": "bare",
       "visibility": "public",
       "disk_format": "qcow2",
-      "name": "cirros-0.6.1-x86_64-disk",
+      "name": "cirros-0.6.1-x86_64-test",
       "owner_specified.openstack.md5": "",
       "owner_specified.openstack.sha256": "",
-      "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk"
+      "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-test"
     }
     ```
 
 
 ### (8) GET /identity
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity"
@@ -659,27 +662,28 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (9) 300 MULTIPLE CHOICES /identity
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="300 MULTIPLE CHOICES http://182.161.114.101/identity"
-    Date: Mon, 19 Dec 2022 09:51:27 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:56 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 274
     Location: http://182.161.114.101/identity/v3/
     Vary: X-Auth-Token
-    x-openstack-request-id: req-0cfea7ac-2639-452e-98ff-df6c5559f6f5
+    x-openstack-request-id: req-e6308e6e-7c58-4728-b189-de230c344a58
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "versions": {
         "values": [
@@ -707,6 +711,7 @@ sequenceDiagram
 
 
 ### (10) POST /identity/v3/auth/tokens
+glance-api --> keystone
 
 === "Header"
     ``` http title="POST http://182.161.114.101/identity/v3/auth/tokens"
@@ -719,7 +724,7 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "auth": {
         "identity": {
@@ -750,21 +755,22 @@ sequenceDiagram
 
 
 ### (11) 201 CREATED /identity/v3/auth/tokens
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="201 CREATED http://182.161.114.101/identity/v3/auth/tokens"
-    Date: Mon, 19 Dec 2022 09:51:27 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:56 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 3833
-    X-Subject-Token: gAAAAABjoDQfrGmFjnYo58OFrsx_voPKDiWGp2sT1K6-kVSHnBNL5hIOAeGoPkqNOnpChKrUTSW5pgV065lkpnZh24ZrC7vcjtVpqKTwE7dlfZYTZpJehU35KUDgE02fU52MwQN-qZDLLTLlT6Hk-3nlf3SzWcRJLMfxK3_rCa9m35T8rQoYcuY
+    X-Subject-Token: gAAAAABjoXL8DX9Ehi2NJdU9AbuiUjdsMuinyhrULr_qtucgoMhNXONeXlUV1YwTJ-6scB-oT6dU9fBzz1pDK2QByk1DQ3hRIdgANcy3VDS5zpXj-Epd0Yd7JhdJvMQRRwCaeghrHc5yLadGFAMRkjNlLf_GRDYGn_YLYOSlM_8jnsfORezZOLs
     Vary: X-Auth-Token
-    x-openstack-request-id: req-0b8e3b7e-e7db-4f03-9346-1c93f45dee44
+    x-openstack-request-id: req-a15494a3-4a10-48b0-83aa-7ec80657f9c6
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "token": {
         "methods": [
@@ -780,10 +786,10 @@ sequenceDiagram
           "password_expires_at": null
         },
         "audit_ids": [
-          "KEjbUeBgReOhG2G8ikeQPQ"
+          "WoxTcjiaSdavdiFe6BurVQ"
         ],
-        "expires_at": "2022-12-19T12:51:27.000000Z",
-        "issued_at": "2022-12-19T09:51:27.000000Z",
+        "expires_at": "2022-12-20T11:31:56.000000Z",
+        "issued_at": "2022-12-20T08:31:56.000000Z",
         "project": {
           "domain": {
             "id": "default",
@@ -968,6 +974,7 @@ sequenceDiagram
 
 
 ### (12) GET /identity/v3/auth/tokens
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/auth/tokens"
@@ -975,33 +982,34 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: application/json
     Connection: keep-alive
-    X-Subject-Token: gAAAAABjoDQeumRrUWzsXDWpG2h6Q3lrRNlkJuuzll_i60p4u3V2yoe_5n2CZi5O1EZnvsD40w72bhDpuTPe1ZSQMPOO19Jtkq5cckilgQnO1XSmesyBZrupbA2xqiB2S2esNiC0fhBPQC5bbQzMDVYwio1n7oBYng9e9Z-FOAcTy9xz78Ukj_0
+    X-Subject-Token: gAAAAABjoXL82HrnIHunE9nn8sJshiB_b-JPsVXlfe-62TL2UDohLQHPnQnGfNht8J8wDIqvKr_qJLX8Dwa1ODoLMYzM18P5Iantj4P_V_PBQmi87PR_NWHJ0aV454PNymS1FcmoJhiGlT-IM-GAJkPgpI_2o371xMPlYAlTaBlQMU9gBOAPKks
     OpenStack-Identity-Access-Rules: 1
-    X-Auth-Token: gAAAAABjoDQfrGmFjnYo58OFrsx_voPKDiWGp2sT1K6-kVSHnBNL5hIOAeGoPkqNOnpChKrUTSW5pgV065lkpnZh24ZrC7vcjtVpqKTwE7dlfZYTZpJehU35KUDgE02fU52MwQN-qZDLLTLlT6Hk-3nlf3SzWcRJLMfxK3_rCa9m35T8rQoYcuY
+    X-Auth-Token: gAAAAABjoXL8DX9Ehi2NJdU9AbuiUjdsMuinyhrULr_qtucgoMhNXONeXlUV1YwTJ-6scB-oT6dU9fBzz1pDK2QByk1DQ3hRIdgANcy3VDS5zpXj-Epd0Yd7JhdJvMQRRwCaeghrHc5yLadGFAMRkjNlLf_GRDYGn_YLYOSlM_8jnsfORezZOLs
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (13) 200 OK /identity/v3/auth/tokens
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/auth/tokens"
-    Date: Mon, 19 Dec 2022 09:51:27 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:56 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 3952
-    X-Subject-Token: gAAAAABjoDQeumRrUWzsXDWpG2h6Q3lrRNlkJuuzll_i60p4u3V2yoe_5n2CZi5O1EZnvsD40w72bhDpuTPe1ZSQMPOO19Jtkq5cckilgQnO1XSmesyBZrupbA2xqiB2S2esNiC0fhBPQC5bbQzMDVYwio1n7oBYng9e9Z-FOAcTy9xz78Ukj_0
+    X-Subject-Token: gAAAAABjoXL82HrnIHunE9nn8sJshiB_b-JPsVXlfe-62TL2UDohLQHPnQnGfNht8J8wDIqvKr_qJLX8Dwa1ODoLMYzM18P5Iantj4P_V_PBQmi87PR_NWHJ0aV454PNymS1FcmoJhiGlT-IM-GAJkPgpI_2o371xMPlYAlTaBlQMU9gBOAPKks
     Vary: X-Auth-Token
-    x-openstack-request-id: req-c11df686-7089-486f-83f5-6c9e7cba9c0b
+    x-openstack-request-id: req-381bf899-aecf-4901-b05a-c8c88f6da541
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "token": {
         "methods": [
@@ -1017,10 +1025,10 @@ sequenceDiagram
           "password_expires_at": null
         },
         "audit_ids": [
-          "xk5jCmWBThmVkA2wQKFTKA"
+          "mPoeaEJJSTOXZUw_2UyqLA"
         ],
-        "expires_at": "2022-12-19T12:51:26.000000Z",
-        "issued_at": "2022-12-19T09:51:26.000000Z",
+        "expires_at": "2022-12-20T11:31:56.000000Z",
+        "issued_at": "2022-12-20T08:31:56.000000Z",
         "project": {
           "domain": {
             "id": "default",
@@ -1213,6 +1221,7 @@ sequenceDiagram
 
 
 ### (14) GET /identity
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity"
@@ -1223,27 +1232,28 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (15) 300 MULTIPLE CHOICES /identity
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="300 MULTIPLE CHOICES http://182.161.114.101/identity"
-    Date: Mon, 19 Dec 2022 09:51:28 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:57 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 274
     Location: http://182.161.114.101/identity/v3/
     Vary: X-Auth-Token
-    x-openstack-request-id: req-e9761c37-3bcf-4df1-a2a0-2bf81f6df463
+    x-openstack-request-id: req-4568108e-3a1e-4608-81ff-ffd470015bfe
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "versions": {
         "values": [
@@ -1271,6 +1281,7 @@ sequenceDiagram
 
 
 ### (16) POST /identity/v3/auth/tokens
+glance-api --> keystone
 
 === "Header"
     ``` http title="POST http://182.161.114.101/identity/v3/auth/tokens"
@@ -1283,7 +1294,7 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "auth": {
         "identity": {
@@ -1311,21 +1322,22 @@ sequenceDiagram
 
 
 ### (17) 201 CREATED /identity/v3/auth/tokens
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="201 CREATED http://182.161.114.101/identity/v3/auth/tokens"
-    Date: Mon, 19 Dec 2022 09:51:28 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:57 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 2374
-    X-Subject-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Subject-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     Vary: X-Auth-Token
-    x-openstack-request-id: req-75626f8f-0227-40d2-b599-248d0df2e58d
+    x-openstack-request-id: req-c955b42f-13bd-4836-abee-b3ce5229995c
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "token": {
         "methods": [
@@ -1341,10 +1353,10 @@ sequenceDiagram
           "password_expires_at": null
         },
         "audit_ids": [
-          "ZVyW-FZBSquhFnG3l-ng8A"
+          "ulMYpczaQE-toXOMGVNgQA"
         ],
-        "expires_at": "2022-12-19T12:51:28.000000Z",
-        "issued_at": "2022-12-19T09:51:28.000000Z",
+        "expires_at": "2022-12-20T11:31:57.000000Z",
+        "issued_at": "2022-12-20T08:31:57.000000Z",
         "roles": [
           {
             "id": "dbf0266266eb4ea885528545e3eb59ec",
@@ -1470,6 +1482,7 @@ sequenceDiagram
 
 
 ### (18) GET /identity/v3/limits/model
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/limits/model"
@@ -1477,30 +1490,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: */*
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (19) 200 OK /identity/v3/limits/model
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/limits/model"
-    Date: Mon, 19 Dec 2022 09:51:28 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:57 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 131
     Vary: X-Auth-Token
-    x-openstack-request-id: req-8540a05a-248c-48f9-915c-ce8705916036
+    x-openstack-request-id: req-4dcd0e0e-d554-4328-809b-58de8dc720ff
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "model": {
         "name": "flat",
@@ -1510,7 +1524,8 @@ sequenceDiagram
     ```
 
 
-### (20) GET /identity/v3/endpoints/{image_endpoint_id}
+### (20) GET /identity/v3/endpoints/3195d06aa49541009838146ab9072997
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/endpoints/3195d06aa49541009838146ab9072997"
@@ -1518,30 +1533,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: */*
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
-### (21) 200 OK /identity/v3/endpoints/{image_endpoint_id}
+### (21) 200 OK /identity/v3/endpoints/3195d06aa49541009838146ab9072997
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/endpoints/3195d06aa49541009838146ab9072997"
-    Date: Mon, 19 Dec 2022 09:51:28 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:57 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 335
     Vary: X-Auth-Token
-    x-openstack-request-id: req-c38b23b1-a66b-491a-bef4-e33b018351b1
+    x-openstack-request-id: req-6dcfa36b-b9d0-42fc-820a-701b1d020794
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "endpoint": {
         "id": "3195d06aa49541009838146ab9072997",
@@ -1560,6 +1576,7 @@ sequenceDiagram
 
 
 ### (22) GET /identity/v3/limits
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_count_total&project_id=a5362cbd04fd4783a038d5a342d58e87"
@@ -1567,30 +1584,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: application/json
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (23) 200 OK /identity/v3/limits
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_count_total&project_id=a5362cbd04fd4783a038d5a342d58e87"
-    Date: Mon, 19 Dec 2022 09:51:28 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:57 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 251
     Vary: X-Auth-Token
-    x-openstack-request-id: req-1e6cb7ba-7a5f-453c-bcae-64ece3245340
+    x-openstack-request-id: req-70f0c115-8e5c-46f6-a34b-d0f312d3a3f7
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "limits": [],
       "links": {
@@ -1603,6 +1621,7 @@ sequenceDiagram
 
 
 ### (24) GET /identity/v3/registered_limits
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/registered_limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_count_total"
@@ -1610,30 +1629,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: application/json
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (25) 200 OK /identity/v3/registered_limits
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/registered_limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_count_total"
-    Date: Mon, 19 Dec 2022 09:51:28 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:57 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 536
     Vary: X-Auth-Token
-    x-openstack-request-id: req-c613cc00-89eb-45a1-ba0c-30516f8c56de
+    x-openstack-request-id: req-7057ce68-6733-4d01-9e88-9d08577b80b4
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "registered_limits": [
         {
@@ -1658,26 +1678,27 @@ sequenceDiagram
 
 
 ### (26) 201 Created /image/v2/images
+openstack <-- glance-api
 
 === "Header"
-    ``` http title="201 Created http://182.161.114.101/image/v2/images"
-    Date: Mon, 19 Dec 2022 09:51:29 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:58 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Length: 781
     Content-Type: application/json
-    Location: http://127.0.0.1:60999/v2/images/e6167145-7865-4d3d-ad19-2a59fb3f1870
+    Location: http://127.0.0.1:60999/v2/images/5f0f89ee-9472-4df0-afdf-546157734351
     Openstack-Image-Import-Methods: glance-direct,web-download,copy-image
-    X-Openstack-Request-Id: req-c29110cd-469e-4eb0-90ee-2d529dd78f36
+    X-Openstack-Request-Id: req-e8ca2b78-6151-408e-8d4f-91f092fe1b0f
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "owner_specified.openstack.md5": "",
       "owner_specified.openstack.sha256": "",
-      "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk",
-      "name": "cirros-0.6.1-x86_64-disk",
+      "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-test",
+      "name": "cirros-0.6.1-x86_64-test",
       "disk_format": "qcow2",
       "container_format": "bare",
       "visibility": "public",
@@ -1692,37 +1713,39 @@ sequenceDiagram
       "os_hidden": false,
       "os_hash_algo": null,
       "os_hash_value": null,
-      "id": "e6167145-7865-4d3d-ad19-2a59fb3f1870",
-      "created_at": "2022-12-19T09:51:29Z",
-      "updated_at": "2022-12-19T09:51:29Z",
+      "id": "5f0f89ee-9472-4df0-afdf-546157734351",
+      "created_at": "2022-12-20T08:31:59Z",
+      "updated_at": "2022-12-20T08:31:59Z",
       "tags": [],
-      "self": "/v2/images/e6167145-7865-4d3d-ad19-2a59fb3f1870",
-      "file": "/v2/images/e6167145-7865-4d3d-ad19-2a59fb3f1870/file",
+      "self": "/v2/images/5f0f89ee-9472-4df0-afdf-546157734351",
+      "file": "/v2/images/5f0f89ee-9472-4df0-afdf-546157734351/file",
       "schema": "/v2/schemas/image"
     }
     ```
 
 
-### (27) PUT /image/v2/images/{image_id}/file
+### (27) PUT /image/v2/images/5f0f89ee-9472-4df0-afdf-546157734351/file
+openstack --> glance-api
 
 === "Header"
-    ``` http title="PUT http://182.161.114.101/image/v2/images/e6167145-7865-4d3d-ad19-2a59fb3f1870/file"
+    ``` http title="PUT http://182.161.114.101/image/v2/images/5f0f89ee-9472-4df0-afdf-546157734351/file"
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
     Accept: 
     Connection: keep-alive
     Content-Type: application/octet-stream
-    X-Auth-Token: gAAAAABjoDQeumRrUWzsXDWpG2h6Q3lrRNlkJuuzll_i60p4u3V2yoe_5n2CZi5O1EZnvsD40w72bhDpuTPe1ZSQMPOO19Jtkq5cckilgQnO1XSmesyBZrupbA2xqiB2S2esNiC0fhBPQC5bbQzMDVYwio1n7oBYng9e9Z-FOAcTy9xz78Ukj_0
+    X-Auth-Token: gAAAAABjoXL82HrnIHunE9nn8sJshiB_b-JPsVXlfe-62TL2UDohLQHPnQnGfNht8J8wDIqvKr_qJLX8Dwa1ODoLMYzM18P5Iantj4P_V_PBQmi87PR_NWHJ0aV454PNymS1FcmoJhiGlT-IM-GAJkPgpI_2o371xMPlYAlTaBlQMU9gBOAPKks
     Content-Length: 21233664
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     <_io.BufferedReader name='cirros-0.6.1-x86_64-disk.img'>
     ```
 
 
 ### (28) GET /identity/v3/limits/model
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/limits/model"
@@ -1730,30 +1753,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: */*
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (29) 200 OK /identity/v3/limits/model
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/limits/model"
-    Date: Mon, 19 Dec 2022 09:51:29 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:58 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 131
     Vary: X-Auth-Token
-    x-openstack-request-id: req-0b414c30-bad5-4e3d-a2bb-15dac76798b6
+    x-openstack-request-id: req-c4d5173d-956f-4003-afe9-57ef8b2cc45c
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "model": {
         "name": "flat",
@@ -1763,7 +1787,8 @@ sequenceDiagram
     ```
 
 
-### (30) GET /identity/v3/endpoints/{image_endpoint_id}
+### (30) GET /identity/v3/endpoints/3195d06aa49541009838146ab9072997
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/endpoints/3195d06aa49541009838146ab9072997"
@@ -1771,30 +1796,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: */*
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
-### (31) 200 OK /identity/v3/endpoints/{image_endpoint_id}
+### (31) 200 OK /identity/v3/endpoints/3195d06aa49541009838146ab9072997
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/endpoints/3195d06aa49541009838146ab9072997"
-    Date: Mon, 19 Dec 2022 09:51:29 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:58 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 335
     Vary: X-Auth-Token
-    x-openstack-request-id: req-c42949dd-c96f-4d78-8c04-8067e9a45dd7
+    x-openstack-request-id: req-31fe9cc7-8ce8-42fa-a03f-cdafae531c34
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "endpoint": {
         "id": "3195d06aa49541009838146ab9072997",
@@ -1813,6 +1839,7 @@ sequenceDiagram
 
 
 ### (32) GET /identity/v3/limits
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_size_total&project_id=a5362cbd04fd4783a038d5a342d58e87"
@@ -1820,30 +1847,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: application/json
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (33) 200 OK /identity/v3/limits
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_size_total&project_id=a5362cbd04fd4783a038d5a342d58e87"
-    Date: Mon, 19 Dec 2022 09:51:29 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:59 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 250
     Vary: X-Auth-Token
-    x-openstack-request-id: req-be9d2e42-3d65-421a-ace8-3e8e70bebb61
+    x-openstack-request-id: req-8a67a6d9-09ae-4079-b71c-d61659bd011d
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "limits": [],
       "links": {
@@ -1856,6 +1884,7 @@ sequenceDiagram
 
 
 ### (34) GET /identity/v3/registered_limits
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/registered_limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_size_total"
@@ -1863,30 +1892,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: application/json
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (35) 200 OK /identity/v3/registered_limits
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/registered_limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_size_total"
-    Date: Mon, 19 Dec 2022 09:51:29 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:59 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 535
     Vary: X-Auth-Token
-    x-openstack-request-id: req-ab2e3de2-8b0a-4900-a984-02276701773e
+    x-openstack-request-id: req-90043142-d69d-43b8-8cdd-955b37bc322f
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "registered_limits": [
         {
@@ -1911,6 +1941,7 @@ sequenceDiagram
 
 
 ### (36) GET /identity/v3/limits/model
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/limits/model"
@@ -1918,30 +1949,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: */*
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (37) 200 OK /identity/v3/limits/model
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/limits/model"
-    Date: Mon, 19 Dec 2022 09:51:30 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:59 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 131
     Vary: X-Auth-Token
-    x-openstack-request-id: req-f8833bee-3ee8-429b-a2b1-f206c817562e
+    x-openstack-request-id: req-ade6eea5-bcea-446e-997d-6282b1a1a64f
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "model": {
         "name": "flat",
@@ -1951,7 +1983,8 @@ sequenceDiagram
     ```
 
 
-### (38) GET /identity/v3/endpoints/{image_endpoint_id}
+### (38) GET /identity/v3/endpoints/3195d06aa49541009838146ab9072997
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/endpoints/3195d06aa49541009838146ab9072997"
@@ -1959,30 +1992,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: */*
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
-### (39) 200 OK /identity/v3/endpoints/{image_endpoint_id}
+### (39) 200 OK /identity/v3/endpoints/3195d06aa49541009838146ab9072997
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/endpoints/3195d06aa49541009838146ab9072997"
-    Date: Mon, 19 Dec 2022 09:51:30 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:59 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 335
     Vary: X-Auth-Token
-    x-openstack-request-id: req-242fb63d-9d68-4854-be03-14361aa1657b
+    x-openstack-request-id: req-46ed5e88-0aa5-4337-b78a-6b59d085f783
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "endpoint": {
         "id": "3195d06aa49541009838146ab9072997",
@@ -2001,6 +2035,7 @@ sequenceDiagram
 
 
 ### (40) GET /identity/v3/limits
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_count_uploading&project_id=a5362cbd04fd4783a038d5a342d58e87"
@@ -2008,30 +2043,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: application/json
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (41) 200 OK /identity/v3/limits
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_count_uploading&project_id=a5362cbd04fd4783a038d5a342d58e87"
-    Date: Mon, 19 Dec 2022 09:51:30 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:31:59 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 255
     Vary: X-Auth-Token
-    x-openstack-request-id: req-d4a551d6-2d1e-4972-8eea-1a92a34a4828
+    x-openstack-request-id: req-0564bf0a-a020-4fdf-82c2-52fd93aa7170
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "limits": [],
       "links": {
@@ -2044,6 +2080,7 @@ sequenceDiagram
 
 
 ### (42) GET /identity/v3/registered_limits
+glance-api --> keystone
 
 === "Header"
     ``` http title="GET http://182.161.114.101/identity/v3/registered_limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_count_uploading"
@@ -2051,30 +2088,31 @@ sequenceDiagram
     Accept-Encoding: gzip, deflate
     Accept: application/json
     Connection: keep-alive
-    X-Auth-Token: gAAAAABjoDQgyKt9jacLcgtWnxShO2lT_slnGqIzg2Q8L0h3TimXFnvkN8y-XYXQrRk-twcEjY41O-U8kPsUVVpZQNpiTWIspvJYFV_V3_LgmUPR9S9HfnUJfWs8CaGGb_tZdQPLGjXuUKZuiEq6HCFtd1yc7DcdSg
+    X-Auth-Token: gAAAAABjoXL91KPiyX946fRpSRYTc-VtL5Pr7wxAp89sEGTQ6-xlObWs1E0_Rttq8Y5SeC3hg3jj5mLB69TrKLWSLzwMwEd16FXLMQ2xKuJFcn0RFM54nX95YHxyQVrh5617TC0V1dQAKQAeoSEZ9yoz5AtyKoCpJw
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
 ### (43) 200 OK /identity/v3/registered_limits
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="200 OK http://182.161.114.101/identity/v3/registered_limits?service_id=4134c089d54f40c4bff6629c9b3c8b17&region_id=RegionOne&resource_name=image_count_uploading"
-    Date: Mon, 19 Dec 2022 09:51:30 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:32:00 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 544
     Vary: X-Auth-Token
-    x-openstack-request-id: req-5a32ddc7-65d2-4478-98d1-0342a2704250
+    x-openstack-request-id: req-546ffba2-50c4-4487-a2fe-cb408bc5a552
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "registered_limits": [
         {
@@ -2099,6 +2137,7 @@ sequenceDiagram
 
 
 ### (44) POST /identity/v3/auth/tokens
+glance-api --> keystone
 
 === "Header"
     ``` http title="POST http://182.161.114.101/identity/v3/auth/tokens"
@@ -2111,7 +2150,7 @@ sequenceDiagram
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "auth": {
         "identity": {
@@ -2142,21 +2181,22 @@ sequenceDiagram
 
 
 ### (45) 201 CREATED /identity/v3/auth/tokens
+glance-api <-- keystone
 
 === "Header"
-    ``` http title="201 CREATED http://182.161.114.101/identity/v3/auth/tokens"
-    Date: Mon, 19 Dec 2022 09:51:31 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:32:00 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: application/json
     Content-Length: 3908
-    X-Subject-Token: gAAAAABjoDQjYIaV2pexhwK0cX02IPQi_8HKs16hGQAAIlmw5fMpL7qG9lXL4ucih6AQSauf1BXRJxChYtjSviirRl3LfqdjxfP-ZIEcy8P52l63QsCEqSPwK_-N4oT_gcJ7tA37zT6UhrXlv3WjKXdE_8_38tBgCPafqOtaM3ALVcboAhiq-c4
+    X-Subject-Token: gAAAAABjoXMAM3KIwS07erJzG3nnWmTkAvs82Jwzme5DdoL6nCgNYItVNS9zkPqTM41_qdwiqFqCEfq6y_pHi-XzVqNMo1p-J4ZoURy1Cr23n7Z81ArVkEazFC_Do40MbopN00Ne4aX2k8JxBzqqz4mLE9iFbIwULBu7oLiopDAZa2iRFHrIDUE
     Vary: X-Auth-Token
-    x-openstack-request-id: req-328c2527-403d-44bf-8bd2-cddedee4280f
+    x-openstack-request-id: req-521c4c10-60ec-4e64-9d0a-be1532ab7ccb
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     {
       "token": {
         "methods": [
@@ -2172,10 +2212,10 @@ sequenceDiagram
           "password_expires_at": null
         },
         "audit_ids": [
-          "9FC1oZ99TR-I-9ng2GwXyw"
+          "480U00I-RtKFf2wJqpzOGw"
         ],
-        "expires_at": "2022-12-19T12:51:31.000000Z",
-        "issued_at": "2022-12-19T09:51:31.000000Z",
+        "expires_at": "2022-12-20T11:32:00.000000Z",
+        "issued_at": "2022-12-20T08:32:00.000000Z",
         "project": {
           "domain": {
             "id": "default",
@@ -2363,27 +2403,29 @@ sequenceDiagram
     ```
 
 
-### (46) HEAD /v1/AUTH_{service_id}/glance
+### (46) HEAD /v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance
+glance-api --> swift-proxy-server
 
 === "Header"
     ``` http title="HEAD http://182.161.114.101:8080/v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance"
-    x-auth-token: b'gAAAAABjoDQjYIaV2pexhwK0cX02IPQi_8HKs16hGQAAIlmw5fMpL7qG9lXL4ucih6AQSauf1BXRJxChYtjSviirRl3LfqdjxfP-ZIEcy8P52l63QsCEqSPwK_-N4oT_gcJ7tA37zT6UhrXlv3WjKXdE_8_38tBgCPafqOtaM3ALVcboAhiq-c4'
+    x-auth-token: b'gAAAAABjoXMAM3KIwS07erJzG3nnWmTkAvs82Jwzme5DdoL6nCgNYItVNS9zkPqTM41_qdwiqFqCEfq6y_pHi-XzVqNMo1p-J4ZoURy1Cr23n7Z81ArVkEazFC_Do40MbopN00Ne4aX2k8JxBzqqz4mLE9iFbIwULBu7oLiopDAZa2iRFHrIDUE'
     user-agent: python-swiftclient-4.1.0
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
+    ```
     None
     ```
 
 
-### (47) 204 No Content /v1/AUTH_{service_id}/glance
+### (47) 204 No Content /v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance
+glance-api <-- swift-proxy-server
 
 === "Header"
-    ``` http title="204 No Content http://182.161.114.101:8080/v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance"
+    ```
     Content-Type: text/plain; charset=utf-8
-    X-Container-Object-Count: 2
-    X-Container-Bytes-Used: 1049344512
+    X-Container-Object-Count: 3
+    X-Container-Bytes-Used: 1070578176
     X-Timestamp: 1670302054.88139
     Last-Modified: Tue, 06 Dec 2022 04:47:35 GMT
     Accept-Ranges: bytes
@@ -2391,67 +2433,69 @@ sequenceDiagram
     X-Container-Sharding: False
     Vary: Accept
     Content-Length: 0
-    X-Trans-Id: tx56c31b3334a34a3288c65-0063a03423
-    X-Openstack-Request-Id: tx56c31b3334a34a3288c65-0063a03423
-    Date: Mon, 19 Dec 2022 09:51:31 GMT
+    X-Trans-Id: tx18c5ea2e55624522aaeb4-0063a17300
+    X-Openstack-Request-Id: tx18c5ea2e55624522aaeb4-0063a17300
+    Date: Tue, 20 Dec 2022 08:32:00 GMT
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
-    
+    ```
+    None
     ```
 
 
-### (48) PUT /v1/AUTH_{service_id}/glance/{image_id}
+### (48) PUT /v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance/5f0f89ee-9472-4df0-afdf-546157734351
+glance-api --> swift-proxy-server
 
 === "Header"
-    ``` http title="PUT http://182.161.114.101:8080/v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance/e6167145-7865-4d3d-ad19-2a59fb3f1870"
-    x-auth-token: b'gAAAAABjoDQjYIaV2pexhwK0cX02IPQi_8HKs16hGQAAIlmw5fMpL7qG9lXL4ucih6AQSauf1BXRJxChYtjSviirRl3LfqdjxfP-ZIEcy8P52l63QsCEqSPwK_-N4oT_gcJ7tA37zT6UhrXlv3WjKXdE_8_38tBgCPafqOtaM3ALVcboAhiq-c4'
+    ``` http title="PUT http://182.161.114.101:8080/v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance/5f0f89ee-9472-4df0-afdf-546157734351"
+    x-auth-token: b'gAAAAABjoXMAM3KIwS07erJzG3nnWmTkAvs82Jwzme5DdoL6nCgNYItVNS9zkPqTM41_qdwiqFqCEfq6y_pHi-XzVqNMo1p-J4ZoURy1Cr23n7Z81ArVkEazFC_Do40MbopN00Ne4aX2k8JxBzqqz4mLE9iFbIwULBu7oLiopDAZa2iRFHrIDUE'
     Content-Length: 21233664
     user-agent: python-swiftclient-4.1.0
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
-    <swiftclient.utils.LengthWrapper object at 0x7f1e3d78c6a0>
+    ```
+    <swiftclient.utils.LengthWrapper object at 0x7f402c712fd0>
     ```
 
 
-### (49) 201 Created /v1/AUTH_{service_id}/glance/{image_id}
+### (49) 201 Created /v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance/5f0f89ee-9472-4df0-afdf-546157734351
+glance-api <-- swift-proxy-server
 
 === "Header"
-    ``` http title="201 Created http://182.161.114.101:8080/v1/AUTH_3a16cadd069e4a70b95f71316ec6f3e8/glance/e6167145-7865-4d3d-ad19-2a59fb3f1870"
+    ```
     Content-Type: text/html; charset=UTF-8
     Content-Length: 0
     Etag: 0c839612eb3f2469420f2ccae990827f
-    Last-Modified: Mon, 19 Dec 2022 09:51:32 GMT
-    X-Trans-Id: tx9e05a6e35d7049148a064-0063a03423
-    X-Openstack-Request-Id: tx9e05a6e35d7049148a064-0063a03423
-    Date: Mon, 19 Dec 2022 09:51:34 GMT
+    Last-Modified: Tue, 20 Dec 2022 08:32:01 GMT
+    X-Trans-Id: tx606a0770becf4bf886e21-0063a17300
+    X-Openstack-Request-Id: tx606a0770becf4bf886e21-0063a17300
+    Date: Tue, 20 Dec 2022 08:32:02 GMT
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
-    
+    ```
+    None
     ```
 
 
-### (50) 204 No Content /image/v2/images/{image_id}/file
+### (50) 204 No Content /image/v2/images/5f0f89ee-9472-4df0-afdf-546157734351/file
+openstack <-- glance-api
 
 === "Header"
-    ``` http title="204 No Content http://182.161.114.101/image/v2/images/e6167145-7865-4d3d-ad19-2a59fb3f1870/file"
-    Date: Mon, 19 Dec 2022 09:51:34 GMT
+    ```
+    Date: Tue, 20 Dec 2022 08:32:02 GMT
     Server: Apache/2.4.41 (Ubuntu)
     Content-Type: text/html; charset=UTF-8
-    X-Openstack-Request-Id: req-2e924dc5-ce29-479b-9563-7e5c1fe82468
+    X-Openstack-Request-Id: req-2b608edf-df19-4820-9d6c-3c1c16f764d6
     Connection: close
     ```
 
 === "Body"
-    ``` json title="" linenums="1"
-    
     ```
-
+    None
+    ```
 
 ??? quote "openstack image create logs"
     ``` log title="/var/log/requests-observer/requests.log" linenums="1"
@@ -2465,25 +2509,25 @@ sequenceDiagram
 ``` json title="openstack image create --disk-format qcow2 --file cirros-0.6.1-x86_64-disk.img --public cirros-0.6.1-x86_64-disk --format json"
 {
   "container_format": "bare",
-  "created_at": "2022-12-19T09:51:29Z",
+  "created_at": "2022-12-20T08:31:59Z",
   "disk_format": "qcow2",
-  "file": "/v2/images/e6167145-7865-4d3d-ad19-2a59fb3f1870/file",
-  "id": "e6167145-7865-4d3d-ad19-2a59fb3f1870",
+  "file": "/v2/images/5f0f89ee-9472-4df0-afdf-546157734351/file",
+  "id": "5f0f89ee-9472-4df0-afdf-546157734351",
   "min_disk": 0,
   "min_ram": 0,
-  "name": "cirros-0.6.1-x86_64-disk",
+  "name": "cirros-0.6.1-x86_64-test",
   "owner": "a5362cbd04fd4783a038d5a342d58e87",
   "properties": {
     "os_hidden": false,
     "owner_specified.openstack.md5": "",
     "owner_specified.openstack.sha256": "",
-    "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk"
+    "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-test"
   },
   "protected": false,
   "schema": "/v2/schemas/image",
   "status": "queued",
   "tags": [],
-  "updated_at": "2022-12-19T09:51:29Z",
+  "updated_at": "2022-12-20T08:31:59Z",
   "visibility": "public"
 }
 ```
