@@ -1,0 +1,2230 @@
+
+### (openstack) REQ >>> (keystone) : GET http://182.161.114.101/identity/
+Host: 182.161.114.101
+User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Requestshook-Request-Id: 12273c05a62a48e0abbc73d6d8acf011
+X-Requestshook-Request-From: openstack
+
+none
+
+
+### (openstack) RESP <<< (keystone) : 300 MULTIPLE CHOICES GET http://182.161.114.101/identity/
+Content-Type: application/json
+Content-Length: 274
+Location: http://182.161.114.101/identity/v3/
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 12273c05a62a48e0abbc73d6d8acf011
+X-Requestshook-Request-From: openstack
+
+{
+  "versions": {
+    "values": [
+      {
+        "id": "v3.14",
+        "status": "stable",
+        "updated": "2020-04-07T00:00:00Z",
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://182.161.114.101/identity/v3/"
+          }
+        ],
+        "media-types": [
+          {
+            "base": "application/json",
+            "type": "application/vnd.openstack.identity-v3+json"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+### (openstack) REQ >>> (keystone) : POST http://182.161.114.101/identity/v3/auth/tokens
+Host: 182.161.114.101
+User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 209
+X-Requestshook-Request-Id: 5c31eb287ba547d7824b867670d9cf67
+X-Requestshook-Request-From: openstack
+
+{
+  "auth": {
+    "identity": {
+      "methods": [
+        "password"
+      ],
+      "password": {
+        "user": {
+          "password": "asdf",
+          "name": "admin",
+          "domain": {
+            "id": "default"
+          }
+        }
+      }
+    },
+    "scope": {
+      "project": {
+        "name": "admin",
+        "domain": {
+          "id": "default"
+        }
+      }
+    }
+  }
+}
+
+
+### (openstack) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
+Content-Type: application/json
+Content-Length: 3952
+X-Subject-Token: gAAAAABjri2BgeQMyl1XzBzy_e75tzOoC4VnXArMIKiI5rvyPeSGzBBRfeg4QvxZUKk7vtma5Bj9f7OKUwOKkAiqyr6WAtOBc-1BFwpf2LdMfx1vd10aV69HxS4dSxTpZXNTnoTBwNd0W0n0ecwDSyMeKpHVf8E6ummcoN1tm1avqOpa0Ku4gxo
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 5c31eb287ba547d7824b867670d9cf67
+X-Requestshook-Request-From: openstack
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "f7a842b4104247debd7589051c5321fc",
+      "name": "admin",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "0ErWdvn-Rc6rN6mWfcMRmQ"
+    ],
+    "expires_at": "2022-12-30T03:14:57.000000Z",
+    "issued_at": "2022-12-30T00:14:57.000000Z",
+    "project": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "de5af600557d44d0996e667499376dbb",
+      "name": "admin"
+    },
+    "is_domain": false,
+    "roles": [
+      {
+        "id": "5f0594b46c8346d2996759ed1f5014f4",
+        "name": "member"
+      },
+      {
+        "id": "28dea0246b6f47df9d99b5b33b423c8b",
+        "name": "reader"
+      },
+      {
+        "id": "3e1adda493764db8921e97d68a5c8bc7",
+        "name": "admin"
+      }
+    ],
+    "catalog": [
+      {
+        "endpoints": [
+          {
+            "id": "6fbbbec7587e4989a4de6e7a43c7205f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/placement",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "10304edc7ec942d282567b8c4f5610d6",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "366c8616c77243d38971272e0eaf4a9f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "117766093c004578b95a185ecf2a5bbf",
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "0c0d6e47d833442f8da165ada8ad43a3",
+            "interface": "internal",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          },
+          {
+            "id": "9440e2831cc84d4da9f7d20c7b42638e",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          },
+          {
+            "id": "c812ae1a5a3e40449f3c61edae4a6bcb",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "22844f546aa941798f06e4978be9ab94",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "fad6bb86523b4f3aba4a6a6fb25cda0e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/image",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "3b7aead421ce4611a82e684ab8c2ad2f",
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82c559324ad244beacb2fd0406f0298b",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080",
+            "region": "RegionOne"
+          },
+          {
+            "id": "d1029ab4d5bf4cd6843a5b819966c2ea",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080/v1/AUTH_de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "628d3cea8d3b4615a4b047bae6112d0e",
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "a7eecf5314434aca81e5feaa8bf7521e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/identity",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "7055978143b74523b826bae1a9c0aabf",
+        "type": "identity",
+        "name": "keystone"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "30dd85ebed584c54ba849ca0e2a4c825",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:9696/networking",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "b3b850a4ec574d16a0cbece3c172a701",
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "871e0e3393974f9b9071342b59f62090",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "cb1921a9c779492484907683bb447e84",
+        "type": "compute_legacy",
+        "name": "nova_legacy"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "b6a779acd3e04ed480847d4cb99ca710",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "d5345b92210c49aa975a873d04921780",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "8c624f7ed1e44096b8f0413866a11b1b",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "e559802e75824163a070bd92dd143476",
+        "type": "volumev3",
+        "name": "cinderv3"
+      }
+    ]
+  }
+}
+
+
+### (glance-api) REQ >>> (keystone) : GET http://182.161.114.101/identity/
+Host: 182.161.114.101
+User-Agent: glance/25.0.1.dev4 keystonemiddleware.auth_token/10.1.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Requestshook-Request-Id: e0ffd36c9e9546c6b32144038b7534c7
+X-Requestshook-Request-From: glance-api
+
+none
+
+
+### (glance-api) RESP <<< (keystone) : 300 MULTIPLE CHOICES GET http://182.161.114.101/identity/
+Content-Type: application/json
+Content-Length: 274
+Location: http://182.161.114.101/identity/v3/
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: e0ffd36c9e9546c6b32144038b7534c7
+X-Requestshook-Request-From: glance-api
+
+{
+  "versions": {
+    "values": [
+      {
+        "id": "v3.14",
+        "status": "stable",
+        "updated": "2020-04-07T00:00:00Z",
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://182.161.114.101/identity/v3/"
+          }
+        ],
+        "media-types": [
+          {
+            "base": "application/json",
+            "type": "application/vnd.openstack.identity-v3+json"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+### (glance-api) REQ >>> (keystone) : POST http://182.161.114.101/identity/v3/auth/tokens
+Host: 182.161.114.101
+User-Agent: glance/25.0.1.dev4 keystonemiddleware.auth_token/10.1.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 216
+X-Requestshook-Request-Id: 7767c31f52e842bcbc242a26379d076f
+X-Requestshook-Request-From: glance-api
+
+{
+  "auth": {
+    "identity": {
+      "methods": [
+        "password"
+      ],
+      "password": {
+        "user": {
+          "password": "asdf",
+          "name": "glance",
+          "domain": {
+            "name": "Default"
+          }
+        }
+      }
+    },
+    "scope": {
+      "project": {
+        "name": "service",
+        "domain": {
+          "name": "Default"
+        }
+      }
+    }
+  }
+}
+
+
+### (glance-api) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
+Content-Type: application/json
+Content-Length: 3833
+X-Subject-Token: gAAAAABjri2Bbw2lHDYRinBmN7jfS15F9mbKTthmu1Uj8CnNvA4U1sopbJ7RuvMEwxXKrumhe_9PDRIxAsUX2sFfpX5yNyUnSw7dLh2WroBAiY5ZtS46wLLCcExasxa26zWH0IFZl4LkD5iY_GLleaviSik_cOfMnghMk3Xw9x1ANaO3Ng-MIqA
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 7767c31f52e842bcbc242a26379d076f
+X-Requestshook-Request-From: glance-api
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "e65d5173dc4c4883a9f3a7252d6c007c",
+      "name": "glance",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "DnlerDdJRhC5JC90kxAidQ"
+    ],
+    "expires_at": "2022-12-30T03:14:57.000000Z",
+    "issued_at": "2022-12-30T00:14:57.000000Z",
+    "project": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "7c4cda7e4807414bbdfcb22b535a9802",
+      "name": "service"
+    },
+    "is_domain": false,
+    "roles": [
+      {
+        "id": "8305567cb70b4087babffa9c7e9a185f",
+        "name": "service"
+      }
+    ],
+    "catalog": [
+      {
+        "endpoints": [
+          {
+            "id": "6fbbbec7587e4989a4de6e7a43c7205f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/placement",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "10304edc7ec942d282567b8c4f5610d6",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "366c8616c77243d38971272e0eaf4a9f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "117766093c004578b95a185ecf2a5bbf",
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "0c0d6e47d833442f8da165ada8ad43a3",
+            "interface": "internal",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          },
+          {
+            "id": "9440e2831cc84d4da9f7d20c7b42638e",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          },
+          {
+            "id": "c812ae1a5a3e40449f3c61edae4a6bcb",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "22844f546aa941798f06e4978be9ab94",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "fad6bb86523b4f3aba4a6a6fb25cda0e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/image",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "3b7aead421ce4611a82e684ab8c2ad2f",
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82c559324ad244beacb2fd0406f0298b",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080",
+            "region": "RegionOne"
+          },
+          {
+            "id": "d1029ab4d5bf4cd6843a5b819966c2ea",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "628d3cea8d3b4615a4b047bae6112d0e",
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "a7eecf5314434aca81e5feaa8bf7521e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/identity",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "7055978143b74523b826bae1a9c0aabf",
+        "type": "identity",
+        "name": "keystone"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "30dd85ebed584c54ba849ca0e2a4c825",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:9696/networking",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "b3b850a4ec574d16a0cbece3c172a701",
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "871e0e3393974f9b9071342b59f62090",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "cb1921a9c779492484907683bb447e84",
+        "type": "compute_legacy",
+        "name": "nova_legacy"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "b6a779acd3e04ed480847d4cb99ca710",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "d5345b92210c49aa975a873d04921780",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "8c624f7ed1e44096b8f0413866a11b1b",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "e559802e75824163a070bd92dd143476",
+        "type": "volumev3",
+        "name": "cinderv3"
+      }
+    ]
+  }
+}
+
+
+### (glance-api) REQ >>> (keystone) : GET http://182.161.114.101/identity/v3/auth/tokens
+Host: 182.161.114.101
+User-Agent: python-keystoneclient
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Subject-Token: gAAAAABjri2BgeQMyl1XzBzy_e75tzOoC4VnXArMIKiI5rvyPeSGzBBRfeg4QvxZUKk7vtma5Bj9f7OKUwOKkAiqyr6WAtOBc-1BFwpf2LdMfx1vd10aV69HxS4dSxTpZXNTnoTBwNd0W0n0ecwDSyMeKpHVf8E6ummcoN1tm1avqOpa0Ku4gxo
+Openstack-Identity-Access-Rules: 1
+X-Auth-Token: gAAAAABjri2Bbw2lHDYRinBmN7jfS15F9mbKTthmu1Uj8CnNvA4U1sopbJ7RuvMEwxXKrumhe_9PDRIxAsUX2sFfpX5yNyUnSw7dLh2WroBAiY5ZtS46wLLCcExasxa26zWH0IFZl4LkD5iY_GLleaviSik_cOfMnghMk3Xw9x1ANaO3Ng-MIqA
+X-Requestshook-Request-Id: 73e367f759fd453bb8565e77adfe274a
+X-Requestshook-Request-From: glance-api
+
+none
+
+
+### (glance-api) RESP <<< (keystone) : 200 OK GET http://182.161.114.101/identity/v3/auth/tokens
+Content-Type: application/json
+Content-Length: 3952
+X-Subject-Token: gAAAAABjri2BgeQMyl1XzBzy_e75tzOoC4VnXArMIKiI5rvyPeSGzBBRfeg4QvxZUKk7vtma5Bj9f7OKUwOKkAiqyr6WAtOBc-1BFwpf2LdMfx1vd10aV69HxS4dSxTpZXNTnoTBwNd0W0n0ecwDSyMeKpHVf8E6ummcoN1tm1avqOpa0Ku4gxo
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 73e367f759fd453bb8565e77adfe274a
+X-Requestshook-Request-From: glance-api
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "f7a842b4104247debd7589051c5321fc",
+      "name": "admin",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "0ErWdvn-Rc6rN6mWfcMRmQ"
+    ],
+    "expires_at": "2022-12-30T03:14:57.000000Z",
+    "issued_at": "2022-12-30T00:14:57.000000Z",
+    "project": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "de5af600557d44d0996e667499376dbb",
+      "name": "admin"
+    },
+    "is_domain": false,
+    "roles": [
+      {
+        "id": "5f0594b46c8346d2996759ed1f5014f4",
+        "name": "member"
+      },
+      {
+        "id": "28dea0246b6f47df9d99b5b33b423c8b",
+        "name": "reader"
+      },
+      {
+        "id": "3e1adda493764db8921e97d68a5c8bc7",
+        "name": "admin"
+      }
+    ],
+    "catalog": [
+      {
+        "endpoints": [
+          {
+            "id": "6fbbbec7587e4989a4de6e7a43c7205f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/placement",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "10304edc7ec942d282567b8c4f5610d6",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "366c8616c77243d38971272e0eaf4a9f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "117766093c004578b95a185ecf2a5bbf",
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "0c0d6e47d833442f8da165ada8ad43a3",
+            "interface": "internal",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          },
+          {
+            "id": "9440e2831cc84d4da9f7d20c7b42638e",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          },
+          {
+            "id": "c812ae1a5a3e40449f3c61edae4a6bcb",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "22844f546aa941798f06e4978be9ab94",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "fad6bb86523b4f3aba4a6a6fb25cda0e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/image",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "3b7aead421ce4611a82e684ab8c2ad2f",
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82c559324ad244beacb2fd0406f0298b",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080",
+            "region": "RegionOne"
+          },
+          {
+            "id": "d1029ab4d5bf4cd6843a5b819966c2ea",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080/v1/AUTH_de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "628d3cea8d3b4615a4b047bae6112d0e",
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "a7eecf5314434aca81e5feaa8bf7521e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/identity",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "7055978143b74523b826bae1a9c0aabf",
+        "type": "identity",
+        "name": "keystone"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "30dd85ebed584c54ba849ca0e2a4c825",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:9696/networking",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "b3b850a4ec574d16a0cbece3c172a701",
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "871e0e3393974f9b9071342b59f62090",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "cb1921a9c779492484907683bb447e84",
+        "type": "compute_legacy",
+        "name": "nova_legacy"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "b6a779acd3e04ed480847d4cb99ca710",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "d5345b92210c49aa975a873d04921780",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "8c624f7ed1e44096b8f0413866a11b1b",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/de5af600557d44d0996e667499376dbb",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "e559802e75824163a070bd92dd143476",
+        "type": "volumev3",
+        "name": "cinderv3"
+      }
+    ]
+  }
+}
+
+
+### (openstack) REQ >>> (glance-api) : POST http://127.0.0.1:60999/v2/images
+Host: 127.0.0.1:60999
+User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: */*
+X-Auth-Token: gAAAAABjri2BgeQMyl1XzBzy_e75tzOoC4VnXArMIKiI5rvyPeSGzBBRfeg4QvxZUKk7vtma5Bj9f7OKUwOKkAiqyr6WAtOBc-1BFwpf2LdMfx1vd10aV69HxS4dSxTpZXNTnoTBwNd0W0n0ecwDSyMeKpHVf8E6ummcoN1tm1avqOpa0Ku4gxo
+Content-Type: application/json
+X-Requestshook-Request-Id: 374c4ec526c949f793fb75e7e8094f0a
+X-Requestshook-Request-From: openstack
+X-Forwarded-For: 182.161.114.101
+X-Forwarded-Host: 182.161.114.101
+X-Forwarded-Server: 127.0.0.1
+Content-Length: 260
+Connection: Keep-Alive
+X-Identity-Status: Confirmed
+X-Roles: member,reader,admin
+Openstack-System-Scope: None
+X-Domain-Id: None
+X-Domain-Name: None
+X-Project-Id: de5af600557d44d0996e667499376dbb
+X-Project-Name: admin
+X-Project-Domain-Id: default
+X-Project-Domain-Name: Default
+X-User-Id: f7a842b4104247debd7589051c5321fc
+X-User-Name: admin
+X-User-Domain-Id: default
+X-User-Domain-Name: Default
+X-Is-Admin-Project: True
+X-Role: member,reader,admin
+X-User: admin
+X-Tenant-Id: de5af600557d44d0996e667499376dbb
+X-Tenant-Name: admin
+X-Tenant: admin
+X-Service-Catalog: [{"type": "placement", "name": "placement", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/placement"}]}, {"type": "compute", "name": "nova", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/compute/v2.1"}]}, {"type": "database", "name": "trove", "endpoints": [{"region": "RegionOne", "internalURL": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb", "adminURL": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb", "publicURL": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb"}]}, {"type": "image", "name": "glance", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/image"}]}, {"type": "object-store", "name": "swift", "endpoints": [{"region": "RegionOne", "adminURL": "http://182.161.114.101:8080", "publicURL": "http://182.161.114.101:8080/v1/AUTH_de5af600557d44d0996e667499376dbb"}]}, {"type": "identity", "name": "keystone", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/identity"}]}, {"type": "network", "name": "neutron", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101:9696/networking"}]}, {"type": "compute_legacy", "name": "nova_legacy", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/compute/v2/de5af600557d44d0996e667499376dbb"}]}, {"type": "block-storage", "name": "cinder", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/volume/v3/de5af600557d44d0996e667499376dbb"}]}, {"type": "volumev3", "name": "cinderv3", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/volume/v3/de5af600557d44d0996e667499376dbb"}]}]
+
+{
+  "container_format": "bare",
+  "name": "cirros-0.6.1-x86_64-test",
+  "visibility": "public",
+  "disk_format": "qcow2",
+  "owner_specified.openstack.md5": "",
+  "owner_specified.openstack.sha256": "",
+  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-test"
+}
+
+
+### (glance-api) REQ >>> (keystone) : GET http://182.161.114.101/identity/
+Host: 182.161.114.101
+User-Agent: uwsgi keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Requestshook-Request-Id: 614b42e0bd2a42c3be9a87f693329c0d
+X-Requestshook-Request-From: glance-api
+
+none
+
+
+### (glance-api) RESP <<< (keystone) : 300 MULTIPLE CHOICES GET http://182.161.114.101/identity/
+Content-Type: application/json
+Content-Length: 274
+Location: http://182.161.114.101/identity/v3/
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 614b42e0bd2a42c3be9a87f693329c0d
+X-Requestshook-Request-From: glance-api
+
+{
+  "versions": {
+    "values": [
+      {
+        "id": "v3.14",
+        "status": "stable",
+        "updated": "2020-04-07T00:00:00Z",
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://182.161.114.101/identity/v3/"
+          }
+        ],
+        "media-types": [
+          {
+            "base": "application/json",
+            "type": "application/vnd.openstack.identity-v3+json"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+### (glance-api) REQ >>> (keystone) : POST http://182.161.114.101/identity/v3/auth/tokens
+Host: 182.161.114.101
+User-Agent: uwsgi keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 178
+X-Requestshook-Request-Id: d097538fb47741c1816b7177439a9f45
+X-Requestshook-Request-From: glance-api
+
+{
+  "auth": {
+    "identity": {
+      "methods": [
+        "password"
+      ],
+      "password": {
+        "user": {
+          "password": "asdf",
+          "name": "glance",
+          "domain": {
+            "name": "Default"
+          }
+        }
+      }
+    },
+    "scope": {
+      "system": {
+        "all": true
+      }
+    }
+  }
+}
+
+
+### (glance-api) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
+Content-Type: application/json
+Content-Length: 2374
+X-Subject-Token: gAAAAABjri2CF_GaANywRvhJ6bXgvbLxoqPkBzTvuVHO7C0zr-5wxH3nbfqZjTw_I2o39BmePElwISom3g9Vpvxf-KmDbXhS1R-iV71tbremEGr7ip0W-B_mlexRLdapTlh9pvNkg5eBSEZ02kH3vUB3pVbJcmS1WQ
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: d097538fb47741c1816b7177439a9f45
+X-Requestshook-Request-From: glance-api
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "e65d5173dc4c4883a9f3a7252d6c007c",
+      "name": "glance",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "ugjzbLIKQQWIjdaHj5EVGA"
+    ],
+    "expires_at": "2022-12-30T03:14:58.000000Z",
+    "issued_at": "2022-12-30T00:14:58.000000Z",
+    "roles": [
+      {
+        "id": "28dea0246b6f47df9d99b5b33b423c8b",
+        "name": "reader"
+      }
+    ],
+    "system": {
+      "all": true
+    },
+    "catalog": [
+      {
+        "endpoints": [
+          {
+            "id": "6fbbbec7587e4989a4de6e7a43c7205f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/placement",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "10304edc7ec942d282567b8c4f5610d6",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "366c8616c77243d38971272e0eaf4a9f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "117766093c004578b95a185ecf2a5bbf",
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [],
+        "id": "22844f546aa941798f06e4978be9ab94",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "fad6bb86523b4f3aba4a6a6fb25cda0e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/image",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "3b7aead421ce4611a82e684ab8c2ad2f",
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82c559324ad244beacb2fd0406f0298b",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "628d3cea8d3b4615a4b047bae6112d0e",
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "a7eecf5314434aca81e5feaa8bf7521e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/identity",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "7055978143b74523b826bae1a9c0aabf",
+        "type": "identity",
+        "name": "keystone"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "30dd85ebed584c54ba849ca0e2a4c825",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:9696/networking",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "b3b850a4ec574d16a0cbece3c172a701",
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [],
+        "id": "cb1921a9c779492484907683bb447e84",
+        "type": "compute_legacy",
+        "name": "nova_legacy"
+      },
+      {
+        "endpoints": [],
+        "id": "d5345b92210c49aa975a873d04921780",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [],
+        "id": "e559802e75824163a070bd92dd143476",
+        "type": "volumev3",
+        "name": "cinderv3"
+      }
+    ]
+  }
+}
+
+
+### (openstack) RESP <<< (glance-api) : 201 Created POST http://127.0.0.1:60999/v2/images
+Content-Length: 781
+Content-Type: application/json
+Location: http://127.0.0.1:60999/v2/images/fc25f541-a7e4-4570-965c-a8d1cd197f60
+OpenStack-image-import-methods: glance-direct,web-download,copy-image
+X-Requestshook-Request-Id: 374c4ec526c949f793fb75e7e8094f0a
+X-Requestshook-Request-From: openstack
+
+{
+  "owner_specified.openstack.md5": "",
+  "owner_specified.openstack.sha256": "",
+  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-test",
+  "name": "cirros-0.6.1-x86_64-test",
+  "disk_format": "qcow2",
+  "container_format": "bare",
+  "visibility": "public",
+  "size": null,
+  "virtual_size": null,
+  "status": "queued",
+  "checksum": null,
+  "protected": false,
+  "min_ram": 0,
+  "min_disk": 0,
+  "owner": "de5af600557d44d0996e667499376dbb",
+  "os_hidden": false,
+  "os_hash_algo": null,
+  "os_hash_value": null,
+  "id": "fc25f541-a7e4-4570-965c-a8d1cd197f60",
+  "created_at": "2022-12-30T00:14:59Z",
+  "updated_at": "2022-12-30T00:14:59Z",
+  "tags": [],
+  "self": "/v2/images/fc25f541-a7e4-4570-965c-a8d1cd197f60",
+  "file": "/v2/images/fc25f541-a7e4-4570-965c-a8d1cd197f60/file",
+  "schema": "/v2/schemas/image"
+}
+
+
+### (openstack) REQ >>> (glance-api) : PUT http://127.0.0.1:60999/v2/images/fc25f541-a7e4-4570-965c-a8d1cd197f60/file
+Host: 127.0.0.1:60999
+User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: 
+Content-Type: application/octet-stream
+X-Auth-Token: gAAAAABjri2BgeQMyl1XzBzy_e75tzOoC4VnXArMIKiI5rvyPeSGzBBRfeg4QvxZUKk7vtma5Bj9f7OKUwOKkAiqyr6WAtOBc-1BFwpf2LdMfx1vd10aV69HxS4dSxTpZXNTnoTBwNd0W0n0ecwDSyMeKpHVf8E6ummcoN1tm1avqOpa0Ku4gxo
+X-Requestshook-Request-Id: 3e068d40ee364fb1981535f3d8fe0097
+X-Requestshook-Request-From: openstack
+X-Forwarded-For: 182.161.114.101
+X-Forwarded-Host: 182.161.114.101
+X-Forwarded-Server: 127.0.0.1
+Content-Length: 21233664
+Connection: Keep-Alive
+X-Identity-Status: Confirmed
+X-Roles: member,reader,admin
+Openstack-System-Scope: None
+X-Domain-Id: None
+X-Domain-Name: None
+X-Project-Id: de5af600557d44d0996e667499376dbb
+X-Project-Name: admin
+X-Project-Domain-Id: default
+X-Project-Domain-Name: Default
+X-User-Id: f7a842b4104247debd7589051c5321fc
+X-User-Name: admin
+X-User-Domain-Id: default
+X-User-Domain-Name: Default
+X-Is-Admin-Project: True
+X-Role: member,reader,admin
+X-User: admin
+X-Tenant-Id: de5af600557d44d0996e667499376dbb
+X-Tenant-Name: admin
+X-Tenant: admin
+X-Service-Catalog: [{"type": "placement", "name": "placement", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/placement"}]}, {"type": "compute", "name": "nova", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/compute/v2.1"}]}, {"type": "database", "name": "trove", "endpoints": [{"region": "RegionOne", "internalURL": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb", "adminURL": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb", "publicURL": "http://182.161.114.101:8779/v1.0/de5af600557d44d0996e667499376dbb"}]}, {"type": "image", "name": "glance", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/image"}]}, {"type": "object-store", "name": "swift", "endpoints": [{"region": "RegionOne", "adminURL": "http://182.161.114.101:8080", "publicURL": "http://182.161.114.101:8080/v1/AUTH_de5af600557d44d0996e667499376dbb"}]}, {"type": "identity", "name": "keystone", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/identity"}]}, {"type": "network", "name": "neutron", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101:9696/networking"}]}, {"type": "compute_legacy", "name": "nova_legacy", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/compute/v2/de5af600557d44d0996e667499376dbb"}]}, {"type": "block-storage", "name": "cinder", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/volume/v3/de5af600557d44d0996e667499376dbb"}]}, {"type": "volumev3", "name": "cinderv3", "endpoints": [{"region": "RegionOne", "publicURL": "http://182.161.114.101/volume/v3/de5af600557d44d0996e667499376dbb"}]}]
+
+b'QFI\xfb\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x07\x00\x00\x00'...
+
+
+### (glance-api) REQ >>> (keystone) : GET http://182.161.114.101/identity/
+Host: 182.161.114.101
+User-Agent: uwsgi keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Requestshook-Request-Id: c21841122d254be194f0a33976e9a3b4
+X-Requestshook-Request-From: glance-api
+
+none
+
+
+### (glance-api) RESP <<< (keystone) : 300 MULTIPLE CHOICES GET http://182.161.114.101/identity/
+Content-Type: application/json
+Content-Length: 274
+Location: http://182.161.114.101/identity/v3/
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: c21841122d254be194f0a33976e9a3b4
+X-Requestshook-Request-From: glance-api
+
+{
+  "versions": {
+    "values": [
+      {
+        "id": "v3.14",
+        "status": "stable",
+        "updated": "2020-04-07T00:00:00Z",
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://182.161.114.101/identity/v3/"
+          }
+        ],
+        "media-types": [
+          {
+            "base": "application/json",
+            "type": "application/vnd.openstack.identity-v3+json"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+### (glance-api) REQ >>> (keystone) : POST http://182.161.114.101/identity/v3/auth/tokens
+Host: 182.161.114.101
+User-Agent: uwsgi keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 178
+X-Requestshook-Request-Id: 6f46f7f795144d73b4bec7c133fd886a
+X-Requestshook-Request-From: glance-api
+
+{
+  "auth": {
+    "identity": {
+      "methods": [
+        "password"
+      ],
+      "password": {
+        "user": {
+          "password": "asdf",
+          "name": "glance",
+          "domain": {
+            "name": "Default"
+          }
+        }
+      }
+    },
+    "scope": {
+      "system": {
+        "all": true
+      }
+    }
+  }
+}
+
+
+### (glance-api) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
+Content-Type: application/json
+Content-Length: 2374
+X-Subject-Token: gAAAAABjri2DuMLVyVdu8lI1A1dVoo4KT_ebNgNVGo4Y63WYty4yMoQm-iiIq0JsZuw3vx-yM3Yb3thGE3HBW3W5NeptreFF888nHsemOT6WjkhwGSD1R0Dbgx0aBOa7JEAdgWGDB8sSJtMxlG0G28zChY8_6ZGU2g
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 6f46f7f795144d73b4bec7c133fd886a
+X-Requestshook-Request-From: glance-api
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "e65d5173dc4c4883a9f3a7252d6c007c",
+      "name": "glance",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "849oQnsmQJSm74ziLlr8NQ"
+    ],
+    "expires_at": "2022-12-30T03:14:59.000000Z",
+    "issued_at": "2022-12-30T00:14:59.000000Z",
+    "roles": [
+      {
+        "id": "28dea0246b6f47df9d99b5b33b423c8b",
+        "name": "reader"
+      }
+    ],
+    "system": {
+      "all": true
+    },
+    "catalog": [
+      {
+        "endpoints": [
+          {
+            "id": "6fbbbec7587e4989a4de6e7a43c7205f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/placement",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "10304edc7ec942d282567b8c4f5610d6",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "366c8616c77243d38971272e0eaf4a9f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "117766093c004578b95a185ecf2a5bbf",
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [],
+        "id": "22844f546aa941798f06e4978be9ab94",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "fad6bb86523b4f3aba4a6a6fb25cda0e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/image",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "3b7aead421ce4611a82e684ab8c2ad2f",
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82c559324ad244beacb2fd0406f0298b",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "628d3cea8d3b4615a4b047bae6112d0e",
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "a7eecf5314434aca81e5feaa8bf7521e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/identity",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "7055978143b74523b826bae1a9c0aabf",
+        "type": "identity",
+        "name": "keystone"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "30dd85ebed584c54ba849ca0e2a4c825",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:9696/networking",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "b3b850a4ec574d16a0cbece3c172a701",
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [],
+        "id": "cb1921a9c779492484907683bb447e84",
+        "type": "compute_legacy",
+        "name": "nova_legacy"
+      },
+      {
+        "endpoints": [],
+        "id": "d5345b92210c49aa975a873d04921780",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [],
+        "id": "e559802e75824163a070bd92dd143476",
+        "type": "volumev3",
+        "name": "cinderv3"
+      }
+    ]
+  }
+}
+
+
+### (glance-api) REQ >>> (keystone) : POST http://182.161.114.101/identity/v3/auth/tokens
+Host: 182.161.114.101
+User-Agent: uwsgi keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 218
+X-Requestshook-Request-Id: 3137fa1d0c5d47ada133829cfd0ecaa9
+X-Requestshook-Request-From: glance-api
+
+{
+  "auth": {
+    "identity": {
+      "methods": [
+        "password"
+      ],
+      "password": {
+        "user": {
+          "password": "asdf",
+          "name": "glance-swift",
+          "domain": {
+            "id": "default"
+          }
+        }
+      }
+    },
+    "scope": {
+      "project": {
+        "name": "service",
+        "domain": {
+          "id": "default"
+        }
+      }
+    }
+  }
+}
+
+
+### (glance-api) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
+Content-Type: application/json
+Content-Length: 3908
+X-Subject-Token: gAAAAABjri2E4NWjaudwAQjXXiVQ6emcQHmBC15jIcI6b87Yqd3b5B10ysmJYIW5B5cJERTlTL7mFuT8hD-4ECXJedo6TZVOGdHKwFyRpnWEZKZ9LHWg2xZE6UviCznhbzLkXLuWH9-VXDI9SymEQgemGaaT4WaqeuzncrGik3i6wPNty_4iZkw
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 3137fa1d0c5d47ada133829cfd0ecaa9
+X-Requestshook-Request-From: glance-api
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "e4cc1d4770e748e985de1fef90bdca3b",
+      "name": "glance-swift",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "Yp8ojfbQTrC2lS4JwFhLrg"
+    ],
+    "expires_at": "2022-12-30T03:15:00.000000Z",
+    "issued_at": "2022-12-30T00:15:00.000000Z",
+    "project": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "7c4cda7e4807414bbdfcb22b535a9802",
+      "name": "service"
+    },
+    "is_domain": false,
+    "roles": [
+      {
+        "id": "8305567cb70b4087babffa9c7e9a185f",
+        "name": "service"
+      },
+      {
+        "id": "fb02fd084500496fad9b29fd8c376f65",
+        "name": "ResellerAdmin"
+      }
+    ],
+    "catalog": [
+      {
+        "endpoints": [
+          {
+            "id": "6fbbbec7587e4989a4de6e7a43c7205f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/placement",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "10304edc7ec942d282567b8c4f5610d6",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "366c8616c77243d38971272e0eaf4a9f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "117766093c004578b95a185ecf2a5bbf",
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "0c0d6e47d833442f8da165ada8ad43a3",
+            "interface": "internal",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          },
+          {
+            "id": "9440e2831cc84d4da9f7d20c7b42638e",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          },
+          {
+            "id": "c812ae1a5a3e40449f3c61edae4a6bcb",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "22844f546aa941798f06e4978be9ab94",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "fad6bb86523b4f3aba4a6a6fb25cda0e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/image",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "3b7aead421ce4611a82e684ab8c2ad2f",
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82c559324ad244beacb2fd0406f0298b",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080",
+            "region": "RegionOne"
+          },
+          {
+            "id": "d1029ab4d5bf4cd6843a5b819966c2ea",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "628d3cea8d3b4615a4b047bae6112d0e",
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "a7eecf5314434aca81e5feaa8bf7521e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/identity",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "7055978143b74523b826bae1a9c0aabf",
+        "type": "identity",
+        "name": "keystone"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "30dd85ebed584c54ba849ca0e2a4c825",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:9696/networking",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "b3b850a4ec574d16a0cbece3c172a701",
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "871e0e3393974f9b9071342b59f62090",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "cb1921a9c779492484907683bb447e84",
+        "type": "compute_legacy",
+        "name": "nova_legacy"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "b6a779acd3e04ed480847d4cb99ca710",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "d5345b92210c49aa975a873d04921780",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "8c624f7ed1e44096b8f0413866a11b1b",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "e559802e75824163a070bd92dd143476",
+        "type": "volumev3",
+        "name": "cinderv3"
+      }
+    ]
+  }
+}
+
+
+### (Swift) REQ >>> (swift-proxy-server) : HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802
+Host: 182.161.114.101:8080
+User-Agent: Swift
+X-Backend-Allow-Reserved-Names: true
+X-Identity-Status: Invalid
+X-Requestshook-Request-Id: 10e2ab0036b34b0a991982ba2650cf2d
+X-Requestshook-Request-From: Swift
+
+none
+
+
+### (Swift) RESP <<< (swift-proxy-server) : 204 No Content HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802?format=json
+Content-Type: application/json; charset=utf-8
+X-Account-Container-Count: 1
+X-Account-Object-Count: 2
+X-Account-Bytes-Used: 1049475584
+X-Timestamp: 1671683363.78367
+X-Account-Storage-Policy-Policy-0-Container-Count: 1
+X-Account-Storage-Policy-Policy-0-Object-Count: 2
+X-Account-Storage-Policy-Policy-0-Bytes-Used: 1049475584
+X-Account-Sysmeta-Project-Domain-Id: default
+Accept-Ranges: bytes
+Content-Length: 0
+X-Backend-Recheck-Account-Existence: 60
+X-Requestshook-Request-Id: 10e2ab0036b34b0a991982ba2650cf2d
+X-Requestshook-Request-From: Swift
+
+none
+
+
+### (Swift) REQ >>> (swift-proxy-server) : HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802
+Host: 182.161.114.101:8080
+User-Agent: Swift
+X-Backend-Allow-Reserved-Names: true
+X-Identity-Status: Invalid
+X-Requestshook-Request-Id: d106f42206304e39aa6fcdd1e805f858
+X-Requestshook-Request-From: Swift
+
+none
+
+
+### (Swift) RESP <<< (swift-proxy-server) : 204 No Content HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802?format=json
+Content-Type: application/json; charset=utf-8
+X-Account-Container-Count: 1
+X-Account-Object-Count: 2
+X-Account-Bytes-Used: 1049475584
+X-Timestamp: 1671683363.78367
+X-Account-Storage-Policy-Policy-0-Container-Count: 1
+X-Account-Storage-Policy-Policy-0-Object-Count: 2
+X-Account-Storage-Policy-Policy-0-Bytes-Used: 1049475584
+X-Account-Sysmeta-Project-Domain-Id: default
+Accept-Ranges: bytes
+Content-Length: 0
+X-Backend-Recheck-Account-Existence: 60
+X-Requestshook-Request-Id: d106f42206304e39aa6fcdd1e805f858
+X-Requestshook-Request-From: Swift
+
+none
+
+
+### (Swift) REQ >>> (swift-proxy-server) : HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance
+Host: 182.161.114.101:8080
+User-Agent: Swift
+X-Backend-Allow-Reserved-Names: true
+X-Identity-Status: Invalid
+X-Requestshook-Request-Id: 6f9ac421655f429f8f1672c15193111b
+X-Requestshook-Request-From: Swift
+
+none
+
+
+### (Swift) RESP <<< (swift-proxy-server) : 204 No Content HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance?format=json&states=listing
+Content-Type: application/json; charset=utf-8
+X-Backend-Timestamp: 1671683363.84851
+X-Backend-Put-Timestamp: 1671683363.83052
+X-Backend-Delete-Timestamp: 0000000000.00000
+X-Backend-Status-Changed-At: 1671683363.83052
+X-Backend-Storage-Policy-Index: 0
+X-Container-Object-Count: 2
+X-Container-Bytes-Used: 1049475584
+X-Timestamp: 1671683363.84851
+X-Backend-Sharding-State: unsharded
+Last-Modified: Thu, 22 Dec 2022 04:29:24 GMT
+Accept-Ranges: bytes
+Content-Length: 0
+X-Storage-Policy: Policy-0
+X-Backend-Recheck-Container-Existence: 60
+X-Requestshook-Request-Id: 6f9ac421655f429f8f1672c15193111b
+X-Requestshook-Request-From: Swift
+
+none
+
+
+### (swift-proxy-server) REQ >>> (keystone) : GET http://182.161.114.101/identity/
+Host: 182.161.114.101
+User-Agent: keystonemiddleware.auth_token/10.1.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Requestshook-Request-Id: 18a4ac0355124562b248da3f96e149a4
+X-Requestshook-Request-From: swift-proxy-server
+
+none
+
+
+### (swift-proxy-server) RESP <<< (keystone) : 300 MULTIPLE CHOICES GET http://182.161.114.101/identity/
+Content-Type: application/json
+Content-Length: 274
+Location: http://182.161.114.101/identity/v3/
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 18a4ac0355124562b248da3f96e149a4
+X-Requestshook-Request-From: swift-proxy-server
+
+{
+  "versions": {
+    "values": [
+      {
+        "id": "v3.14",
+        "status": "stable",
+        "updated": "2020-04-07T00:00:00Z",
+        "links": [
+          {
+            "rel": "self",
+            "href": "http://182.161.114.101/identity/v3/"
+          }
+        ],
+        "media-types": [
+          {
+            "base": "application/json",
+            "type": "application/vnd.openstack.identity-v3+json"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+### (swift-proxy-server) REQ >>> (keystone) : POST http://182.161.114.101/identity/v3/auth/tokens
+Host: 182.161.114.101
+User-Agent: keystonemiddleware.auth_token/10.1.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 215
+X-Requestshook-Request-Id: 63dc08e2aba74f438b0e0e43a3f683d7
+X-Requestshook-Request-From: swift-proxy-server
+
+{
+  "auth": {
+    "identity": {
+      "methods": [
+        "password"
+      ],
+      "password": {
+        "user": {
+          "password": "asdf",
+          "name": "swift",
+          "domain": {
+            "name": "Default"
+          }
+        }
+      }
+    },
+    "scope": {
+      "project": {
+        "name": "service",
+        "domain": {
+          "name": "Default"
+        }
+      }
+    }
+  }
+}
+
+
+### (swift-proxy-server) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
+Content-Type: application/json
+Content-Length: 4017
+X-Subject-Token: gAAAAABjri2Ft0o0A1nM9WbJZz3e-KsEkS6yv3I-PxizCMyJtG6_gjAxkmP6-_f1a5vHmHUNouZDaXlUiUKNlM3DhBkCZH9Xv7Vw6whXbHc7f6tvajcv4ontWgoMvXPEqz9WT7l1LrZq52CcbpmYb8tM3hXxqM6RlqwTDI-nYisZ9c02IAlbo0g
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 63dc08e2aba74f438b0e0e43a3f683d7
+X-Requestshook-Request-From: swift-proxy-server
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "76b3aee8e06249509c67e7413eac8ae6",
+      "name": "swift",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "knav97OpQKe2lI_pS3J2HA"
+    ],
+    "expires_at": "2022-12-30T03:15:01.000000Z",
+    "issued_at": "2022-12-30T00:15:01.000000Z",
+    "project": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "7c4cda7e4807414bbdfcb22b535a9802",
+      "name": "service"
+    },
+    "is_domain": false,
+    "roles": [
+      {
+        "id": "28dea0246b6f47df9d99b5b33b423c8b",
+        "name": "reader"
+      },
+      {
+        "id": "5f0594b46c8346d2996759ed1f5014f4",
+        "name": "member"
+      },
+      {
+        "id": "8305567cb70b4087babffa9c7e9a185f",
+        "name": "service"
+      },
+      {
+        "id": "3e1adda493764db8921e97d68a5c8bc7",
+        "name": "admin"
+      }
+    ],
+    "catalog": [
+      {
+        "endpoints": [
+          {
+            "id": "6fbbbec7587e4989a4de6e7a43c7205f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/placement",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "10304edc7ec942d282567b8c4f5610d6",
+        "type": "placement",
+        "name": "placement"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "366c8616c77243d38971272e0eaf4a9f",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2.1",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "117766093c004578b95a185ecf2a5bbf",
+        "type": "compute",
+        "name": "nova"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "0c0d6e47d833442f8da165ada8ad43a3",
+            "interface": "internal",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          },
+          {
+            "id": "9440e2831cc84d4da9f7d20c7b42638e",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          },
+          {
+            "id": "c812ae1a5a3e40449f3c61edae4a6bcb",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "22844f546aa941798f06e4978be9ab94",
+        "type": "database",
+        "name": "trove"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "fad6bb86523b4f3aba4a6a6fb25cda0e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/image",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "3b7aead421ce4611a82e684ab8c2ad2f",
+        "type": "image",
+        "name": "glance"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "82c559324ad244beacb2fd0406f0298b",
+            "interface": "admin",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080",
+            "region": "RegionOne"
+          },
+          {
+            "id": "d1029ab4d5bf4cd6843a5b819966c2ea",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "628d3cea8d3b4615a4b047bae6112d0e",
+        "type": "object-store",
+        "name": "swift"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "a7eecf5314434aca81e5feaa8bf7521e",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/identity",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "7055978143b74523b826bae1a9c0aabf",
+        "type": "identity",
+        "name": "keystone"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "30dd85ebed584c54ba849ca0e2a4c825",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101:9696/networking",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "b3b850a4ec574d16a0cbece3c172a701",
+        "type": "network",
+        "name": "neutron"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "871e0e3393974f9b9071342b59f62090",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/compute/v2/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "cb1921a9c779492484907683bb447e84",
+        "type": "compute_legacy",
+        "name": "nova_legacy"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "b6a779acd3e04ed480847d4cb99ca710",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "d5345b92210c49aa975a873d04921780",
+        "type": "block-storage",
+        "name": "cinder"
+      },
+      {
+        "endpoints": [
+          {
+            "id": "8c624f7ed1e44096b8f0413866a11b1b",
+            "interface": "public",
+            "region_id": "RegionOne",
+            "url": "http://182.161.114.101/volume/v3/7c4cda7e4807414bbdfcb22b535a9802",
+            "region": "RegionOne"
+          }
+        ],
+        "id": "e559802e75824163a070bd92dd143476",
+        "type": "volumev3",
+        "name": "cinderv3"
+      }
+    ]
+  }
+}
+
+
+### (swift-proxy-server) REQ >>> (keystone) : GET http://182.161.114.101/identity/v3/auth/tokens?nocatalog
+Host: 182.161.114.101
+User-Agent: python-keystoneclient
+Accept-Encoding: gzip, deflate
+Accept: application/json
+Connection: keep-alive
+X-Subject-Token: gAAAAABjri2E4NWjaudwAQjXXiVQ6emcQHmBC15jIcI6b87Yqd3b5B10ysmJYIW5B5cJERTlTL7mFuT8hD-4ECXJedo6TZVOGdHKwFyRpnWEZKZ9LHWg2xZE6UviCznhbzLkXLuWH9-VXDI9SymEQgemGaaT4WaqeuzncrGik3i6wPNty_4iZkw
+Openstack-Identity-Access-Rules: 1
+X-Auth-Token: gAAAAABjri2Ft0o0A1nM9WbJZz3e-KsEkS6yv3I-PxizCMyJtG6_gjAxkmP6-_f1a5vHmHUNouZDaXlUiUKNlM3DhBkCZH9Xv7Vw6whXbHc7f6tvajcv4ontWgoMvXPEqz9WT7l1LrZq52CcbpmYb8tM3hXxqM6RlqwTDI-nYisZ9c02IAlbo0g
+X-Requestshook-Request-Id: 6177909377774dda9bccf2a65a679ec9
+X-Requestshook-Request-From: swift-proxy-server
+
+none
+
+
+### (swift-proxy-server) RESP <<< (keystone) : 200 OK GET http://182.161.114.101/identity/v3/auth/tokens?nocatalog
+Content-Type: application/json
+Content-Length: 604
+X-Subject-Token: gAAAAABjri2E4NWjaudwAQjXXiVQ6emcQHmBC15jIcI6b87Yqd3b5B10ysmJYIW5B5cJERTlTL7mFuT8hD-4ECXJedo6TZVOGdHKwFyRpnWEZKZ9LHWg2xZE6UviCznhbzLkXLuWH9-VXDI9SymEQgemGaaT4WaqeuzncrGik3i6wPNty_4iZkw
+Vary: X-Auth-Token
+X-Requestshook-Request-Id: 6177909377774dda9bccf2a65a679ec9
+X-Requestshook-Request-From: swift-proxy-server
+
+{
+  "token": {
+    "methods": [
+      "password"
+    ],
+    "user": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "e4cc1d4770e748e985de1fef90bdca3b",
+      "name": "glance-swift",
+      "password_expires_at": null
+    },
+    "audit_ids": [
+      "Yp8ojfbQTrC2lS4JwFhLrg"
+    ],
+    "expires_at": "2022-12-30T03:15:00.000000Z",
+    "issued_at": "2022-12-30T00:15:00.000000Z",
+    "project": {
+      "domain": {
+        "id": "default",
+        "name": "Default"
+      },
+      "id": "7c4cda7e4807414bbdfcb22b535a9802",
+      "name": "service"
+    },
+    "is_domain": false,
+    "roles": [
+      {
+        "id": "8305567cb70b4087babffa9c7e9a185f",
+        "name": "service"
+      },
+      {
+        "id": "fb02fd084500496fad9b29fd8c376f65",
+        "name": "ResellerAdmin"
+      }
+    ]
+  }
+}
+
+
+### (glance-api) REQ >>> (swift-proxy-server) : HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance?format=json
+Content-Type: 
+Host: 182.161.114.101:8080
+Accept-Encoding: identity
+X-Auth-Token: gAAAAABjri2E4NWjaudwAQjXXiVQ6emcQHmBC15jIcI6b87Yqd3b5B10ysmJYIW5B5cJERTlTL7mFuT8hD-4ECXJedo6TZVOGdHKwFyRpnWEZKZ9LHWg2xZE6UviCznhbzLkXLuWH9-VXDI9SymEQgemGaaT4WaqeuzncrGik3i6wPNty_4iZkw
+User-Agent: python-swiftclient-4.1.0
+X-Requestshook-Request-Id: a308a143e8d54051a7e9bb15bf72e738
+X-Requestshook-Request-From: glance-api
+X-Identity-Status: Confirmed
+X-Roles: service,ResellerAdmin
+Openstack-System-Scope: None
+X-Domain-Id: None
+X-Domain-Name: None
+X-Project-Id: 7c4cda7e4807414bbdfcb22b535a9802
+X-Project-Name: service
+X-Project-Domain-Id: default
+X-Project-Domain-Name: Default
+X-User-Id: e4cc1d4770e748e985de1fef90bdca3b
+X-User-Name: glance-swift
+X-User-Domain-Id: default
+X-User-Domain-Name: Default
+X-Is-Admin-Project: True
+X-Role: service,ResellerAdmin
+X-User: glance-swift
+X-Tenant-Id: 7c4cda7e4807414bbdfcb22b535a9802
+X-Tenant-Name: service
+X-Tenant: service
+
+none
+
+
+### (glance-api) RESP <<< (swift-proxy-server) : 204 No Content HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance?format=json&states=listing
+Content-Type: application/json; charset=utf-8
+X-Backend-Timestamp: 1671683363.84851
+X-Backend-Put-Timestamp: 1671683363.83052
+X-Backend-Delete-Timestamp: 0000000000.00000
+X-Backend-Status-Changed-At: 1671683363.83052
+X-Backend-Storage-Policy-Index: 0
+X-Container-Object-Count: 2
+X-Container-Bytes-Used: 1049475584
+X-Timestamp: 1671683363.84851
+X-Backend-Sharding-State: unsharded
+Last-Modified: Thu, 22 Dec 2022 04:29:24 GMT
+Accept-Ranges: bytes
+Content-Length: 0
+X-Storage-Policy: Policy-0
+X-Backend-Recheck-Container-Existence: 60
+X-Container-Sharding: False
+X-Requestshook-Request-Id: a308a143e8d54051a7e9bb15bf72e738
+X-Requestshook-Request-From: glance-api
+
+none
+
+
+### (glance-api) REQ >>> (swift-proxy-server) : PUT http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/fc25f541-a7e4-4570-965c-a8d1cd197f60
+Content-Type: 
+Content-Length: 21233664
+Host: 182.161.114.101:8080
+Accept-Encoding: identity
+X-Auth-Token: gAAAAABjri2E4NWjaudwAQjXXiVQ6emcQHmBC15jIcI6b87Yqd3b5B10ysmJYIW5B5cJERTlTL7mFuT8hD-4ECXJedo6TZVOGdHKwFyRpnWEZKZ9LHWg2xZE6UviCznhbzLkXLuWH9-VXDI9SymEQgemGaaT4WaqeuzncrGik3i6wPNty_4iZkw
+User-Agent: python-swiftclient-4.1.0
+X-Requestshook-Request-Id: 2ddf25485c19400ab03ca9e5a5637ec6
+X-Requestshook-Request-From: glance-api
+X-Identity-Status: Confirmed
+X-Roles: service,ResellerAdmin
+Openstack-System-Scope: None
+X-Domain-Id: None
+X-Domain-Name: None
+X-Project-Id: 7c4cda7e4807414bbdfcb22b535a9802
+X-Project-Name: service
+X-Project-Domain-Id: default
+X-Project-Domain-Name: Default
+X-User-Id: e4cc1d4770e748e985de1fef90bdca3b
+X-User-Name: glance-swift
+X-User-Domain-Id: default
+X-User-Domain-Name: Default
+X-Is-Admin-Project: True
+X-Role: service,ResellerAdmin
+X-User: glance-swift
+X-Tenant-Id: 7c4cda7e4807414bbdfcb22b535a9802
+X-Tenant-Name: service
+X-Tenant: service
+
+b'QFI\xfb\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x07\x00\x00\x00'...
+
+
+### (glance-api) RESP <<< (swift-proxy-server) : 201 Created PUT http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/fc25f541-a7e4-4570-965c-a8d1cd197f60
+Content-Type: text/html; charset=UTF-8
+Content-Length: 0
+Etag: 0c839612eb3f2469420f2ccae990827f
+Last-Modified: Fri, 30 Dec 2022 00:15:02 GMT
+X-Requestshook-Request-Id: 2ddf25485c19400ab03ca9e5a5637ec6
+X-Requestshook-Request-From: glance-api
+
+none
+
+
+### (openstack) RESP <<< (glance-api) : 204 No Content PUT http://127.0.0.1:60999/v2/images/fc25f541-a7e4-4570-965c-a8d1cd197f60/file
+Content-Type: text/html; charset=UTF-8
+Content-Length: 0
+X-Requestshook-Request-Id: 3e068d40ee364fb1981535f3d8fe0097
+X-Requestshook-Request-From: openstack
+
+none
+
