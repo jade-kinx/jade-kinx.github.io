@@ -25,10 +25,10 @@ if os.name == 'nt':
     LOG_PATH = os.path.expanduser(os.path.join('~', 'log', PACKAGE_NAME))
     CONF_PATH = os.path.expanduser(os.path.join('~', 'conf'))
 
-LOG_FILE_PATH = os.path.join(LOG_PATH, f'{PACKAGE_NAME}.log')
 CONF_FILE_PATH = os.path.join(CONF_PATH, f'{PACKAGE_NAME}.conf')
-DIAGRAM_FILE_PATH = os.path.join(LOG_PATH, f'{PACKAGE_NAME}-diagram.md')
-DOC_FILE_PATH = os.path.join(LOG_PATH, f'{PACKAGE_NAME}-doc.md')
+LOG_FILE_PATH = os.path.join(LOG_PATH, f'{PACKAGE_NAME}.log')
+DIAGRAM_FILE_PATH = os.path.join(LOG_PATH, f'diagram.md')
+DOC_FILE_PATH = os.path.join(LOG_PATH, f'body.md')
 
 try:
     # create log path if not exists...

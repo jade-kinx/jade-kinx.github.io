@@ -49,8 +49,12 @@ $ openstack image create \
 ``` mermaid
 sequenceDiagram
     autonumber
-    --8<-- "openstack/image/create-diagram.md"
+    --8<-- "openstack/image/create/diagram.md"
 ```
+
+!!! note
+    `{image_id}`: `a42bfade-78ec-4c95-b7b4-272ba265072c`  
+    `{account}`: `7c4cda7e4807414bbdfcb22b535a9802`  
 
 이미지 서비스에 qcow2 포맷의 로컬 이미지 파일 등록 요청을 보낼 때의 시퀀스 다이어그램이다.  
 
@@ -114,7 +118,7 @@ sequenceDiagram
 !!! note
     `Header` 에 포함된 `X-Requestshook-Request-Id`, `X-Requestshook-Request-From` 항목은 API Sequence 추적을 위해 `requestshook`에서 추가한 항목이며, 오픈스택에서 제공하는 정보가 아니므로 무시한다.  
 
---8<-- "openstack/image/create-contents.md"
+--8<-- "openstack/image/create/body.md"
 
 ## Output
 
@@ -123,8 +127,8 @@ sequenceDiagram
   "container_format": "bare",
   "created_at": "2022-12-30T01:38:06Z",
   "disk_format": "qcow2",
-  "file": "/v2/images/7d29b113-3248-4052-be42-aefdfa1758cf",
-  "id": "7d29b113-3248-4052-be42-aefdfa1758cf",
+  "file": "/v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c",
+  "id": "a42bfade-78ec-4c95-b7b4-272ba265072c",
   "min_disk": 0,
   "min_ram": 0,
   "name": "cirros-0.6.1-x86_64-disk",
@@ -146,5 +150,5 @@ sequenceDiagram
 
 ??? quote "/var/log/requests.log"
     ``` text title="" linenums="1"
-    --8<-- "openstack/image/create-log.md"
+    --8<-- "openstack/image/create/log.md"
     ```

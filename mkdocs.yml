@@ -138,9 +138,18 @@ nav:
       - trove-api: openstack/debugging/trove-api.md
     - Trove: 
       - Install Trove on DevStack: openstack/trove/install-trove-on-devstack.md
-  - Image(GLANCE):
-    - sequence dump: openstack/image/sequence-dump-how-to.md
-    - image create: openstack/image/create.md
+  - Image(GLANCE): 
+    - openstack/image/index.md
+    - image create: openstack/image/create/index.md
+    - image list: openstack/image/list/index.md
+    - image show: openstack/image/show/index.md
+    - image save: openstack/image/save/index.md
+    - image add project: openstack/image/add-project/index.md
+    - image member list: openstack/image/member-list/index.md
+    - image remove project: openstack/image/remove-project/index.md
+    - image set: openstack/image/set/index.md
+    - image unset: openstack/image/unset/index.md
+    - image delete: openstack/image/delete/index.md
   - OpenStack CLI API Sequence:
     - Image Service:
       - image create: openstack/sequence/image/create.md

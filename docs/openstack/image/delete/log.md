@@ -5,7 +5,7 @@ User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPyt
 Accept-Encoding: gzip, deflate
 Accept: application/json
 Connection: keep-alive
-X-Requestshook-Request-Id: db99482beaf54a05982bdc1f47687afd
+X-Requestshook-Request-Id: 1db6ad752cca483facdfc12a69d28876
 X-Requestshook-Request-From: openstack
 
 none
@@ -16,7 +16,7 @@ Content-Type: application/json
 Content-Length: 274
 Location: http://182.161.114.101/identity/v3/
 Vary: X-Auth-Token
-X-Requestshook-Request-Id: db99482beaf54a05982bdc1f47687afd
+X-Requestshook-Request-Id: 1db6ad752cca483facdfc12a69d28876
 X-Requestshook-Request-From: openstack
 
 {
@@ -52,7 +52,7 @@ Accept: application/json
 Connection: keep-alive
 Content-Type: application/json
 Content-Length: 209
-X-Requestshook-Request-Id: 77b63da6e8304573a0673f43a48857cb
+X-Requestshook-Request-Id: 3804cb0ea7134da9aa83bea5e5c8d560
 X-Requestshook-Request-From: openstack
 
 {
@@ -86,9 +86,9 @@ X-Requestshook-Request-From: openstack
 ### (openstack) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
 Content-Type: application/json
 Content-Length: 3952
-X-Subject-Token: gAAAAABjrkD9cqBlaLtF1_FlWZfHjo2u7cJvLXX1HNPG-aFEylyLg7rBQwXEckDcnO__Yjj7akLG-xtxDVRk3zfTJPFdMYJ1MjeZJLaLbOD_Cbx4_D57F_EBR7g-QEmJdvXqN8GADYgNslbXm8cxCBhl3ww4_VJQBWEVQtav4_vVRW_E9vKAkxc
+X-Subject-Token: gAAAAABjspx1DTolfmi1UKixnxPvZiIPNhKyrDbDcK2O3pCAVfWobD6l224XbtGK3aGN_GlqFR4fXO8rjYFoEeamp62klqQATvNsbd1k-VoG2nnK3HLMWlLxKc-0dEE-h1owxeC-X5LulGti8ehy2UPYdv24LH3TOv5FNa1PsXRwkmnEl5ax_ns
 Vary: X-Auth-Token
-X-Requestshook-Request-Id: 77b63da6e8304573a0673f43a48857cb
+X-Requestshook-Request-Id: 3804cb0ea7134da9aa83bea5e5c8d560
 X-Requestshook-Request-From: openstack
 
 {
@@ -106,10 +106,10 @@ X-Requestshook-Request-From: openstack
       "password_expires_at": null
     },
     "audit_ids": [
-      "9U94bbR7Tu6vPiWuThd6Gg"
+      "cn7BsshFTxKQopJTR4Nkmw"
     ],
-    "expires_at": "2022-12-30T04:38:05.000000Z",
-    "issued_at": "2022-12-30T01:38:05.000000Z",
+    "expires_at": "2023-01-02T11:57:25.000000Z",
+    "issued_at": "2023-01-02T08:57:25.000000Z",
     "project": {
       "domain": {
         "id": "default",
@@ -121,16 +121,16 @@ X-Requestshook-Request-From: openstack
     "is_domain": false,
     "roles": [
       {
-        "id": "3e1adda493764db8921e97d68a5c8bc7",
-        "name": "admin"
+        "id": "28dea0246b6f47df9d99b5b33b423c8b",
+        "name": "reader"
       },
       {
         "id": "5f0594b46c8346d2996759ed1f5014f4",
         "name": "member"
       },
       {
-        "id": "28dea0246b6f47df9d99b5b33b423c8b",
-        "name": "reader"
+        "id": "3e1adda493764db8921e97d68a5c8bc7",
+        "name": "admin"
       }
     ],
     "catalog": [
@@ -300,323 +300,20 @@ X-Requestshook-Request-From: openstack
 }
 
 
-### (openstack) REQ >>> (glance-api) : POST http://127.0.0.1:60999/v2/images
+### (openstack) REQ >>> (glance-api) : GET http://127.0.0.1:60999/v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 Host: 127.0.0.1:60999
 User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
 Accept-Encoding: gzip, deflate
 Accept: */*
-X-Auth-Token: gAAAAABjrkD9cqBlaLtF1_FlWZfHjo2u7cJvLXX1HNPG-aFEylyLg7rBQwXEckDcnO__Yjj7akLG-xtxDVRk3zfTJPFdMYJ1MjeZJLaLbOD_Cbx4_D57F_EBR7g-QEmJdvXqN8GADYgNslbXm8cxCBhl3ww4_VJQBWEVQtav4_vVRW_E9vKAkxc
-Content-Type: application/json
-X-Requestshook-Request-Id: 3ab3d14d95bf4be1bad368dbe46a773a
+X-Auth-Token: gAAAAABjspx1DTolfmi1UKixnxPvZiIPNhKyrDbDcK2O3pCAVfWobD6l224XbtGK3aGN_GlqFR4fXO8rjYFoEeamp62klqQATvNsbd1k-VoG2nnK3HLMWlLxKc-0dEE-h1owxeC-X5LulGti8ehy2UPYdv24LH3TOv5FNa1PsXRwkmnEl5ax_ns
+X-Requestshook-Request-Id: 561e78aa05794efd804f1fa7aa1542af
 X-Requestshook-Request-From: openstack
 X-Forwarded-For: 182.161.114.101
 X-Forwarded-Host: 182.161.114.101
 X-Forwarded-Server: 127.0.0.1
-Content-Length: 260
 Connection: Keep-Alive
 
-{
-  "container_format": "bare",
-  "visibility": "public",
-  "disk_format": "qcow2",
-  "name": "cirros-0.6.1-x86_64-disk",
-  "owner_specified.openstack.md5": "",
-  "owner_specified.openstack.sha256": "",
-  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk"
-}
-
-
-### (glance-api) REQ >>> (keystone) : GET http://182.161.114.101/identity/
-Host: 182.161.114.101
-User-Agent: glance/25.0.1.dev4 keystonemiddleware.auth_token/10.1.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
-Accept-Encoding: gzip, deflate
-Accept: application/json
-Connection: keep-alive
-X-Requestshook-Request-Id: 76d74b23313c4e57884048d860486320
-X-Requestshook-Request-From: glance-api
-
 none
-
-
-### (glance-api) RESP <<< (keystone) : 300 MULTIPLE CHOICES GET http://182.161.114.101/identity/
-Content-Type: application/json
-Content-Length: 274
-Location: http://182.161.114.101/identity/v3/
-Vary: X-Auth-Token
-X-Requestshook-Request-Id: 76d74b23313c4e57884048d860486320
-X-Requestshook-Request-From: glance-api
-
-{
-  "versions": {
-    "values": [
-      {
-        "id": "v3.14",
-        "status": "stable",
-        "updated": "2020-04-07T00:00:00Z",
-        "links": [
-          {
-            "rel": "self",
-            "href": "http://182.161.114.101/identity/v3/"
-          }
-        ],
-        "media-types": [
-          {
-            "base": "application/json",
-            "type": "application/vnd.openstack.identity-v3+json"
-          }
-        ]
-      }
-    ]
-  }
-}
-
-
-### (glance-api) REQ >>> (keystone) : POST http://182.161.114.101/identity/v3/auth/tokens
-Host: 182.161.114.101
-User-Agent: glance/25.0.1.dev4 keystonemiddleware.auth_token/10.1.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
-Accept-Encoding: gzip, deflate
-Accept: application/json
-Connection: keep-alive
-Content-Type: application/json
-Content-Length: 216
-X-Requestshook-Request-Id: 86b015c3843b4f779436cf402cfa17dc
-X-Requestshook-Request-From: glance-api
-
-{
-  "auth": {
-    "identity": {
-      "methods": [
-        "password"
-      ],
-      "password": {
-        "user": {
-          "password": "asdf",
-          "name": "glance",
-          "domain": {
-            "name": "Default"
-          }
-        }
-      }
-    },
-    "scope": {
-      "project": {
-        "name": "service",
-        "domain": {
-          "name": "Default"
-        }
-      }
-    }
-  }
-}
-
-
-### (glance-api) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
-Content-Type: application/json
-Content-Length: 3833
-X-Subject-Token: gAAAAABjrkD9tCni_jA0hswR8965Hg5cRQxRe2cGhOniDRLEUEmRQxBC-JAqhVkPyuvpyYOoVOGEg8Keb8P5JRmqes6F3eHkt2dDJd5E66TCFDpbWnNMjHfzzp9j2UCD-uVcwz30bKCrIbQUGSW_-VFDdDrHnbApFBKazs7_U8HR4YB3Hj8hWHA
-Vary: X-Auth-Token
-X-Requestshook-Request-Id: 86b015c3843b4f779436cf402cfa17dc
-X-Requestshook-Request-From: glance-api
-
-{
-  "token": {
-    "methods": [
-      "password"
-    ],
-    "user": {
-      "domain": {
-        "id": "default",
-        "name": "Default"
-      },
-      "id": "e65d5173dc4c4883a9f3a7252d6c007c",
-      "name": "glance",
-      "password_expires_at": null
-    },
-    "audit_ids": [
-      "20tUnWnaQ6ScGFzUNIjAlQ"
-    ],
-    "expires_at": "2022-12-30T04:38:05.000000Z",
-    "issued_at": "2022-12-30T01:38:05.000000Z",
-    "project": {
-      "domain": {
-        "id": "default",
-        "name": "Default"
-      },
-      "id": "7c4cda7e4807414bbdfcb22b535a9802",
-      "name": "service"
-    },
-    "is_domain": false,
-    "roles": [
-      {
-        "id": "8305567cb70b4087babffa9c7e9a185f",
-        "name": "service"
-      }
-    ],
-    "catalog": [
-      {
-        "endpoints": [
-          {
-            "id": "6fbbbec7587e4989a4de6e7a43c7205f",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101/placement",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "10304edc7ec942d282567b8c4f5610d6",
-        "type": "placement",
-        "name": "placement"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "366c8616c77243d38971272e0eaf4a9f",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101/compute/v2.1",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "117766093c004578b95a185ecf2a5bbf",
-        "type": "compute",
-        "name": "nova"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "0c0d6e47d833442f8da165ada8ad43a3",
-            "interface": "internal",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
-            "region": "RegionOne"
-          },
-          {
-            "id": "9440e2831cc84d4da9f7d20c7b42638e",
-            "interface": "admin",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
-            "region": "RegionOne"
-          },
-          {
-            "id": "c812ae1a5a3e40449f3c61edae4a6bcb",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101:8779/v1.0/7c4cda7e4807414bbdfcb22b535a9802",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "22844f546aa941798f06e4978be9ab94",
-        "type": "database",
-        "name": "trove"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "fad6bb86523b4f3aba4a6a6fb25cda0e",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101/image",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "3b7aead421ce4611a82e684ab8c2ad2f",
-        "type": "image",
-        "name": "glance"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "82c559324ad244beacb2fd0406f0298b",
-            "interface": "admin",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101:8080",
-            "region": "RegionOne"
-          },
-          {
-            "id": "d1029ab4d5bf4cd6843a5b819966c2ea",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "628d3cea8d3b4615a4b047bae6112d0e",
-        "type": "object-store",
-        "name": "swift"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "a7eecf5314434aca81e5feaa8bf7521e",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101/identity",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "7055978143b74523b826bae1a9c0aabf",
-        "type": "identity",
-        "name": "keystone"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "30dd85ebed584c54ba849ca0e2a4c825",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101:9696/networking",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "b3b850a4ec574d16a0cbece3c172a701",
-        "type": "network",
-        "name": "neutron"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "871e0e3393974f9b9071342b59f62090",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101/compute/v2/7c4cda7e4807414bbdfcb22b535a9802",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "cb1921a9c779492484907683bb447e84",
-        "type": "compute_legacy",
-        "name": "nova_legacy"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "b6a779acd3e04ed480847d4cb99ca710",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101/volume/v3/7c4cda7e4807414bbdfcb22b535a9802",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "d5345b92210c49aa975a873d04921780",
-        "type": "block-storage",
-        "name": "cinder"
-      },
-      {
-        "endpoints": [
-          {
-            "id": "8c624f7ed1e44096b8f0413866a11b1b",
-            "interface": "public",
-            "region_id": "RegionOne",
-            "url": "http://182.161.114.101/volume/v3/7c4cda7e4807414bbdfcb22b535a9802",
-            "region": "RegionOne"
-          }
-        ],
-        "id": "e559802e75824163a070bd92dd143476",
-        "type": "volumev3",
-        "name": "cinderv3"
-      }
-    ]
-  }
-}
 
 
 ### (glance-api) REQ >>> (keystone) : GET http://182.161.114.101/identity/v3/auth/tokens
@@ -625,10 +322,10 @@ User-Agent: python-keystoneclient
 Accept-Encoding: gzip, deflate
 Accept: application/json
 Connection: keep-alive
-X-Subject-Token: gAAAAABjrkD9cqBlaLtF1_FlWZfHjo2u7cJvLXX1HNPG-aFEylyLg7rBQwXEckDcnO__Yjj7akLG-xtxDVRk3zfTJPFdMYJ1MjeZJLaLbOD_Cbx4_D57F_EBR7g-QEmJdvXqN8GADYgNslbXm8cxCBhl3ww4_VJQBWEVQtav4_vVRW_E9vKAkxc
+X-Subject-Token: gAAAAABjspx1DTolfmi1UKixnxPvZiIPNhKyrDbDcK2O3pCAVfWobD6l224XbtGK3aGN_GlqFR4fXO8rjYFoEeamp62klqQATvNsbd1k-VoG2nnK3HLMWlLxKc-0dEE-h1owxeC-X5LulGti8ehy2UPYdv24LH3TOv5FNa1PsXRwkmnEl5ax_ns
 Openstack-Identity-Access-Rules: 1
-X-Auth-Token: gAAAAABjrkD9tCni_jA0hswR8965Hg5cRQxRe2cGhOniDRLEUEmRQxBC-JAqhVkPyuvpyYOoVOGEg8Keb8P5JRmqes6F3eHkt2dDJd5E66TCFDpbWnNMjHfzzp9j2UCD-uVcwz30bKCrIbQUGSW_-VFDdDrHnbApFBKazs7_U8HR4YB3Hj8hWHA
-X-Requestshook-Request-Id: 283b65bcbcc242589f994cfc2017b35c
+X-Auth-Token: gAAAAABjsngzWyVGDHbiSj5O8qRegJFlrF6uhymf73wRY30-fdJy6Z5__WEEU_v9HN2B1fKW4tjnkh673cmzR2781Rz8taI2YJh8vI_0zgDRvwUxWzGGIhUCh7554NDMLnvCrcvVGvIdBVONzHpcKBc2cEwaU0KQIAunm5Mk4kOXkl8pN32scro
+X-Requestshook-Request-Id: 19d28ac95c814764bfa2e82d546597ec
 X-Requestshook-Request-From: glance-api
 
 none
@@ -637,9 +334,9 @@ none
 ### (glance-api) RESP <<< (keystone) : 200 OK GET http://182.161.114.101/identity/v3/auth/tokens
 Content-Type: application/json
 Content-Length: 3952
-X-Subject-Token: gAAAAABjrkD9cqBlaLtF1_FlWZfHjo2u7cJvLXX1HNPG-aFEylyLg7rBQwXEckDcnO__Yjj7akLG-xtxDVRk3zfTJPFdMYJ1MjeZJLaLbOD_Cbx4_D57F_EBR7g-QEmJdvXqN8GADYgNslbXm8cxCBhl3ww4_VJQBWEVQtav4_vVRW_E9vKAkxc
+X-Subject-Token: gAAAAABjspx1DTolfmi1UKixnxPvZiIPNhKyrDbDcK2O3pCAVfWobD6l224XbtGK3aGN_GlqFR4fXO8rjYFoEeamp62klqQATvNsbd1k-VoG2nnK3HLMWlLxKc-0dEE-h1owxeC-X5LulGti8ehy2UPYdv24LH3TOv5FNa1PsXRwkmnEl5ax_ns
 Vary: X-Auth-Token
-X-Requestshook-Request-Id: 283b65bcbcc242589f994cfc2017b35c
+X-Requestshook-Request-Id: 19d28ac95c814764bfa2e82d546597ec
 X-Requestshook-Request-From: glance-api
 
 {
@@ -657,10 +354,10 @@ X-Requestshook-Request-From: glance-api
       "password_expires_at": null
     },
     "audit_ids": [
-      "9U94bbR7Tu6vPiWuThd6Gg"
+      "cn7BsshFTxKQopJTR4Nkmw"
     ],
-    "expires_at": "2022-12-30T04:38:05.000000Z",
-    "issued_at": "2022-12-30T01:38:05.000000Z",
+    "expires_at": "2023-01-02T11:57:25.000000Z",
+    "issued_at": "2023-01-02T08:57:25.000000Z",
     "project": {
       "domain": {
         "id": "default",
@@ -672,16 +369,16 @@ X-Requestshook-Request-From: glance-api
     "is_domain": false,
     "roles": [
       {
-        "id": "3e1adda493764db8921e97d68a5c8bc7",
-        "name": "admin"
+        "id": "28dea0246b6f47df9d99b5b33b423c8b",
+        "name": "reader"
       },
       {
         "id": "5f0594b46c8346d2996759ed1f5014f4",
         "name": "member"
       },
       {
-        "id": "28dea0246b6f47df9d99b5b33b423c8b",
-        "name": "reader"
+        "id": "3e1adda493764db8921e97d68a5c8bc7",
+        "name": "admin"
       }
     ],
     "catalog": [
@@ -851,71 +548,68 @@ X-Requestshook-Request-From: glance-api
 }
 
 
-### (openstack) RESP <<< (glance-api) : 201 Created POST http://127.0.0.1:60999/v2/images
-Content-Length: 781
+### (openstack) RESP <<< (glance-api) : 200 OK GET http://127.0.0.1:60999/v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+Content-Length: 950
 Content-Type: application/json
-Location: http://127.0.0.1:60999/v2/images/7d29b113-3248-4052-be42-aefdfa1758cf
-OpenStack-image-import-methods: glance-direct,web-download,copy-image
-x-openstack-request-id: req-d15c0fbc-c5c3-44b5-af20-005b8b7d96e8
-X-Requestshook-Request-Id: 3ab3d14d95bf4be1bad368dbe46a773a
+x-openstack-request-id: req-2468cafe-dfa5-435f-952d-9fa9fbc6375f
+X-Requestshook-Request-Id: 561e78aa05794efd804f1fa7aa1542af
 X-Requestshook-Request-From: openstack
 
 {
   "owner_specified.openstack.md5": "",
+  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-test",
   "owner_specified.openstack.sha256": "",
-  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk",
-  "name": "cirros-0.6.1-x86_64-disk",
+  "name": "cirros-0.6.1-x86_64-test",
   "disk_format": "qcow2",
   "container_format": "bare",
   "visibility": "public",
-  "size": null,
-  "virtual_size": null,
-  "status": "queued",
-  "checksum": null,
+  "size": 21233664,
+  "virtual_size": 117440512,
+  "status": "active",
+  "checksum": "0c839612eb3f2469420f2ccae990827f",
   "protected": false,
   "min_ram": 0,
   "min_disk": 0,
   "owner": "de5af600557d44d0996e667499376dbb",
   "os_hidden": false,
-  "os_hash_algo": null,
-  "os_hash_value": null,
-  "id": "7d29b113-3248-4052-be42-aefdfa1758cf",
-  "created_at": "2022-12-30T01:38:06Z",
-  "updated_at": "2022-12-30T01:38:06Z",
+  "os_hash_algo": "sha512",
+  "os_hash_value": "df88bac2791254f68941229792539621516bd480aa3d6fe4c0ca16057393d024a4944d644959f323dc01a25e3417c0b581776ab3c8db8da542039f2a67230579",
+  "id": "04cd3672-1f97-4e98-bfe0-0d4801d88a8e",
+  "created_at": "2023-01-02T08:56:13Z",
+  "updated_at": "2023-01-02T08:56:16Z",
   "tags": [],
-  "self": "/v2/images/7d29b113-3248-4052-be42-aefdfa1758cf",
-  "file": "/v2/images/7d29b113-3248-4052-be42-aefdfa1758cf/file",
+  "self": "/v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e",
+  "file": "/v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e/file",
   "schema": "/v2/schemas/image"
 }
 
 
-### (openstack) REQ >>> (glance-api) : PUT http://127.0.0.1:60999/v2/images/7d29b113-3248-4052-be42-aefdfa1758cf/file
+### (openstack) REQ >>> (glance-api) : DELETE http://127.0.0.1:60999/v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 Host: 127.0.0.1:60999
 User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
 Accept-Encoding: gzip, deflate
-Accept: 
-Content-Type: application/octet-stream
-X-Auth-Token: gAAAAABjrkD9cqBlaLtF1_FlWZfHjo2u7cJvLXX1HNPG-aFEylyLg7rBQwXEckDcnO__Yjj7akLG-xtxDVRk3zfTJPFdMYJ1MjeZJLaLbOD_Cbx4_D57F_EBR7g-QEmJdvXqN8GADYgNslbXm8cxCBhl3ww4_VJQBWEVQtav4_vVRW_E9vKAkxc
-X-Requestshook-Request-Id: e4c3be3fe42a47e4a3b3558cec50fe75
+Accept: */*
+X-Auth-Token: gAAAAABjspx1DTolfmi1UKixnxPvZiIPNhKyrDbDcK2O3pCAVfWobD6l224XbtGK3aGN_GlqFR4fXO8rjYFoEeamp62klqQATvNsbd1k-VoG2nnK3HLMWlLxKc-0dEE-h1owxeC-X5LulGti8ehy2UPYdv24LH3TOv5FNa1PsXRwkmnEl5ax_ns
+X-Requestshook-Request-Id: 35652d6381fa4d069c2ada94e19c0bd1
 X-Requestshook-Request-From: openstack
 X-Forwarded-For: 182.161.114.101
 X-Forwarded-Host: 182.161.114.101
 X-Forwarded-Server: 127.0.0.1
-Content-Length: 21233664
+Content-Length: 0
 Connection: Keep-Alive
 
-b'QFI\xfb\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x07\x00\x00\x00'...
+none
 
 
 ### (glance-api) REQ >>> (keystone) : POST http://182.161.114.101/identity/v3/auth/tokens
 Host: 182.161.114.101
-User-Agent: uwsgi keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+User-Agent: python-keystoneclient
 Accept-Encoding: gzip, deflate
 Accept: application/json
 Connection: keep-alive
 Content-Type: application/json
 Content-Length: 218
-X-Requestshook-Request-Id: dd6c58c6ef2542148b682bd4c0588d58
+X-Requestshook-Request-Id: f85968d4bdcf46c6bb8d8ff84b67176e
 X-Requestshook-Request-From: glance-api
 
 {
@@ -949,9 +643,9 @@ X-Requestshook-Request-From: glance-api
 ### (glance-api) RESP <<< (keystone) : 201 CREATED POST http://182.161.114.101/identity/v3/auth/tokens
 Content-Type: application/json
 Content-Length: 3908
-X-Subject-Token: gAAAAABjrkD_e5s9lpQ1vHif6SROJFWbCUa7ySvxD0YfrBS2P3BwgwC-AhPppfXs5uRQoknWTZHWrnm5x2sC5C-B9JUyIgsUDKlQvE3PT5ro7Xm9MdhSpjkYfSu_5YNLizd26s9Zfm7Ctoi7OKG5vpx30vORbQHqtAHx09wbko5g-QSDNSjSIM8
+X-Subject-Token: gAAAAABjspx2bYIpv8B0LX9k_ZPSkXrrMWMRKLVWVOG5VzqhRzLNJTfDYL5Gi0ikunp_b11hXheYclkxWaZbtTvlGYvAKfnzye_Rrmrza6nOj7mko0ec3OV6jsMQeJI8s2KXYOCSt6wEQpBlFjx6WhxW-PVaZqbDTQooGEGJ-XHf6s_HbM7Qjk4
 Vary: X-Auth-Token
-X-Requestshook-Request-Id: dd6c58c6ef2542148b682bd4c0588d58
+X-Requestshook-Request-Id: f85968d4bdcf46c6bb8d8ff84b67176e
 X-Requestshook-Request-From: glance-api
 
 {
@@ -969,10 +663,10 @@ X-Requestshook-Request-From: glance-api
       "password_expires_at": null
     },
     "audit_ids": [
-      "OPHYuaAhRvCBHzKKmJku7A"
+      "01I3jNBBRE-HXUHdqyhFPg"
     ],
-    "expires_at": "2022-12-30T04:38:07.000000Z",
-    "issued_at": "2022-12-30T01:38:07.000000Z",
+    "expires_at": "2023-01-02T11:57:26.000000Z",
+    "issued_at": "2023-01-02T08:57:26.000000Z",
     "project": {
       "domain": {
         "id": "default",
@@ -1159,13 +853,13 @@ X-Requestshook-Request-From: glance-api
 }
 
 
-### (glance-api) REQ >>> (swift-proxy-server) : HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance
+### (glance-api) REQ >>> (swift-proxy-server) : HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 Content-Type: 
 Host: 182.161.114.101:8080
 Accept-Encoding: identity
-X-Auth-Token: gAAAAABjrkD_e5s9lpQ1vHif6SROJFWbCUa7ySvxD0YfrBS2P3BwgwC-AhPppfXs5uRQoknWTZHWrnm5x2sC5C-B9JUyIgsUDKlQvE3PT5ro7Xm9MdhSpjkYfSu_5YNLizd26s9Zfm7Ctoi7OKG5vpx30vORbQHqtAHx09wbko5g-QSDNSjSIM8
+X-Auth-Token: gAAAAABjspx2bYIpv8B0LX9k_ZPSkXrrMWMRKLVWVOG5VzqhRzLNJTfDYL5Gi0ikunp_b11hXheYclkxWaZbtTvlGYvAKfnzye_Rrmrza6nOj7mko0ec3OV6jsMQeJI8s2KXYOCSt6wEQpBlFjx6WhxW-PVaZqbDTQooGEGJ-XHf6s_HbM7Qjk4
 User-Agent: python-swiftclient-4.1.0
-X-Requestshook-Request-Id: d533cebd33bb49ddacbf735bdd6b2556
+X-Requestshook-Request-Id: 8a285aef3735457983b7f1c5cccad4e8
 X-Requestshook-Request-From: glance-api
 
 none
@@ -1177,10 +871,10 @@ User-Agent: python-keystoneclient
 Accept-Encoding: gzip, deflate
 Accept: application/json
 Connection: keep-alive
-X-Subject-Token: gAAAAABjrkD_e5s9lpQ1vHif6SROJFWbCUa7ySvxD0YfrBS2P3BwgwC-AhPppfXs5uRQoknWTZHWrnm5x2sC5C-B9JUyIgsUDKlQvE3PT5ro7Xm9MdhSpjkYfSu_5YNLizd26s9Zfm7Ctoi7OKG5vpx30vORbQHqtAHx09wbko5g-QSDNSjSIM8
+X-Subject-Token: gAAAAABjspx2bYIpv8B0LX9k_ZPSkXrrMWMRKLVWVOG5VzqhRzLNJTfDYL5Gi0ikunp_b11hXheYclkxWaZbtTvlGYvAKfnzye_Rrmrza6nOj7mko0ec3OV6jsMQeJI8s2KXYOCSt6wEQpBlFjx6WhxW-PVaZqbDTQooGEGJ-XHf6s_HbM7Qjk4
 Openstack-Identity-Access-Rules: 1
-X-Auth-Token: gAAAAABjrjJGaF5Q7tx3oVja4UAOY53wgd7ltBWAfsYXHJH3w4XwhdecBvGgfQR5qtuFW3PbnACXZKs_t9XgYG0q9cCCXOllAkzAMgbPkAHknHuINTQ3t0sPKEoJLawZ95y1jznIFcb-oQGXqGQKScS6qKwToz3Qc39csvxir7YStSBYOTw4E1U
-X-Requestshook-Request-Id: 2674b060812d401681587747ba23f2fc
+X-Auth-Token: gAAAAABjsnnI948eHZWtPSl7u52IntTMCHg6VqXZUTFEYmIX9_imlt30fJUYRJ16vwgnUVHibxshwZd9PlrS8Wwn9EnA2DkpM5xxyhYM_w9nVcSdUgJavA13KfoO815p7OP_hOIKal4k9xRurbuF6H2DhVRhowrBhG_VIUPb_y3DjqLErhqjTp4
+X-Requestshook-Request-Id: 72e695dc4ec04a78befa863c0b017fea
 X-Requestshook-Request-From: swift-proxy-server
 
 none
@@ -1189,9 +883,9 @@ none
 ### (swift-proxy-server) RESP <<< (keystone) : 200 OK GET http://182.161.114.101/identity/v3/auth/tokens?nocatalog
 Content-Type: application/json
 Content-Length: 604
-X-Subject-Token: gAAAAABjrkD_e5s9lpQ1vHif6SROJFWbCUa7ySvxD0YfrBS2P3BwgwC-AhPppfXs5uRQoknWTZHWrnm5x2sC5C-B9JUyIgsUDKlQvE3PT5ro7Xm9MdhSpjkYfSu_5YNLizd26s9Zfm7Ctoi7OKG5vpx30vORbQHqtAHx09wbko5g-QSDNSjSIM8
+X-Subject-Token: gAAAAABjspx2bYIpv8B0LX9k_ZPSkXrrMWMRKLVWVOG5VzqhRzLNJTfDYL5Gi0ikunp_b11hXheYclkxWaZbtTvlGYvAKfnzye_Rrmrza6nOj7mko0ec3OV6jsMQeJI8s2KXYOCSt6wEQpBlFjx6WhxW-PVaZqbDTQooGEGJ-XHf6s_HbM7Qjk4
 Vary: X-Auth-Token
-X-Requestshook-Request-Id: 2674b060812d401681587747ba23f2fc
+X-Requestshook-Request-Id: 72e695dc4ec04a78befa863c0b017fea
 X-Requestshook-Request-From: swift-proxy-server
 
 {
@@ -1209,10 +903,10 @@ X-Requestshook-Request-From: swift-proxy-server
       "password_expires_at": null
     },
     "audit_ids": [
-      "OPHYuaAhRvCBHzKKmJku7A"
+      "01I3jNBBRE-HXUHdqyhFPg"
     ],
-    "expires_at": "2022-12-30T04:38:07.000000Z",
-    "issued_at": "2022-12-30T01:38:07.000000Z",
+    "expires_at": "2023-01-02T11:57:26.000000Z",
+    "issued_at": "2023-01-02T08:57:26.000000Z",
     "project": {
       "domain": {
         "id": "default",
@@ -1236,58 +930,51 @@ X-Requestshook-Request-From: swift-proxy-server
 }
 
 
-### (glance-api) RESP <<< (swift-proxy-server) : 204 No Content HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance?format=json&states=listing
-Content-Type: text/plain; charset=utf-8
-X-Backend-Timestamp: 1671683363.84851
-X-Backend-Put-Timestamp: 1671683363.83052
-X-Backend-Delete-Timestamp: 0000000000.00000
-X-Backend-Status-Changed-At: 1671683363.83052
-X-Backend-Storage-Policy-Index: 0
-X-Container-Object-Count: 6
-X-Container-Bytes-Used: 1134410240
-X-Timestamp: 1671683363.84851
-X-Backend-Sharding-State: unsharded
-Last-Modified: Thu, 22 Dec 2022 04:29:24 GMT
+### (glance-api) RESP <<< (swift-proxy-server) : 200 OK HEAD http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+Content-Type: application/octet-stream
+Etag: 0c839612eb3f2469420f2ccae990827f
+Last-Modified: Mon, 02 Jan 2023 08:56:16 GMT
+X-Timestamp: 1672649775.23372
+X-Backend-Timestamp: 1672649775.23372
+X-Backend-Data-Timestamp: 1672649775.23372
+X-Backend-Durable-Timestamp: 1672649775.23372
 Accept-Ranges: bytes
-X-Storage-Policy: Policy-0
-X-Backend-Recheck-Container-Existence: 60
-X-Container-Sharding: False
-Vary: Accept
-X-Requestshook-Request-Id: d533cebd33bb49ddacbf735bdd6b2556
+Content-Length: 21233664
+X-Requestshook-Request-Id: 8a285aef3735457983b7f1c5cccad4e8
 X-Requestshook-Request-From: glance-api
 
 none
 
 
-### (glance-api) REQ >>> (swift-proxy-server) : PUT http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/7d29b113-3248-4052-be42-aefdfa1758cf
+### (glance-api) REQ >>> (swift-proxy-server) : DELETE http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 Content-Type: 
-Content-Length: 21233664
+Content-Length: 0
 Host: 182.161.114.101:8080
 Accept-Encoding: identity
-X-Auth-Token: gAAAAABjrkD_e5s9lpQ1vHif6SROJFWbCUa7ySvxD0YfrBS2P3BwgwC-AhPppfXs5uRQoknWTZHWrnm5x2sC5C-B9JUyIgsUDKlQvE3PT5ro7Xm9MdhSpjkYfSu_5YNLizd26s9Zfm7Ctoi7OKG5vpx30vORbQHqtAHx09wbko5g-QSDNSjSIM8
+X-Auth-Token: gAAAAABjspx2bYIpv8B0LX9k_ZPSkXrrMWMRKLVWVOG5VzqhRzLNJTfDYL5Gi0ikunp_b11hXheYclkxWaZbtTvlGYvAKfnzye_Rrmrza6nOj7mko0ec3OV6jsMQeJI8s2KXYOCSt6wEQpBlFjx6WhxW-PVaZqbDTQooGEGJ-XHf6s_HbM7Qjk4
 User-Agent: python-swiftclient-4.1.0
-X-Requestshook-Request-Id: 47c57e9898a4482487b3509f0c1499b4
-X-Requestshook-Request-From: glance-api
-
-b'QFI\xfb\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x07\x00\x00\x00'...
-
-
-### (glance-api) RESP <<< (swift-proxy-server) : 201 Created PUT http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/7d29b113-3248-4052-be42-aefdfa1758cf
-Content-Type: text/html; charset=UTF-8
-Content-Length: 0
-Etag: 0c839612eb3f2469420f2ccae990827f
-Last-Modified: Fri, 30 Dec 2022 01:38:09 GMT
-X-Requestshook-Request-Id: 47c57e9898a4482487b3509f0c1499b4
+X-Requestshook-Request-Id: decb7adc6c5441ae8709b44fcedcd26f
 X-Requestshook-Request-From: glance-api
 
 none
 
 
-### (openstack) RESP <<< (glance-api) : 204 No Content PUT http://127.0.0.1:60999/v2/images/7d29b113-3248-4052-be42-aefdfa1758cf/file
+### (glance-api) RESP <<< (swift-proxy-server) : 204 No Content DELETE http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 Content-Type: text/html; charset=UTF-8
 Content-Length: 0
-x-openstack-request-id: req-74f0320e-e525-48c8-b989-5366de6d304b
-X-Requestshook-Request-Id: e4c3be3fe42a47e4a3b3558cec50fe75
+X-Backend-Timestamp: 1672649846.32414
+X-Backend-Content-Type: application/octet-stream
+X-Requestshook-Request-Id: decb7adc6c5441ae8709b44fcedcd26f
+X-Requestshook-Request-From: glance-api
+
+none
+
+
+### (openstack) RESP <<< (glance-api) : 204 No Content DELETE http://127.0.0.1:60999/v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+Content-Type: text/html; charset=UTF-8
+Content-Length: 0
+x-openstack-request-id: req-00821f6e-c515-4746-b155-b3e33a96f39f
+X-Requestshook-Request-Id: 35652d6381fa4d069c2ada94e19c0bd1
 X-Requestshook-Request-From: openstack
 
 none
