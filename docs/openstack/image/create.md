@@ -11,6 +11,7 @@ $ openstack image create \
   --disk-format qcow2 \
   --file cirros-0.6.1-x86_64-disk.qcow2 \
   --public \
+  --format json
   cirros-0.6.1-x86_64-disk
 ```
 
@@ -25,7 +26,8 @@ $ openstack image create \
             "--disk-format", "qcow2", 
             "--file", "cirros-0.6.1-x86_64-disk.qcow2", 
             "--public", 
-            "cirros-0.6.1-x86_64-disk"],
+            "--format", "json"],
+            "cirros-0.6.1-x86_64-disk", 
         "env": {
             "OS_AUTH_URL": "http://devstack-debug/identity",
             "OS_IDENTITY_API_VERSION": "3",
@@ -80,7 +82,7 @@ sequenceDiagram
     }
     ```
     
-    * `glance-api`에서 `keystone`으로 쿼터 관련 정보를 요청하는 부분은 위 `should_not_hook.json` 설정에 의해서 제외되었다.  
+    * `glance-api`에서 `keystone`으로 쿼터 관련 정보를 요청하는 부분은 위 `should_not_hook.json` 설정에 의해서 제외되었다.(너무 많아서...)  
 
     ``` json title="should_not_hook.json"
     {
@@ -114,9 +116,35 @@ sequenceDiagram
 
 --8<-- "openstack/image/create-contents.md"
 
-## Full Logs
+## Output
 
-??? quote "openstack image create logs"
-    ``` log title="/var/log/requestshook/requestshook.log" linenums="1"
+``` json title="openstack image create --disk-format qcow2 --file cirros-0.6.1-x86_64-disk.img --public --format json cirros-0.6.1-x86_64-disk"
+{
+  "container_format": "bare",
+  "created_at": "2022-12-30T01:38:06Z",
+  "disk_format": "qcow2",
+  "file": "/v2/images/7d29b113-3248-4052-be42-aefdfa1758cf",
+  "id": "7d29b113-3248-4052-be42-aefdfa1758cf",
+  "min_disk": 0,
+  "min_ram": 0,
+  "name": "cirros-0.6.1-x86_64-disk",
+  "owner": "de5af600557d44d0996e667499376dbb",
+  "properties": {
+    "os_hidden": false,
+    "owner_specified.openstack.md5": "",
+    "owner_specified.openstack.sha256": "",
+    "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk"
+  },
+  "protected": false,
+  "schema": "/v2/schemas/image",
+  "status": "queued",
+  "tags": [],
+  "updated_at": "2022-12-30T01:38:06Z",
+  "visibility": "public"
+}
+```
+
+??? quote "/var/log/requests.log"
+    ``` text title="" linenums="1"
     --8<-- "openstack/image/create-log.md"
     ```

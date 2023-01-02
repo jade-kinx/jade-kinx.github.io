@@ -319,10 +319,10 @@ Connection: Keep-Alive
   "container_format": "bare",
   "visibility": "public",
   "disk_format": "qcow2",
-  "name": "cirros-0.6.1-x86_64-test",
+  "name": "cirros-0.6.1-x86_64-disk",
   "owner_specified.openstack.md5": "",
   "owner_specified.openstack.sha256": "",
-  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-test"
+  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk"
 }
 
 
@@ -863,8 +863,8 @@ X-Requestshook-Request-From: openstack
 {
   "owner_specified.openstack.md5": "",
   "owner_specified.openstack.sha256": "",
-  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-test",
-  "name": "cirros-0.6.1-x86_64-test",
+  "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk",
+  "name": "cirros-0.6.1-x86_64-disk",
   "disk_format": "qcow2",
   "container_format": "bare",
   "visibility": "public",
