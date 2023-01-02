@@ -139,6 +139,7 @@ nav:
     - Trove: 
       - Install Trove on DevStack: openstack/trove/install-trove-on-devstack.md
   - Image(GLANCE):
+    - sequence dump: openstack/image/sequence-dump-how-to.md
     - image create: openstack/image/create.md
   - OpenStack CLI API Sequence:
     - Image Service:

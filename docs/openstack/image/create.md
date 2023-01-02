@@ -65,7 +65,7 @@ sequenceDiagram
 - `glance` 서비스는 `(13)` 요청에서 수신한 이미지 파일을 `PUT` 메소드로 `swift` 서비스에 업로드한다. `(20-21)`
 - `glance` 서비스가 `openstack-client`에 최종적으로 이미지 파일 업로드를 완료했다고 결과를 통보한다. `(22)`
 
-!!! note "생략된 시퀀스"
+???+ note "생략된 시퀀스"
 
     ``` json title="should_not_hook.json"
     {
