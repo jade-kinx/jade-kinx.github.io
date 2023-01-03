@@ -1,40 +1,17 @@
 # openstack image show
 
-`id` 또는 `name`으로 이미지 상세 정보를 조회한다.
+이미지 상세 정보를 조회하는 `openstack image show` 커맨드를 이용하여 이미지 상세 정보를 조회, 그 과정에서 발생하는 API 요청 시퀀스 다이어그램을 작성해보고 Request/Response를 분석해 본다.  
 
-!!! tip "CLI 참조"
-    [openstack image show](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-show)
+* `id` 또는 `name`으로 이미지 정보를 조회(여기서는 `id`로 조회)
 
-## OpenStack Client Command
-``` bash title="python3-openstackclient command"
+[:material-console: openstack image show](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-show)
+``` bash title=""
 $ openstack image show a42bfade-78ec-4c95-b7b4-272ba265072c --format json
 ```
 
-??? note ".vscode/launch.json"
-    ``` json title="configuration .vscode/launch.json"
-    {
-        "name": "Python: openstack image list",
-        "type": "python",
-        "request": "launch",
-        "program": "Scripts/openstack.exe",
-        "args": ["image", "show", "a42bfade-78ec-4c95-b7b4-272ba265072c", "--format", "json"],
-        "env": {
-            "OS_AUTH_URL": "http://devstack-debug/identity",
-            "OS_IDENTITY_API_VERSION": "3",
-            "OS_USERNAME": "admin",
-            "OS_PASSWORD": "asdf",
-            "OS_PROJECT_NAME": "admin",
-            "OS_USER_DOMAIN_NAME": "Default",
-            "OS_PROJECT_DOMAIN_NAME": "Default"
-        },
-        "console": "integratedTerminal",
-        "justMyCode": false
-    },
-    ```
-
-위 커맨드를 실행했을 때의 시퀀스 다이어그램 및 HTTP Request/Response 내용은 아래와 같다.  
-
 ## Sequence Diagram
+
+`openstack image show a42bfade-78ec-4c95-b7b4-272ba265072c --format json` 커맨드를 이용한 이미지 상세 정보 조회 과정은 아래의 시퀀스 다이어그램으로 표현할 수 있다.  
 
 ``` mermaid
 sequenceDiagram
@@ -44,7 +21,7 @@ sequenceDiagram
 
 각 과정에 대한 간략한 설명은 다음과 같다.   
 
-- `openstack-client`가 `keystone` 서비스에 인증 정보를 보내 인증 토큰 발급 및 서비스 카탈로그를 수신한다. `(1-4)`
+- `openstack-client`가 `keystone` 서비스에 인증 정보(`credential:password`)를 보내 인증 토큰 발급 및 서비스 카탈로그를 수신한다. `(1-4)`
 
 ## Request / Response
 

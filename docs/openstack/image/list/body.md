@@ -63,6 +63,9 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
+[:material-api: Password authentication with scoped authorization](https://docs.openstack.org/api-ref/identity/v3/index.html#password-authentication-with-scoped-authorization)
+
+
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
     Host: 182.161.114.101
@@ -111,7 +114,7 @@
 `openstack` <-- `keystone`
 
 === "Header"
-    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1"
+    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="3"
     Content-Type: application/json
     Content-Length: 3952
     X-Subject-Token: gAAAAABjsn20pmzK9_V7ehVsDICJVb08u5MFD0s09MMj-rGZH5sOaJv9lzinrxaM5Hb6KOhNEBX386FiJoWxj2xav4zEv6JeVqgKq5SrQJQBrQSiBTjA5mYLOVvJPqwy9-_XmAbIcVDE6DLx8IyfIyhI1V5NsRzjXqXaQQweeUUwokqD1MmiCqU
@@ -335,8 +338,14 @@
 ### (5) GET /v2/images
 `openstack` --> `glance-api`
 
+[:material-api: List images](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=list-images-detail#list-images)
+
+`GET /v2/images` API를 이용하여 이미지 목록 조회를 요청한다.  
+`query-string`에 원하는 `query-filters`를 추가하여 조회 조건을 지정할 수 있다.  
+자세한 검색 조건은 위의 List Images API를 참고한다.    
+
 === "Header"
-    ``` http title="GET /v2/images" linenums="1"
+    ``` http title="GET /v2/images" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -468,7 +477,7 @@
 `glance-api` <-- `keystone`
 
 === "Header"
-    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1"
+    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="3"
     Content-Type: application/json
     Content-Length: 3833
     X-Subject-Token: gAAAAABjsn215OxhShBEiueN9lpmbGY7XYuF0OWOxl1aCACn0y8gtECXMWBUOSB6Zp6d1xqtoXuiKNEdnb74y1Md4IfwFluzMhVRHBoJBZHByNdLJgY0P6fmY97CzYQf1tVnSZ0rIrcyh2po7kxlrMwxPVhYtkx12b6Jjtd8seYdaBW59vYGT8k
@@ -685,7 +694,7 @@
 `glance-api` --> `keystone`
 
 === "Header"
-    ``` http title="GET /identity/v3/auth/tokens" linenums="1"
+    ``` http title="GET /identity/v3/auth/tokens" linenums="1" hl_lines="6 8"
     Host: 182.161.114.101
     User-Agent: python-keystoneclient
     Accept-Encoding: gzip, deflate
