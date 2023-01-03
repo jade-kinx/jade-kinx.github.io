@@ -50,7 +50,7 @@ theme:
         icon: material/brightness-4
         name: Switch to light mode
   font:
-    text: Noto Sans KR
+    text: Roboto
     code: Roboto Mono
   favicon: assets/favicon.png
   icon:

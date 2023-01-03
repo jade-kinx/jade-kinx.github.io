@@ -1,10 +1,13 @@
 # OpenStack Image Service Sequence Dump
 
-이 문서에서는 `requestshook` 패키지를 이용하여 `glance` 서비스의 API 시퀀스를 추적하는 방법을 알아본다.
+이 문서에서는 `requestshook` 패키지를 만들고, 이를 이용하여 `glance` 서비스의 API 시퀀스를 추적하는 방법을 알아본다.  
 
 ## requestshook package
 
-`requestshook` 패키지는 `requests.adapters.HttpAdapter.send()` 메소드를 후킹하여, API 요청 `header`에 `X-Requestshook-Request-Id`, `X-Requestshook-Requests-From` 값을 추가해주고, 오픈스택 서비스들(`keystone`, `glance`, `cinder`, `neutron`, `nova`, `swift`, `trove`, `horizone`)에서 요청을 처리할때 요청과 응답을 추적하는 `Middleware`를 제공한다.
+`requestshook` 패키지는 API 요청시 `Header`에 요청자 정보를 추가하고, 오픈스택 API 서비스에서 사용할 수 있는 로깅 미들웨어 기능을 제공한다.  
+
+!!! tip ""
+    Github: [https://github.com/jade-kinx/requestshook](https://github.com/jade-kinx/requestshook)
 
 === "Package Tree"
 
@@ -24,36 +27,39 @@
             __init__.py
     ```
 
-!!! tip ""
-    Github: [https://github.com/jade-kinx/requestshook](https://github.com/jade-kinx/requestshook)
+`requestshook_middleware` 모듈은 오픈스택 서비스들(`keystone`, `glance`, `cinder`, `neutron`, `nova`, `swift`, `trove`, `horizone`)에서 API 요청을 처리할때 요청과 응답을 추적하는 `Middleware`를 제공한다.  
+`requestshook` 모듈은 `requests.adapters.HttpAdapter.send()` 메소드를 후킹하여, API 요청 `header`에 `X-Requestshook-Request-Id`, `X-Requestshook-Requests-From` 값을 추가하는 기능을 제공한다. 올인원 버전의 데브스택에서는 `Remote IP`, `User-Agent` 만으로는 어느 서비스에서 발생한 요청인지 판단하기 어렵기 때문에, 헤더에 요청한 서비스에 대한 정보를 추가하도록 한다.  
+`should_not_hook` 모듈은 일정 주기로 지속적으로 발생하는 요청이나, 추적하고 싶지 않은 요청 등을 필터링하여 로깅에서 제외하여 주는 기능을 제공한다.  
+
 
 === "setup.py"
-    ``` python title=""
+    ``` py title="" linenums="1" hl_lines="23 24"
     --8<-- "openstack/image/requestshook/setup.py"
     ```
+    `setup.py`에서 `entry_points` 정보를 포함한다. 이를 이용하여 `keystone`, `placement-api`에서 미들웨어를 추가할 수 있다.  
 
 === "\_\_init\_\_.py"
-    ``` python title=""
+    ``` py title="" linenums="1"
     --8<-- "openstack/image/requestshook/__init__.py"
     ```
 
 === "requestshook.py"
-    ``` python title=""
+    ``` py title=""
     --8<-- "openstack/image/requestshook/requestshook.py"
     ```
 
 === "requestshook_middleware.py"
-    ``` python title=""
+    ``` py title=""
     --8<-- "openstack/image/requestshook/requestshook_middleware.py"
     ```
 
 === "should_not_hook.py"
-    ``` python title=""
+    ``` py title=""
     --8<-- "openstack/image/requestshook/should_not_hook.py"
     ```
 
 === "utils.py"
-    ``` python title=""
+    ``` py title=""
     --8<-- "openstack/image/requestshook/utils.py"
     ```
 
@@ -67,7 +73,7 @@ $ python setup.py bdist_wheel
 
 ## `requests` 패키지 후킹
 
-``` python title="/usr/local/lib/python3.8/dist-package/requests/adapters.py" linenums="1" hl_lines="4 5"
+``` py title="/usr/local/lib/python3.8/dist-package/requests/adapters.py" linenums="1" hl_lines="4 5"
     class HTTPAdapter(BaseAdapter):
         """The built-in HTTP Adapter for urllib3."""
     ...
@@ -95,7 +101,7 @@ HTTP 요청 헤더에 요청자 정보를 추가하는 것은, API 서비스 미
 
 ### keystone middleware 추가
 
-``` python title="/opt/stack/keystone/keystone/server/flask/core.py" linenums="1" hl_lines="20 21 22"
+``` py title="/opt/stack/keystone/keystone/server/flask/core.py" linenums="1" hl_lines="20 21 22"
     ...
     # NOTE(morgan): ORDER HERE IS IMPORTANT! The middleware will process the
     # request in this list's order.
@@ -124,7 +130,7 @@ HTTP 요청 헤더에 요청자 정보를 추가하는 것은, API 서비스 미
 
 `requestshook` 패키지의 `setup.py` 에서 `entry_points` 정보를 아래와 같이 추가하였으므로, 패키지의 엔트리 포인트 정보를 이용하여 위 코드와 같이 미들웨어를 직접 추가한다.  
 
-``` python title="setup.py" linenums="1" hl_lines="4 5"
+``` py title="setup.py" linenums="1" hl_lines="4 5"
 setuptools.setup(
 ...
 entry_points={
@@ -140,7 +146,7 @@ entry_points={
 ``` bash title="restart service"
 # service devstack@keystone restart
 ```
-서비스를 재시작하고, `/var/log/requestshook/` 경로에 `keystone` 관련 로그가 정상적으로 생성되는지 확인한다.
+서비스를 재시작하고 `keystone` 서비스에 API 요청을 전송한 후에 `/var/log/requestshook/` 경로에 관련 로그가 정상적으로 생성되는지 확인한다.
 
 ### glance-api middleware 추가
 
@@ -284,7 +290,7 @@ paste.filter_factory = requestshook:RequestsHookMiddleware.factory
     ```
 
 === "placement-api"
-    ``` python title="/opt/stack/placement/placement/deploy.py" linenums="1" hl_lines="9 10 13"
+    ``` py title="/opt/stack/placement/placement/deploy.py" linenums="1" hl_lines="9 10 13"
     ...
     context_middleware = auth.PlacementKeystoneContext
     microversion_middleware = mp_middleware.MicroversionMiddleware
@@ -370,21 +376,22 @@ paste.filter_factory = requestshook:RequestsHookMiddleware.factory
 ### 시퀀스 로그 확인
 
 시퀀스 로그는 `/var/log/requestshook/` 경로에서 확인할 수 있다.  
-`requestshook-diagram.md` 파일은 `시퀀스 다이어그램`에 사용할 내용이 기록되어 있고, 마크다운 문서에 아래와 같이 추가할 수 있다.  
+`diagram.md` 파일은 시퀀스 다이어그램에 사용할 내용이 기록되어 있고, 마크다운 문서에 아래와 같이 추가할 수 있다.  
+(아래 예제들에서는 외부 문서 포함 문자 `--8<--` 에 백틱이 포함되어 있는데, 백틱은 제거해야 한다.)  
 
 ```` markdown title="시퀀스 다이어그램 추가"
 ``` mermaid
 sequenceDiagram
   autonumber
-  `--8<--` "requestshook-diagram.md"
+  `--8<--` "diagram.md"
 ```
 ````
 
-`requestshook-doc.md` 파일에는 시퀀스 문서에 추가할 Request, Response 정보가 기록되어 있고, 마크다운 문서에 아래와 같이 추가할 수 있다.  
+`body.md` 파일에는 시퀀스 문서에 추가할 `Request`, `Response` 내용이 기록되어 있고, 마크다운 문서에 아래와 같이 추가할 수 있다.  
 
 ```` markdown title="Request/Response 문서 추가"
 ## Request/Reponse 
-`--8<--` "openstack/image/create-contents.md"
+`--8<--` "body.md"
 ````
 
 `requestshook.log` 파일에는 마크다운 포맷이 아닌 일반 로그 포맷으로 Request/Response 로그가 기록되어 있다.
@@ -394,7 +401,7 @@ sequenceDiagram
 ```
 ````
 
-이 시퀀스 로그를 이용하여, 다음의 CLI 명령에 대해 시퀀스 다이어그램을 작성할 것이다.
+이 시퀀스 로그를 이용하여, 다음의 CLI 명령에 대해 시퀀스 다이어그램 및 Request/Response 덤프를 작성할 것이다.
 
 * openstack image create
 * openstack image list

@@ -1,5 +1,5 @@
 
-### GET /identity/
+### (1) GET /identity/
 `openstack` --> `keystone`
 
 === "Header"
@@ -19,7 +19,7 @@
     ```
 
 
-### 300 MULTIPLE CHOICES /identity/
+### (2) 300 MULTIPLE CHOICES /identity/
 `openstack` <-- `keystone`
 
 === "Header"
@@ -60,7 +60,7 @@
     ```
 
 
-### POST /identity/v3/auth/tokens
+### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
 === "Header"
@@ -107,7 +107,7 @@
     ```
 
 
-### 201 CREATED /identity/v3/auth/tokens
+### (4) 201 CREATED /identity/v3/auth/tokens
 `openstack` <-- `keystone`
 
 === "Header"
@@ -332,7 +332,7 @@
     ```
 
 
-### GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
+### (5) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` --> `glance-api`
 
 === "Header"
@@ -356,7 +356,7 @@
     ```
 
 
-### GET /identity/v3/auth/tokens
+### (6) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
 === "Header"
@@ -379,7 +379,7 @@
     ```
 
 
-### 200 OK /identity/v3/auth/tokens
+### (7) 200 OK /identity/v3/auth/tokens
 `glance-api` <-- `keystone`
 
 === "Header"
@@ -604,7 +604,7 @@
     ```
 
 
-### 200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
+### (8) 200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` <-- `glance-api`
 
 === "Header"
@@ -650,7 +650,7 @@
     ```
 
 
-### DELETE /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/tags/cirros
+### (9) DELETE /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/tags/cirros
 `openstack` --> `glance-api`
 
 === "Header"
@@ -675,7 +675,7 @@
     ```
 
 
-### 204 No Content /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/tags/cirros
+### (10) 204 No Content /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/tags/cirros
 `openstack` <-- `glance-api`
 
 === "Header"

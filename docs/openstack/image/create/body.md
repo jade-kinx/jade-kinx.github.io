@@ -2,7 +2,8 @@
 ### (1) GET /identity/
 `openstack` --> `keystone`
 
-환경변수 `OS_AUTH_URL` 에 정의된 URL로 `Identity` 서비스의 버전별 EndPoint 목록을 요청한다.  
+환경변수 `OS_AUTH_URL` 에 정의된 URL로 `이미지` 서비스의 버전별 EndPoint 목록을 요청한다.  
+`(1-2)` 과정은 `version negotiation` 과정으로 볼 수 있다.  
 이 요청에 대한 결과로 받은 EndPoint 중 적당한 EndPoint를 선택하여 Access Token 발급 및 서비스 API 카탈로그를 요청하게 된다.
 
 === "Header"
@@ -25,7 +26,7 @@
 ### (2) 300 MULTIPLE CHOICES /identity/
 `openstack` <-- `keystone`
 
-(1)번 요청에 대한 응답이다.  
+`(1)` 요청에 대한 응답이다.  
 `Body`의 내용을 통해 `Identity` 서비스의 EndPoint 는 현재 `v3.14` 버전이며, url은 `http://182.161.114.101/identity/v3/` 인 것을 확인할 수 있다.
 
 === "Header"
@@ -69,8 +70,7 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
-!!! tip "API 참조"
-    [Password authentication with scoped authorization](https://docs.openstack.org/api-ref/identity/v3/index.html#password-authentication-with-scoped-authorization)
+[:material-api: Password authentication with scoped authorization](https://docs.openstack.org/api-ref/identity/v3/index.html#password-authentication-with-scoped-authorization)
 
 `Access Token` 발급 및 `서비스 카탈로그` 요청한다.  
 `Body`는 `admin` 사용자가 `admin` 프로젝트 스코프로 `패스워드` 방식으로(패스워드=`asdf`) 인증 요청을 담고 있다.  
@@ -89,7 +89,7 @@
     ```
 
 === "Body"
-    ``` json title="POST /identity/v3/auth/tokens" linenums="1"
+    ``` json title="POST /identity/v3/auth/tokens" linenums="1" hl_lines="5 9 10 19"
     {
       "auth": {
         "identity": {
@@ -136,7 +136,7 @@
     ```
 
 === "Body"
-    ``` json title="201 CREATED /identity/v3/auth/tokens" linenums="1"
+    ``` json title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="106 111"
     {
       "token": {
         "methods": [
@@ -347,19 +347,24 @@
     ```
 
 서비스 `catalog` 중, 원하는 서비스 EndPoint URL을 선택하여 해당 URL로 요청을 전송하게 된다.  
-`type`이 `image`인 endpoint `http://182.161.114.101/image` 를 이용하여 이미지 생성 요청을 보낼 것이다.  
+이 경우에는 `type`이 `image`인 endpoint `http://182.161.114.101/image`를 이용하여 이미지 생성 요청을 보낼 것이다.  
 
 
 ### (5) POST /v2/images
 `openstack` --> `glance-api`
 
-!!! tip "API 참조"
-    [Create image](https://docs.openstack.org/api-ref/image/v2/index.html#create-image)
+[:material-api: Create image](https://docs.openstack.org/api-ref/image/v2/index.html#create-image)
 
-발급 받은 `access token`을 `Header`의 `X-Auth-Token` 항목으로 이미지 생성을 요청한다.  
+발급 받은 `access token`을 `Header`의 `X-Auth-Token` 값으로 추가하여 이미지 생성을 요청한다.  
 `Body`에는 `disk_format=qcow2`, `container_format=bare`, `visibility=public`, `name=cirros-0.6.1-x86_64-disk`와 같은 이미지 정보를 포함한다.  
-`container_format`은 커맨드로부터 입력되지 않았으나, `openstackclient` 기본값인 `bare`가 자동으로 설정되었다.  
-이 요청은 데이터베이스 등에 이미지 정보를 생성하는 요청이며, 실제 파일 업로드는 (13) `PUT /v2/images/{image_id}/file` 요청에 의해서 업로드 된다.  
+`container_format`은 커맨드로부터 입력되지 않았으나, `openstack-client` 기본값인 `bare`가 자동으로 설정되었다.  
+이 요청은 데이터베이스 등에 이미지 정보를 생성하는 요청이며, 실제 파일 업로드는 `(13)` `PUT /v2/images/{image_id}/file` 요청에 의해서 업로드 된다.  
+
+!!! note
+    `openstack-client`는 `http://182.161.114.101/image/v2/images/` EndPoint로 요청을 보냈지만, `apache-wsgi-proxy`에 의해 `glance-api` 서비스가 구동중인 `127.0.0.1:60999`로 포워딩 되었다. 
+    ``` http title="/etc/apache2/sites-enabled/glance-wsgi-api.conf"
+    ProxyPass "/image" "http://127.0.0.1:60999" retry=0
+    ```
 
 === "Header"
     ``` http title="POST /v2/images" linenums="1" hl_lines="5"
@@ -394,9 +399,10 @@
 ### (6) GET /identity/
 `glance-api` --> `keystone`
 
-(6)-(9) 과정은 `glance-api` 서비스가 사용할 인증 토큰을 (재)발급 받는 과정이다.  
+사용자의 인증 토큰을 `keystone`에 보내 검증 하기 위해서는 `glance-api` 서비스의 인증 토큰도 필요하다.  
+`(6)-(9)` 과정은 `glance-api` 서비스가 `keystone` 서비스로 API 요청을 보낼 때 사용할 인증 토큰을 발급(또는 재발급) 받는 과정이다.  
 인증 토큰이 생성되지 않았거나, 만료되었을 때 인증 토큰을 (재)발급 받게 된다.  
-사용 가능한 인증 토큰을 이미 보유하고 있다면 (6)-(9) 과정은 생략될 수 있다.  
+사용 가능한 인증 토큰을 이미 보유하고 있다면 `(6)-(9)` 과정은 생략된다.  
 
 === "Header"
     ``` http title="GET /identity/" linenums="1"
@@ -505,6 +511,8 @@
 
 ### (9) 201 CREATED /identity/v3/auth/tokens
 `glance-api` <-- `keystone`
+
+`glance-api`가 사용할 인증 토큰을 발급 받았다.  
 
 === "Header"
     ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="3"
@@ -723,11 +731,10 @@
 ### (10) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
-!!! tip "API 참조"
-    [Validate and show information for token](https://docs.openstack.org/api-ref/identity/v3/index.html#validate-and-show-information-for-token)
+[:material-api: Validate and show information for token](https://docs.openstack.org/api-ref/identity/v3/index.html#validate-and-show-information-for-token)
 
-(5) 요청에 대해 `keystone` 서비스에 인증 토큰 검증을 요청한다.  
-이 과정에서 사용자의 인증 토큰은 `X-Subject-Token`, `glance-api`의 인증 토큰은 `X-Auth-Token`으로 헤더에 포함하여 요청한다.  
+`(5)` 요청에 대해 `keystone` 서비스에 사용자 인증 토큰 검증을 요청한다.  
+이 과정에서 사용자의 인증 토큰은 `X-Subject-Token`, `glance-api`의 인증 토큰은 `X-Auth-Token` 값으로 헤더에 포함하여 요청한다.  
 
 === "Header"
     ``` http title="GET /identity/v3/auth/tokens" linenums="1" hl_lines="6 8"
@@ -753,6 +760,7 @@
 `glance-api` <-- `keystone`
 
 `keystone`으로부터 사용자 인증 토큰에 대한 인증 및 서비스 카탈로그를 수신한다.  
+사용자 인증 토큰이 `Header`의 `X-Subject-Token` 값으로, `Body`에는 서비스 카탈로그를 포함하고 있는 것을 확인할 수 있다.  
 
 === "Header"
     ``` http title="200 OK /identity/v3/auth/tokens" linenums="1" hl_lines="3"
@@ -1029,15 +1037,19 @@
 ### (13) PUT /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file
 `openstack` --> `glance-api`
 
-!!! tip "API 참조"
-    [Upload binary image data](https://docs.openstack.org/api-ref/image/v2/index.html#upload-binary-image-data)
+[:material-api: Upload binary image data](https://docs.openstack.org/api-ref/image/v2/index.html#upload-binary-image-data)
 
 이미지가 생성되었고(레코드만), `status`가 `queued` 상태이므로 이미지 파일을 업로드 할 수 있다.  
 `PUT` 메소드를 이용하여, 파일을 업로드한다.  
-`content-type`이 `application/octet-stream`, `Body`에는 파일의 바이너리 데이터가 포함된다.  
+`Content-Type`이 `application/octet-stream`, `Body`에는 파일의 바이너리 데이터가 포함된다.  
+`X-Auth-Token`에는 `openstack-client`가 발급 받은 인증 토큰을 사용한다.  
+
+!!! question "`(13)` 요청의 인증 토큰을 검증하지 않는 이유?"
+    `(10-11)` 과정을 통해 이미 검증한 토큰에 대해서는 캐싱하고 있으면서 토큰 만료(`expires_at`)까지 재검증 하지 않는 것으로 보인다.  
+    그리고, 이러한 정책은 다른 과정에서 모두 동일할 것으로 추정된다. (`(20)` 요청에 대해서도 검증하지 않음)  
 
 === "Header"
-    ``` http title="PUT /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file" linenums="1" hl_lines="5"
+    ``` http title="PUT /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file" linenums="1" hl_lines="5 6"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -1057,13 +1069,13 @@
     ``` json title="PUT /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file" linenums="1"
     b'QFI\xfb\x00\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x10\x00\x00\x00\x00\x07\x00\x00\x00'...
     ```
-
+    (여기서는 바이너리 일부만 표현)
 
 ### (14) POST /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
-(14),(15) 과정은 `glance-api`가 `object-store(swift)` 서비스에 사용할 인증 토큰을 발급 받는 과정이다.  
-이미 만료되지 않은 인증 토큰을 보유하고 있다면, 이 과정은 생략될 수 있다.  
+`(14-15)` 과정은 `glance-api`가 `object-store(swift)` 서비스에 사용할 인증 토큰을 발급 받는 과정이다.  
+만료되지 않은 인증 토큰을 보유하고 있다면, 이 과정은 생략될 수 있다.  
 `Body`의 `auth.identity.password.user.name`이 `glance-swift`인 것을 확인할 수 있다.  
 
 === "Header"
@@ -1113,8 +1125,11 @@
 ### (15) 201 CREATED /identity/v3/auth/tokens
 `glance-api` <-- `keystone`
 
+`glance-api` 서비스가 `object-store` 서비스(`swift`)에 요청할 인증 토큰을 발급 받았다.  
+`Body`의 `catalog` 에서 `object-store` 타입 서비스(`swift`)의 endpoint가 `http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802`임을 확인할 수 있다.  
+
 === "Header"
-    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1"
+    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="3"
     Content-Type: application/json
     Content-Length: 3908
     X-Subject-Token: gAAAAABjrkD_e5s9lpQ1vHif6SROJFWbCUa7ySvxD0YfrBS2P3BwgwC-AhPppfXs5uRQoknWTZHWrnm5x2sC5C-B9JUyIgsUDKlQvE3PT5ro7Xm9MdhSpjkYfSu_5YNLizd26s9Zfm7Ctoi7OKG5vpx30vORbQHqtAHx09wbko5g-QSDNSjSIM8
@@ -1330,16 +1345,12 @@
     }
     ```
 
-`Body`의 `catalog` 에서 `swift` 서비스의 endpoint가 `http://182.161.114.101:8080/v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802` 임을 확인할 수 있다.  
-
-
 ### (16) HEAD /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance
 `glance-api` --> `swift-proxy-server`
 
-!!! tip "API 참조"
-    [Show container metadata](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#show-container-metadata)
+[:material-api: Show container metadata](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#show-container-metadata)
 
-(15)번 요청에서 받은 `object-store` 의 endpoint로 컨테이너 메타데이터 정보를 요청한다.  
+`(15)` 요청에서 받은 `object-store` 의 endpoint로 컨테이너 메타데이터 정보를 요청한다.  
 (존재하는지, 사용 가능한지 등의 확인 목적으로 추정된다.)  
 
 === "Header"
@@ -1362,11 +1373,12 @@
 ### (17) GET /identity/v3/auth/tokens
 `swift-proxy-server` --> `keystone`
 
-(17),(18) 과정은 `glance-api` 요청에 대해 `keystone`으로부터 인증 토큰을 검증 하는 과정이다.  
-
+`(17-18)` 과정은 `glance-api` 요청에 대해 인증 토큰을 검증 하는 과정이다.  
+`swift-proxy-server`는 만료되지 않은 인증 토큰 `gAAAAABjrjJGaF5Q7tx3oVja4UAOY53wgd7ltBWA...`을 보유하고 있으므로 `keystone`에 인증 토큰 발급을 요청하지 않는다.  
+만약, `swift-proxy-server`의 인증 토큰이 만료되었다면, `(6-9)` 과정과 같이 인증 토큰을 먼저 발급 받고 검증을 요청한다.    
 
 === "Header"
-    ``` http title="GET /identity/v3/auth/tokens" linenums="1"
+    ``` http title="GET /identity/v3/auth/tokens" linenums="1" hl_lines="6 8"
     Host: 182.161.114.101
     User-Agent: python-keystoneclient
     Accept-Encoding: gzip, deflate
@@ -1387,6 +1399,8 @@
 
 ### (18) 200 OK /identity/v3/auth/tokens
 `swift-proxy-server` <-- `keystone`
+
+`(16)` 요청에 대해 인증 토큰 검증 완료하고, 해당 토큰에 대한 서비스 카탈로그를 수신하였다.  
 
 === "Header"
     ``` http title="200 OK /identity/v3/auth/tokens" linenums="1"
@@ -1446,6 +1460,9 @@
 ### (19) 204 No Content /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance
 `glance-api` <-- `swift-proxy-server`
 
+`glance-api`의 `container` 메타데이터 정보 요청에 대해 응답한다.  
+`Header`에 메타데이터 정보가 포함된다.  
+
 === "Header"
     ``` http title="204 No Content /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance" linenums="1"
     Content-Type: text/plain; charset=utf-8
@@ -1477,12 +1494,11 @@
 ### (20) PUT /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/a42bfade-78ec-4c95-b7b4-272ba265072c
 `glance-api` --> `swift-proxy-server`
 
-!!! tip "API 참조"
-    [Create or replace object](https://docs.openstack.org/api-ref/object-store/?expanded=#create-or-replace-object)
+[:material-api: Create or replace object](https://docs.openstack.org/api-ref/object-store/?expanded=#create-or-replace-object)
 
-(13) `PUT /v2/images/{image_id}/file` 요청을 통해 받은 이미지 파일을 오브젝트 스토리지로 업로드한다.  
+`(13)` `PUT /v2/images/{image_id}/file` 요청을 통해 받은 이미지 파일을 오브젝트 스토리지로 업로드한다.  
 `glance-api`와 다르게 `swift-proxy-server`는 `content-type`을 지정하지 않아도 되나보다.  
-
+`(13)` 요청과 마찬가지로 이미 검증한 토큰이므로 캐싱 토큰과 비교하고 `keystone`으로 검증 요청을 하지 않는다.  
 
 === "Header"
     ``` http title="PUT /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
@@ -1505,7 +1521,7 @@
 ### (21) 201 Created /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/a42bfade-78ec-4c95-b7b4-272ba265072c
 `glance-api` <-- `swift-proxy-server`
 
-오브젝트 스토리지로 파일 업로드 성공! 응답한다.
+오브젝트 스토리지로 파일 업로드 성공! 응답한다.  
 
 === "Header"
     ``` http title="201 Created /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
@@ -1526,7 +1542,7 @@
 ### (22) 204 No Content /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file
 `openstack` <-- `glance-api`
 
-(13)번 요청에 대해 이미지 서비스 파일 업로드 성공 응답(`status=204`)을 전송한다.  
+`(13)` 요청에 대해 이미지 파일 업로드 성공 응답(`status=204`)을 전송한다.  
 
 === "Header"
     ``` http title="204 No Content /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file" linenums="1"

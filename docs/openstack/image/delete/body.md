@@ -1,5 +1,5 @@
 
-### GET /identity/
+### (1) GET /identity/
 `openstack` --> `keystone`
 
 === "Header"
@@ -19,7 +19,7 @@
     ```
 
 
-### 300 MULTIPLE CHOICES /identity/
+### (2) 300 MULTIPLE CHOICES /identity/
 `openstack` <-- `keystone`
 
 === "Header"
@@ -60,7 +60,7 @@
     ```
 
 
-### POST /identity/v3/auth/tokens
+### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
 === "Header"
@@ -107,7 +107,7 @@
     ```
 
 
-### 201 CREATED /identity/v3/auth/tokens
+### (4) 201 CREATED /identity/v3/auth/tokens
 `openstack` <-- `keystone`
 
 === "Header"
@@ -332,7 +332,7 @@
     ```
 
 
-### GET /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+### (5) GET /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `openstack` --> `glance-api`
 
 === "Header"
@@ -356,7 +356,7 @@
     ```
 
 
-### GET /identity/v3/auth/tokens
+### (6) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
 === "Header"
@@ -379,7 +379,7 @@
     ```
 
 
-### 200 OK /identity/v3/auth/tokens
+### (7) 200 OK /identity/v3/auth/tokens
 `glance-api` <-- `keystone`
 
 === "Header"
@@ -604,7 +604,7 @@
     ```
 
 
-### 200 OK /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+### (8) 200 OK /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `openstack` <-- `glance-api`
 
 === "Header"
@@ -648,7 +648,7 @@
     ```
 
 
-### DELETE /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+### (9) DELETE /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `openstack` --> `glance-api`
 
 === "Header"
@@ -673,7 +673,7 @@
     ```
 
 
-### POST /identity/v3/auth/tokens
+### (10) POST /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
 === "Header"
@@ -720,7 +720,7 @@
     ```
 
 
-### 201 CREATED /identity/v3/auth/tokens
+### (11) 201 CREATED /identity/v3/auth/tokens
 `glance-api` <-- `keystone`
 
 === "Header"
@@ -941,7 +941,7 @@
     ```
 
 
-### HEAD /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+### (12) HEAD /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `glance-api` --> `swift-proxy-server`
 
 === "Header"
@@ -961,7 +961,7 @@
     ```
 
 
-### GET /identity/v3/auth/tokens
+### (13) GET /identity/v3/auth/tokens
 `swift-proxy-server` --> `keystone`
 
 === "Header"
@@ -984,7 +984,7 @@
     ```
 
 
-### 200 OK /identity/v3/auth/tokens
+### (14) 200 OK /identity/v3/auth/tokens
 `swift-proxy-server` <-- `keystone`
 
 === "Header"
@@ -1042,7 +1042,7 @@
     ```
 
 
-### 200 OK /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+### (15) 200 OK /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `glance-api` <-- `swift-proxy-server`
 
 === "Header"
@@ -1066,7 +1066,7 @@
     ```
 
 
-### DELETE /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+### (16) DELETE /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `glance-api` --> `swift-proxy-server`
 
 === "Header"
@@ -1087,7 +1087,7 @@
     ```
 
 
-### 204 No Content /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+### (17) 204 No Content /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `glance-api` <-- `swift-proxy-server`
 
 === "Header"
@@ -1106,7 +1106,7 @@
     ```
 
 
-### 204 No Content /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
+### (18) 204 No Content /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `openstack` <-- `glance-api`
 
 === "Header"
