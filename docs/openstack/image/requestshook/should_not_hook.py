@@ -7,24 +7,9 @@ from requestshook.utils import (
     write_syslog
 )
 
-# # configuration
-# CONF = configparser.ConfigParser()
-# CONF.read(os.path.join(CONF_PATH, f'{PACKAGE_NAME}.conf'))
-
-# # get multiline list from ini style config
-# def get_config_list(section, option, fallback=[]):
-#     try:
-#         return json.loads(CONF.get(section, option, fallback=fallback))
-#     except:
-#         return fallback
-
-
 DEFAULT_MAPPINGS = {
-    "{uuid}": "([a-fA-F0-9-]+)",
-    "{version}": "(v[0-9.]+)",
-    "{name}": "(.+?)",
-    "{endpoint_id}": "([a-fA-F0-9]+)"
-    }
+    '{uuid}': '([a-fA-F0-9-]+)',
+}
 
 DEFAULT_FILTERS = [
     {
@@ -45,23 +30,8 @@ DEFAULT_FILTERS = [
         "urls": [
             "/identity/"
         ]
-    },
-    {
-        "from": "Swift",
-        "to": "swift-proxy-server",
-        "method": "HEAD"
-    },
-    {
-        "from": "glance-api",
-        "to": "keystone",
-        "method": "GET",
-        "urls": [
-            "/identity/{version}/limits",
-            "/identity/{version}/registered_limits",
-            "/identity/{version}/endpoints/{endpoint_id}"
-        ]
-    }    
-    ]
+    }
+]
 
 # config file path: /etc/requestshook/should_not_hook.json
 config_file_path = os.path.join(CONF_PATH, 'should_not_hook.json')

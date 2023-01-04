@@ -2,12 +2,22 @@
 
 조건에 해당하는 이미지 목록을 조회하는 `openstack image list` CLI 커맨드를 이용하여 이미지 목록을 조회, 그 과정에서 발생하는 API 요청들의 시퀀스 다이어그램을 작성하고, Request / Response 내용을 분석해 본다.  
 
-* `openstack image list --all` 커맨드를 이용하여 모든 이미지를 출력
+* `openstack image list --all` 커맨드를 이용하여 모든 이미지를 조회  
 
-[:material-console: openstack image list](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-list)
-``` bash title=""
-$ openstack image list --all
-```
+## Openstack CLI Command & Output
+??? example "openstack image list --all"
+    !!! tip ""
+        :material-console:{.md-cli} [openstack image list](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-list)
+    ``` txt title="Console Output" linenums="1"
+    +--------------------------------------+--------------------------+--------+
+    | ID                                   | Name                     | Status |
+    +--------------------------------------+--------------------------+--------+
+    | 98b68b53-2939-474e-aab1-64a49c57e941 | cirros-0.5.2-x86_64-disk | active |
+    | a42bfade-78ec-4c95-b7b4-272ba265072c | cirros-0.6.1-x86_64-disk | active |
+    | 52223e76-ba72-46d1-b11e-89e4bce4414a | trove-guest-ubuntu-focal | active |
+    +--------------------------------------+--------------------------+--------+
+    ```
+
 
 ## Sequence Diagram
 
@@ -31,21 +41,9 @@ sequenceDiagram
 
 --8<-- "openstack/image/list/body.md"
 
-## Output
+## Full Log
 
-`openstack image list --all` 커맨드 실행 결과는 다음과 같다.  
-
-``` bash title="openstack image list --all"
-+--------------------------------------+--------------------------+--------+
-| ID                                   | Name                     | Status |
-+--------------------------------------+--------------------------+--------+
-| 98b68b53-2939-474e-aab1-64a49c57e941 | cirros-0.5.2-x86_64-disk | active |
-| a42bfade-78ec-4c95-b7b4-272ba265072c | cirros-0.6.1-x86_64-disk | active |
-| 52223e76-ba72-46d1-b11e-89e4bce4414a | trove-guest-ubuntu-focal | active |
-+--------------------------------------+--------------------------+--------+
-```
-
-??? quote "`requestshook.log` 확인"
-    ``` text title="/var/log/requestshook/requestshook.log" linenums="1"
+??? quote "/var/log/requestshook/requestshook.log"
+    ``` text title="" linenums="1"
     --8<-- "openstack/image/list/log.md"
     ```

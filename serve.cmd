@@ -6,4 +6,4 @@ if "%PORT%"=="" set "PORT=80"
 
 start python -m mkdocs serve -a localhost:%PORT%
 
-start http://localhost:%PORT%
+start http://localhost:%PORT%/openstack-docs/

@@ -4,7 +4,7 @@
 
 * `qcow2` 디스크 타입의 [cirros-0.6.1-x86_64-disk.img](http://download.cirros-cloud.net/0.6.1/cirros-0.6.1-x86_64-disk.img)  
 * 생성된 이미지는 아래 설정에 의해 오브젝트 스토리지에 저장된다.  
-``` ini title="/etc/glance/glance-api.conf" hl_lines="6"
+``` ini title="/etc/glance/glance-api.conf" hl_lines="7"
 ...
 [glance_store]
 stores = file, http, swift
@@ -16,15 +16,39 @@ filesystem_store_datadir = /opt/stack/data/glance/images/
 ...
 ```
 
-[:material-console: openstack image create](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-create)
-``` bash title=""
-$ openstack image create \
-  --disk-format qcow2 \
-  --file cirros-0.6.1-x86_64-disk.qcow2 \
-  --public \
-  --format json
-  cirros-0.6.1-x86_64-disk
-```
+## Openstack CLI Command & Output
+
+??? example "openstack image create --disk-format qcow2 --file cirros-0.6.1-x86_64-disk.img --public --format json cirros-0.6.1-x86_64-disk"
+    !!! tip ""
+        :material-console:{.md-cli} [openstack image create](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-create)
+    ``` json title="Console Output" linenums="1" hl_lines="19"
+    {
+      "container_format": "bare",
+      "created_at": "2022-12-30T01:38:06Z",
+      "disk_format": "qcow2",
+      "file": "/v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c",
+      "id": "a42bfade-78ec-4c95-b7b4-272ba265072c",
+      "min_disk": 0,
+      "min_ram": 0,
+      "name": "cirros-0.6.1-x86_64-disk",
+      "owner": "de5af600557d44d0996e667499376dbb",
+      "properties": {
+          "os_hidden": false,
+          "owner_specified.openstack.md5": "",
+          "owner_specified.openstack.sha256": "",
+          "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk"
+      },
+      "protected": false,
+      "schema": "/v2/schemas/image",
+      "status": "queued",
+      "tags": [],
+      "updated_at": "2022-12-30T01:38:06Z",
+      "visibility": "public"
+    }
+    ```
+    ???+ question "결과 출력에서 `status`가 `queued`인 이유?"
+        `(13)` 이미지 파일 업로드 요청에 대해 `(22)` 응답에서 이미지의 `status` 관련 정보를 응답하지 않으므로, `(12)` 응답에서 수집된 `status` = `queued`를 그대로 이용하는 듯 하다.  
+        이미지 상태를 확인하기 위해서는 `openstack image show {image_id}` 커맨드 또는 `GET /v2/images/{image_id}` API 등을 통해 직접 확인해야 한다.  
 
 
 ## Sequence Diagram
@@ -37,9 +61,10 @@ sequenceDiagram
     --8<-- "openstack/image/create/diagram.md"
 ```
 
-!!! info
-    `{image_id}`: `a42bfade-78ec-4c95-b7b4-272ba265072c`  
-    `{account}`: `7c4cda7e4807414bbdfcb22b535a9802`  
+| variables | values |
+|-----------|--------|
+| `image_id` | a42bfade-78ec-4c95-b7b4-272ba265072c |
+| `account` | AUTH_7c4cda7e4807414bbdfcb22b535a9802 |
 
 각 과정을 간략히 요약하면 다음과 같다.  
 
@@ -58,7 +83,7 @@ sequenceDiagram
     `(6-9)` 과정은 `glance-api`가 사용할 인증 토큰을 발급 받지 않았거나, 만료된 경우에 발생한다.  
     만약, `glance-api`가 만료되지 않은 인증 토큰을 보유하고 있는 경우, `(6-9)` 과정은 발생하지 않는다.   
 
-??? note "생략된 시퀀스"
+??? warning "생략된 시퀀스"
 
     ``` json title="should_not_hook.json"
     {
@@ -109,41 +134,9 @@ sequenceDiagram
 
 --8<-- "openstack/image/create/body.md"
 
-## Output
+## Full Log
 
-`openstack image create ...` 커맨드 실행 결과는 다음과 같다.  
-
-``` json title="openstack image create --disk-format qcow2 --file cirros-0.6.1-x86_64-disk.img --public --format json cirros-0.6.1-x86_64-disk" linenums="1" hl_lines="19"
-{
-  "container_format": "bare",
-  "created_at": "2022-12-30T01:38:06Z",
-  "disk_format": "qcow2",
-  "file": "/v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c",
-  "id": "a42bfade-78ec-4c95-b7b4-272ba265072c",
-  "min_disk": 0,
-  "min_ram": 0,
-  "name": "cirros-0.6.1-x86_64-disk",
-  "owner": "de5af600557d44d0996e667499376dbb",
-  "properties": {
-    "os_hidden": false,
-    "owner_specified.openstack.md5": "",
-    "owner_specified.openstack.sha256": "",
-    "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk"
-  },
-  "protected": false,
-  "schema": "/v2/schemas/image",
-  "status": "queued",
-  "tags": [],
-  "updated_at": "2022-12-30T01:38:06Z",
-  "visibility": "public"
-}
-```
-
-!!! question "결과 출력 화면에서 `status`가 `queued` 상태인 이유?"
-    `(13)` 이미지 파일 업로드 요청에 대해 `(22)` 응답에서 이미지의 `status` 관련 정보를 응답하지 않으므로, `(12)` 응답에서 수집된 `status` = `queued`를 그대로 이용하는 듯 하다.  
-    이미지 상태를 확인하기 위해서는 `openstack image show {image_id}` 커맨드 또는 `GET /v2/images/{image_id}` API 등을 통해 직접 확인해야 한다.  
-
-??? quote "`requestshook.log` 확인"
-    ``` text title="/var/log/requestshook/requestshook.log" linenums="1"
+??? quote "/var/log/requestshook/requestshook.log"
+    ``` text title="" linenums="1"
     --8<-- "openstack/image/create/log.md"
     ```

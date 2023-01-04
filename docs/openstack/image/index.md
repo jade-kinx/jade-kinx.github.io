@@ -90,14 +90,14 @@ $ python setup.py bdist_wheel
 HTTP 요청 헤더에 요청자 정보를 추가하는 것은, API 서비스 미들웨어에서 요청자를 식별하여 시퀀스 다이어그램을 생성하기 위해서이다.  
 
 !!! note
-    `requests` 패키지 후킹에서 직접 API 요청과 응답을 덤프할 수 있지만, `swfit` 서비스의 경우 `response.body`에 접근하여 버퍼를 읽으면 이후 오픈스택 서비스 처리에서 `http 500 internal server error` 등의 문제가 발생한다. (원인은 모르겠다)  
-    그래서, `requests` 패키지 후킹에서는 요청자 정보만 포함하고, service api의 middleware에서 시퀀스 덤프를 수행하도록 한다.  
-    (또는, `requests` 패키지 후킹에서는 `http.request`에 대해 덤프하고, `middleware`에서는 `http.response`에 대해 덤프해도 무방해 보인다)
+    `requests` 패키지 후킹에서 직접 API 요청과 응답을 덤프할 수 있지만, `swfit` 서비스의 경우 `response.body`에 접근하면 이후 서비스 처리에서 `http 500 internal server error` 등의 문제가 발생한다. (`response` 버퍼 포인터 수정이 원인이 아닐까 싶은데? 정확히는 모르겠다)  
+    그래서, `requests` `send()` 후킹에서는 요청자 정보만 포함하고, service api의 middleware에서 시퀀스 덤프를 수행하도록 한다.  
+    (또는, `requests` `send()` 후킹에서는 `http.request`에 대해 덤프하고, service `middleware`에서 `http.response`에 대해 덤프해도 무방해 보인다)
 
 ## Middleware 추가
 
 오픈스택의 API 서비스들은 API 요청을 Middleware 파이프라인 방식으로 처리한다.  
-데브스택 `zed` 기준으로 `keystone`, `placement-api` 서비스는 코드에서 직접 파이프라인에 사용할 미들웨어를 입력하도록 되어 있고, `glance-api`, `cinder-api`, `nova-api`, `neutron-server`, `swift-proxy-server`, `trove-api` 는 `api-paste.ini` 설정으로 파이프라인에 미들웨어를 추가할 수 있다.
+데브스택 `zed` 기준으로 `keystone`, `placement-api` 서비스는 코드에서 직접 파이프라인에 사용할 미들웨어를 추가하도록 되어 있고, `glance-api`, `cinder-api`, `nova-api`, `neutron-server`, `swift-proxy-server`, `trove-api` 는 `api-paste.ini` 설정으로 파이프라인에 미들웨어를 추가할 수 있다.
 
 ### keystone middleware 추가
 
@@ -206,7 +206,8 @@ paste.filter_factory = requestshook:RequestsHookMiddleware.factory
     ...
     [composite:openstack_volume_api_v3]
     use = call:cinder.api.middleware.auth:pipeline_factory
-    noauth = request_id cors http_proxy_to_wsgi faultwrap sizelimit osprofiler noauth requestshook apiv3noauth_include_project_id = request_id cors http_proxy_to_wsgi faultwrap sizelimit osprofiler noauth_include_project_id requestshook apiv3
+    noauth = request_id cors http_proxy_to_wsgi faultwrap sizelimit osprofiler noauth requestshook apiv3
+    noauth_include_project_id = request_id cors http_proxy_to_wsgi faultwrap sizelimit osprofiler noauth_include_project_id requestshook apiv3
     keystone = request_id cors http_proxy_to_wsgi faultwrap sizelimit osprofiler authtoken keystonecontext requestshook apiv3
     keystone_nolimit = request_id cors http_proxy_to_wsgi faultwrap sizelimit osprofiler authtoken keystonecontext requestshook apiv3    
     ...
@@ -371,7 +372,7 @@ paste.filter_factory = requestshook:RequestsHookMiddleware.factory
 ```
 
 주기적으로 발생하는 요청이나, 로그에서 제외하고 싶은 요청을 `should_not_hook.json` 설정 파일에 등록하여 시퀀스 로그에서 제거할 수 있다.  
-미들웨어가 실행될 때마다 매번 설정을 로드하므로, 설정을 수정하면 즉시 반영된다.
+미들웨어가 실행될 때마다(요청을 받을 때마다) 매번 설정을 로드하므로, 설정을 수정하면 즉시 반영된다.
 
 ### 시퀀스 로그 확인
 
