@@ -5,9 +5,11 @@
 * `openstack image list --all` 커맨드를 이용하여 모든 이미지를 조회  
 
 ## Openstack CLI Command & Output
+
+!!! reference "CLI 참조"
+    [openstack image list](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-list)
+
 ??? example "openstack image list --all"
-    !!! tip ""
-        :material-console:{.md-cli} [openstack image list](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-list)
     ``` txt title="Console Output" linenums="1"
     +--------------------------------------+--------------------------+--------+
     | ID                                   | Name                     | Status |

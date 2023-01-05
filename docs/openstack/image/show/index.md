@@ -6,9 +6,10 @@
 
 ## Openstack CLI Command & Output
 
+!!! reference "CLI 참조"
+    [openstack image show](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-show)
+
 ??? example "openstack image show a42bfade-78ec-4c95-b7b4-272ba265072c --format json"
-    !!! tip ""
-        :material-console:{ .md-cli } [openstack image show](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-show)
     ``` json title="Console Output" linenums="1"
     {
       "checksum": "0c839612eb3f2469420f2ccae990827f",

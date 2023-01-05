@@ -18,9 +18,10 @@ filesystem_store_datadir = /opt/stack/data/glance/images/
 
 ## Openstack CLI Command & Output
 
+!!! reference "CLI 참조"
+    [openstack image create](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-create)
+
 ??? example "openstack image create --disk-format qcow2 --file cirros-0.6.1-x86_64-disk.img --public --format json cirros-0.6.1-x86_64-disk"
-    !!! tip ""
-        :material-console:{.md-cli} [openstack image create](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-create)
     ``` json title="Console Output" linenums="1" hl_lines="19"
     {
       "container_format": "bare",

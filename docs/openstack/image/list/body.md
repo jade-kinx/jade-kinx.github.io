@@ -63,8 +63,8 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
-!!! tip ""
-    :material-api:{.md-api} [Password authentication with scoped authorization](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+!!! reference "API 참조"
+    [Password authentication with scoped authorization](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
 
 
 === "Header"
@@ -339,8 +339,8 @@
 ### (5) GET /v2/images
 `openstack` --> `glance-api`
 
-!!! tip ""
-    :material-api:{.md-api} [List images](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=list-images-detail#list-images)
+!!! reference "API 참조"
+    [List images](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=list-images-detail#list-images)
 
 `GET /v2/images` API를 이용하여 이미지 목록 조회를 요청한다.  
 `query-string`에 원하는 `query-filters`를 추가하여 조회 조건을 지정할 수 있다.  

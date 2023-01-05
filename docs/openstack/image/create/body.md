@@ -70,8 +70,8 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
-!!! tip ""
-    :material-api:{.md-api} [Password authentication with scoped authorization](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+!!! reference "API 참조"
+    [Password authentication with scoped authorization](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
 
 `Access Token` 발급 및 `서비스 카탈로그` 요청한다.  
 `Body`는 `admin` 사용자가 `admin` 프로젝트 스코프로 `패스워드` 방식으로(패스워드=`asdf`) 인증 요청을 담고 있다.  
@@ -354,8 +354,8 @@
 ### (5) POST /v2/images
 `openstack` --> `glance-api`
 
-!!! tip ""
-    :material-api:{.md-api} [Create image](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=create-image-detail#create-image)
+!!! reference "API 참조"
+    [Create image](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=create-image-detail#create-image)
 
 발급 받은 `access token`을 `Header`의 `X-Auth-Token` 값으로 추가하여 이미지 생성을 요청한다.  
 `Body`에는 `disk_format=qcow2`, `container_format=bare`, `visibility=public`, `name=cirros-0.6.1-x86_64-disk`와 같은 이미지 정보를 포함한다.  
@@ -733,8 +733,8 @@
 ### (10) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
-!!! tip ""
-    :material-api:{.md-api} [Validate and show information for token](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
+!!! reference "API 참조"
+    [Validate and show information for token](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
 
 `(5)` 요청에 대해 `keystone` 서비스에 사용자 인증 토큰 검증을 요청한다.  
 이 과정에서 사용자의 인증 토큰은 `X-Subject-Token`, `glance-api`의 인증 토큰은 `X-Auth-Token` 값으로 헤더에 포함하여 요청한다.  
@@ -1040,8 +1040,8 @@
 ### (13) PUT /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file
 `openstack` --> `glance-api`
 
-!!! tip ""
-    :material-api:{.md-api} [Upload binary image data](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=upload-binary-image-data-detail#upload-binary-image-data)
+!!! reference "API 참조"
+    [Upload binary image data](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=upload-binary-image-data-detail#upload-binary-image-data)
 
 이미지가 생성되었고(레코드만), `status`가 `queued` 상태이므로 이미지 파일을 업로드 할 수 있다.  
 `PUT` 메소드를 이용하여, 파일을 업로드한다.  
@@ -1352,8 +1352,8 @@
 ### (16) HEAD /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance
 `glance-api` --> `swift-proxy-server`
 
-!!! tip ""
-    :material-api:{.md-api} [Show container metadata](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#show-container-metadata)
+!!! reference "API 참조"
+    [Show container metadata](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#show-container-metadata)
 
 `(15)` 요청에서 받은 `object-store` 의 endpoint로 컨테이너 메타데이터 정보를 요청한다.  
 (존재하는지, 사용 가능한지 등의 확인 목적으로 추정된다.)  
@@ -1499,8 +1499,8 @@
 ### (20) PUT /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/a42bfade-78ec-4c95-b7b4-272ba265072c
 `glance-api` --> `swift-proxy-server`
 
-!!! tip ""
-    :material-api:{.md-api} [Create or replace object](https://docs.openstack.org/api-ref/object-store/?expanded=create-or-replace-object-detail#create-or-replace-object)
+!!! reference "API 참조"
+    [Create or replace object](https://docs.openstack.org/api-ref/object-store/?expanded=create-or-replace-object-detail#create-or-replace-object)
 
 `(13)` `PUT /v2/images/{image_id}/file` 요청을 통해 받은 이미지 파일을 오브젝트 스토리지로 업로드한다.  
 `glance-api`와 다르게 `swift-proxy-server`는 `content-type`을 지정하지 않아도 되나보다.  
