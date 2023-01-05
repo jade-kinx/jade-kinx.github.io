@@ -41,6 +41,9 @@ sequenceDiagram
 
 ## Request / Response
 
+!!! warning
+    `Header` 에 포함된 `X-Requestshook-Request-Id`, `X-Requestshook-Request-From` 항목은 API Sequence 추적을 위해 `requestshook`에서 추가한 항목이며, 오픈스택에서 제공하는 정보가 아니라는 점을 주의한다.    
+
 --8<-- "openstack/image/list/body.md"
 
 ## Full Log

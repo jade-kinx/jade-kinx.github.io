@@ -63,8 +63,8 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
-!!! reference "API 참조"
-    [Password authentication with scoped authorization](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
 
 
 === "Header"
@@ -339,8 +339,8 @@
 ### (5) GET /v2/images
 `openstack` --> `glance-api`
 
-!!! reference "API 참조"
-    [List images](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=list-images-detail#list-images)
+!!! reference "API 참조 - List images"
+    [GET /v2/images](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=list-images-detail#list-images)
 
 `GET /v2/images` API를 이용하여 이미지 목록 조회를 요청한다.  
 `query-string`에 원하는 `query-filters`를 추가하여 조회 조건을 지정할 수 있다.  
@@ -430,6 +430,9 @@
 
 ### (8) POST /identity/v3/auth/tokens
 `glance-api` --> `keystone`
+
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
 
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
@@ -694,6 +697,9 @@
 
 ### (10) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
+
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
 
 === "Header"
     ``` http title="GET /identity/v3/auth/tokens" linenums="1" hl_lines="6 8"

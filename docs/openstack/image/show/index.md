@@ -59,12 +59,14 @@ sequenceDiagram
 - `a42bfade-78ec-4c95-b7b4-272ba265072c` 이미지의 상세 정보를 응답한다. `(8)`
 
 !!! note "이미지 이름으로 조회를 요청하면..."
-    만약 이미지의 `id`가 아닌 `name`으로 요청하게 되면(`cirros-0.6.1-x86_64-disk`) `(5)` 과정에서 `GET /v2/images/cirros-0.6.1-x86_64-disk` 로 요청을 보내고
-    이 요청은 `404 Not Found` 에러를 응답받게 된다.  
-    이때 `openstack-client`는 입력 값을 `name`으로 인식하여 `GET /v2/images?name=cirros-0.6.1-x86_64-disk` 으로 요청한다.  
+    만약 이미지의 `id`가 아닌 `name`으로 요청하게 되면(가령, `cirros-0.6.1-x86_64-disk`) `(5)` 과정에서 `GET /v2/images/cirros-0.6.1-x86_64-disk` 요청은 `404 Not Found` 에러메세지와 함께 실패하고, `GET /v2/images?name=cirros-0.6.1-x86_64-disk`로 다시 요청하여 이미지 상세 정보를 수신하게 된다.  
     즉, `openstack-client`는 입력 받은 이미지를 `id`로 우선 인식하여 요청하고, 실패하면 `name`으로 인식하여 요청한다.  
 
 ## Request / Response
+
+!!! warning
+    `Header` 에 포함된 `X-Requestshook-Request-Id`, `X-Requestshook-Request-From` 항목은 API Sequence 추적을 위해 `requestshook`에서 추가한 항목이며, 오픈스택에서 제공하는 정보가 아니라는 점을 주의한다.    
+
 --8<-- "openstack/image/show/body.md"
 
 ## Full Logs

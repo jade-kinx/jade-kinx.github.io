@@ -63,6 +63,9 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
     Host: 182.161.114.101
@@ -335,8 +338,8 @@
 ### (5) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` --> `glance-api`
 
-!!! reference "API 참조"
-    [Show Image](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=show-image-detail#show-image) 
+!!! reference "API 참조 - Show Image"
+    [GET /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=show-image-detail#show-image) 
 
 === "Header"
     ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
@@ -361,6 +364,9 @@
 
 ### (6) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
+
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
 
 === "Header"
     ``` http title="GET /identity/v3/auth/tokens" linenums="1"

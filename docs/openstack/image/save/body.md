@@ -63,6 +63,9 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
     Host: 182.161.114.101
@@ -335,6 +338,9 @@
 ### (5) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Show Image"
+    [GET /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=show-image-detail#show-image) 
+
 === "Header"
     ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
     Host: 127.0.0.1:60999
@@ -358,6 +364,9 @@
 
 ### (6) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
+
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
 
 === "Header"
     ``` http title="GET /identity/v3/auth/tokens" linenums="1"
@@ -651,6 +660,9 @@
 ### (9) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Download binary image data"
+    [GET /v2/images/{image_id}/file](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=download-binary-image-data-detail#download-binary-image-data)
+
 === "Header"
     ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file" linenums="1"
     Host: 127.0.0.1:60999
@@ -674,6 +686,9 @@
 
 ### (10) POST /identity/v3/auth/tokens
 `glance-api` --> `keystone`
+
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
 
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
@@ -943,6 +958,9 @@
 ### (12) GET /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/a42bfade-78ec-4c95-b7b4-272ba265072c
 `glance-api` --> `swift-proxy-server`
 
+!!! reference "API 참조 - Get object content and metadata"
+    [GET /v1/{account}/{container}/{object}](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#get-object-content-and-metadata)
+
 === "Header"
     ``` http title="GET /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
     Content-Type: 
@@ -962,6 +980,9 @@
 
 ### (13) GET /identity/v3/auth/tokens
 `swift-proxy-server` --> `keystone`
+
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
 
 === "Header"
     ``` http title="GET /identity/v3/auth/tokens" linenums="1"
