@@ -188,7 +188,7 @@ paste.filter_factory = requestshook:RequestsHookMiddleware.factory
 `requestshook` 미들웨어의 적절한 위치를 판단하기 어려워, `proxy-logging` 미들웨어 뒤에 추가하였다. `proxy-logging` 미들웨어가 요청을 로깅하는 미들웨어로 보이고, `authtoken` 미들웨어 보다 앞에 있으므로 적당한 위치로 추정된다.
 
 ??? question "pipeline에 `proxy-logging` 미들웨어가 2개 있는 이유는?"
-    두 `proxy-logging` 미들웨어 사이의 미들웨어들에서 처리된 이후의 `request`, `response` 변화를 확인하기 위해서인가???  
+    두 `proxy-logging` 사이의 미들웨어들에서 처리된 이후의 `request`, `response` 변화를 확인하기 위해서인가???  
 
 ``` bash title="restart service"
 # service devstack@s-account restart

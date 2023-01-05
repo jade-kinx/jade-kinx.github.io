@@ -1,6 +1,6 @@
 # openstack image create
 
-이미지를 생성하고 업로드하는 `openstack image create` CLI 커맨드를 이용하여 이미지를 등록, 그 과정에서 발생하는 API 시퀀스 다이어그램을 작성해보고 `Request`, `Response`를 분석해본다.  
+이미지를 생성하고 업로드하는 `openstack image create` CLI 커맨드를 이용하여 이미지를 등록하여 보고, 그 과정에서 발생하는 API 시퀀스 다이어그램을 작성하고 `Request`, `Response`를 분석해본다.  
 
 * `qcow2` 디스크 타입의 [cirros-0.6.1-x86_64-disk.img](http://download.cirros-cloud.net/0.6.1/cirros-0.6.1-x86_64-disk.img)  
 * 생성된 이미지는 아래 설정에 의해 오브젝트 스토리지에 저장된다.  
@@ -22,7 +22,8 @@ filesystem_store_datadir = /opt/stack/data/glance/images/
     [openstack image create](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-create)
 
 ??? example "openstack image create --disk-format qcow2 --file cirros-0.6.1-x86_64-disk.img --public --format json cirros-0.6.1-x86_64-disk"
-    ``` json title="Console Output" linenums="1" hl_lines="19"
+    ``` console title="Console Output" linenums="1" hl_lines="19"
+    $ openstack image create --disk-format qcow2 --file cirros-0.6.1-x86_64-disk.img --public --format json cirros-0.6.1-x86_64-disk
     {
       "container_format": "bare",
       "created_at": "2022-12-30T01:38:06Z",
@@ -100,7 +101,12 @@ sequenceDiagram
     ```
     
     * `glance-api`에서 `keystone`으로 쿼터 관련 정보를 요청하는 부분은 위 `should_not_hook.json` 설정에 의해서 제외하였다. (너무 많고 길어져서...)  
-
+    ??? quote "쿼터 제한 확인 시퀀스 (오브젝트 스토리지 제외)"
+        ``` mermaid
+        sequenceDiagram
+            autonumber
+            --8<-- "openstack/image/create/diagram-with-limits.md"
+        ```
     ``` json title="should_not_hook.json"
     {
         "from": "nova-compute",
