@@ -1,6 +1,6 @@
 # openstack image create
 
-이미지를 생성하고 업로드하는 `openstack image create` CLI 커맨드를 이용하여 이미지를 등록, 그 과정에서 발생하는 API 시퀀스 다이어그램을 작성해보고 Request/Response를 분석해본다.  
+이미지를 생성하고 업로드하는 `openstack image create` CLI 커맨드를 이용하여 이미지를 등록, 그 과정에서 발생하는 API 시퀀스 다이어그램을 작성해보고 `Request`, `Response`를 분석해본다.  
 
 * `qcow2` 디스크 타입의 [cirros-0.6.1-x86_64-disk.img](http://download.cirros-cloud.net/0.6.1/cirros-0.6.1-x86_64-disk.img)  
 * 생성된 이미지는 아래 설정에 의해 오브젝트 스토리지에 저장된다.  
