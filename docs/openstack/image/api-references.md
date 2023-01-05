@@ -43,6 +43,9 @@
 !!! reference "API 참조 - Update image"
     [PATCH /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=update-image-detail#update-image)
 
+!!! reference "API 참조 - Delete image"
+    [DELETE /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=delete-image-detail#delete-image)
+
 !!! reference "API 참조 - Add image tag"
     [PUT /v2/images/{image_id}/tags/{tag}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=add-image-tag-detail#add-image-tag)
 
@@ -58,6 +61,8 @@
     [GET /v1/{account}/{container}/{object}](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#get-object-content-and-metadata)
 
 !!! reference "API 참조 - Create or replace object"
-    [/v1/{account}/{container}/{object}](https://docs.openstack.org/api-ref/object-store/?expanded=create-or-replace-object-detail#create-or-replace-object)
+    [PUT /v1/{account}/{container}/{object}](https://docs.openstack.org/api-ref/object-store/?expanded=create-or-replace-object-detail#create-or-replace-object)
 
+!!! reference "API 참조 - Delete object"
+    [DELETE /v1/{account}/{container}/{object}](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#delete-object)
 

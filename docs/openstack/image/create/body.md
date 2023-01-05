@@ -1509,7 +1509,7 @@
 `glance-api` --> `swift-proxy-server`
 
 !!! reference "API 참조 - Create or replace object"
-    [/v1/{account}/{container}/{object}](https://docs.openstack.org/api-ref/object-store/?expanded=create-or-replace-object-detail#create-or-replace-object)
+    [PUT /v1/{account}/{container}/{object}](https://docs.openstack.org/api-ref/object-store/?expanded=create-or-replace-object-detail#create-or-replace-object)
 
 `(13)` `PUT /v2/images/{image_id}/file` 요청을 통해 받은 이미지 파일을 오브젝트 스토리지로 업로드한다.  
 `glance-api`와 다르게 `swift-proxy-server`는 `content-type`을 지정하지 않아도 되나보다.  

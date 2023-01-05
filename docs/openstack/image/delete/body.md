@@ -63,6 +63,10 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+
+
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
     Host: 182.161.114.101
@@ -111,7 +115,7 @@
 `openstack` <-- `keystone`
 
 === "Header"
-    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1"
+    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="3"
     Content-Type: application/json
     Content-Length: 3952
     X-Subject-Token: gAAAAABjspx1DTolfmi1UKixnxPvZiIPNhKyrDbDcK2O3pCAVfWobD6l224XbtGK3aGN_GlqFR4fXO8rjYFoEeamp62klqQATvNsbd1k-VoG2nnK3HLMWlLxKc-0dEE-h1owxeC-X5LulGti8ehy2UPYdv24LH3TOv5FNa1PsXRwkmnEl5ax_ns
@@ -335,8 +339,12 @@
 ### (5) GET /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Show Image"
+    [GET /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=show-image-detail#show-image) 
+
+
 === "Header"
-    ``` http title="GET /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e" linenums="1"
+    ``` http title="GET /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -359,8 +367,12 @@
 ### (6) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
+
+
 === "Header"
-    ``` http title="GET /identity/v3/auth/tokens" linenums="1"
+    ``` http title="GET /identity/v3/auth/tokens" linenums="1" hl_lines="6 8"
     Host: 182.161.114.101
     User-Agent: python-keystoneclient
     Accept-Encoding: gzip, deflate
@@ -651,8 +663,14 @@
 ### (9) DELETE /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Delete image"
+    [DELETE /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=delete-image-detail#delete-image)
+
+사용자가 `glance-api`에 이미지 삭제를 요청한다.  
+`glance-api`는 이 요청에 대해 인증 토큰을 검증하지 않는다. `(5)` 요청에서 이미 인증 토큰을 검증하였고, 동일한 인증 토큰이기 때문  
+
 === "Header"
-    ``` http title="DELETE /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e" linenums="1"
+    ``` http title="DELETE /v2/images/04cd3672-1f97-4e98-bfe0-0d4801d88a8e" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -675,6 +693,13 @@
 
 ### (10) POST /identity/v3/auth/tokens
 `glance-api` --> `keystone`
+
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+
+`(10-11)` 과정은 `glance-api`가 `swift` 서비스에 요청할 때 사용할 인증 토큰을 발급 받는 과정으로 이전 요청 등에서 유효한 토큰을 보유하고 있다면 이 과정은 생략된다.  
+
+
 
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
@@ -944,6 +969,9 @@
 ### (12) HEAD /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `glance-api` --> `swift-proxy-server`
 
+!!! reference "API 참조 - Show container metadata"
+    [HEAD /v1/{account}/{container}](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#show-container-metadata)
+
 === "Header"
     ``` http title="HEAD /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e" linenums="1"
     Content-Type: 
@@ -963,6 +991,10 @@
 
 ### (13) GET /identity/v3/auth/tokens
 `swift-proxy-server` --> `keystone`
+
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
+
 
 === "Header"
     ``` http title="GET /identity/v3/auth/tokens" linenums="1"
@@ -1068,6 +1100,11 @@
 
 ### (16) DELETE /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e
 `glance-api` --> `swift-proxy-server`
+
+!!! reference "API 참조 - Delete object"
+    [DELETE /v1/{account}/{container}/{object}](https://docs.openstack.org/api-ref/object-store/?expanded=show-container-metadata-detail#delete-object)
+
+`glance-api`가 `swift` 서비스에 `Delete object` API를 이용하여 이미지 파일 오브젝트 삭제를 요청한다.  
 
 === "Header"
     ``` http title="DELETE /v1/AUTH_7c4cda7e4807414bbdfcb22b535a9802/glance/04cd3672-1f97-4e98-bfe0-0d4801d88a8e" linenums="1"
