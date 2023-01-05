@@ -8,6 +8,12 @@
 !!! reference "API 참조 - Validate and show information for token"
     [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
 
+!!! reference "API 참조 - List projects"
+    [GET /v3/projects](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=list-projects-detail#list-projects)
+
+!!! reference "API 참조 - Show project details"
+    [GET /v3/projects/{project_id}](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=show-project-details-detail#show-project-details)
+
 ## Image Service
 
 !!! reference "API 참조 - Create image"
@@ -25,6 +31,8 @@
 !!! reference "API 참조 - Download binary image data"
     [GET /v2/images/{image_id}/file](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=download-binary-image-data-detail#download-binary-image-data)
 
+!!! reference "API 참조 - Create image member"
+    [POST /v2/images/{image_id}/members](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=create-image-member-detail#create-image-member)
 
 ## Object Store Service
 

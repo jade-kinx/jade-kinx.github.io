@@ -63,6 +63,9 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
     Host: 182.161.114.101
@@ -335,6 +338,12 @@
 ### (5) GET /identity/v3/projects/demo
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Show project details"
+    [GET /v3/projects/{project_id}](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=show-project-details-detail#show-project-details)
+
+입력 인자로 받은 `demo`를 프로젝트 `id`로 우선 인식하여 프로젝트 상세 정보 요청을 전송한다.  
+`demo`는 `name`이므로, 이 요청은 `404 NOT FOUND` 응답으로 실패할 것이다.
+
 === "Header"
     ``` http title="GET /identity/v3/projects/demo" linenums="1"
     Host: 182.161.114.101
@@ -355,6 +364,8 @@
 
 ### (6) 404 NOT FOUND /identity/v3/projects/demo
 `openstack` <-- `keystone`
+
+`demo`는 프로젝트 `id`가 아니기 때문에 `404 NOT FOUND` 오류를 수신하였다.  
 
 === "Header"
     ``` http title="404 NOT FOUND /identity/v3/projects/demo" linenums="1"
@@ -380,6 +391,13 @@
 ### (7) GET /identity/v3/projects?name=demo
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - List projects"
+    [GET /v3/projects](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=list-projects-detail#list-projects)
+
+`(5)` 요청이 실패하였기 때문에 입력 인자를 `name`으로 판단하여, `name` 필터로 프로젝트 리스트를 요청한다.  
+만약, 동일한 `name`이 2개 이상 존재하는 경우, `409 Conflict` 오류를 응답하게 된다.  
+
+
 === "Header"
     ``` http title="GET /identity/v3/projects" linenums="1"
     Host: 182.161.114.101
@@ -401,6 +419,9 @@
 ### (8) 200 OK /identity/v3/projects?name=demo
 `openstack` <-- `keystone`
 
+`demo` 프로젝트에 해당하는 프로젝트 상세 정보를 수신하였다.  
+`Body` 에서 `demo` 프로젝트의 `id`가 `cdb477d9329c450e996cae2d02a2c44f`임을 확인할 수 있다.  
+
 === "Header"
     ``` http title="200 OK /identity/v3/projects" linenums="1"
     Content-Type: application/json
@@ -411,7 +432,7 @@
     ```
 
 === "Body"
-    ``` json title="200 OK /identity/v3/projects" linenums="1"
+    ``` json title="200 OK /identity/v3/projects" linenums="1" hl_lines="4"
     {
       "projects": [
         {
@@ -441,6 +462,11 @@
 ### (9) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Show Image"
+    [GET /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=show-image-detail#show-image) 
+
+입력 인자로 받은 이미지 값을 `id`로 판단하여 이미지 상세 정보를 요청한다.  
+
 === "Header"
     ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
     Host: 127.0.0.1:60999
@@ -464,6 +490,11 @@
 
 ### (10) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
+
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
+
+`(10-11)` 과정은 `(9)` 요청의 인증 토큰을 검증하는 과정이다.  
 
 === "Header"
     ``` http title="GET /identity/v3/auth/tokens" linenums="1"
@@ -713,6 +744,10 @@
 ### (12) 200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` <-- `glance-api`
 
+이미지의 상세 정보를 수신하였다.  
+입력 인자가 `id`였고, 이미지의 `id`가 `a42bfade-78ec-4c95-b7b4-272ba265072c` 임을 확인하였다.  
+이제, `a42bfade-78ec-4c95-b7b4-272ba265072c` 이미지에 `(8)`에서 수신한 `demo` 프로젝트의 `id`인 `cdb477d9329c450e996cae2d02a2c44f`를 이용하여 멤버로 프로젝트를 추가할 수 있다.  
+
 === "Header"
     ``` http title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
     Content-Length: 950
@@ -723,7 +758,7 @@
     ```
 
 === "Body"
-    ``` json title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
+    ``` json title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1" hl_lines="20"
     {
       "owner_specified.openstack.md5": "",
       "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk",
@@ -757,6 +792,12 @@
 ### (13) POST /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Create image member"
+    [POST /v2/images/{image_id}/members](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=create-image-member-detail#create-image-member)
+
+`Create image member` API를 이용하여 `a42bfade-78ec-4c95-b7b4-272ba265072c` 이미지에 `cdb477d9329c450e996cae2d02a2c44f` 프로젝트를 멤버로 추가한다.  
+`Body`에서 `member` 항목이 `cdb477d9329c450e996cae2d02a2c44f` 임을 확인할 수 있다.  
+
 === "Header"
     ``` http title="POST /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1"
     Host: 127.0.0.1:60999
@@ -785,6 +826,10 @@
 ### (14) 200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members
 `openstack` <-- `glance-api`
 
+`200 OK` 응답을 통해 멤버 추가가 성공했다는 것을 확인했다.  
+`Body`에서 `member_id`, `image_id` 를 확인할 수 있다.  
+`Response.Body`의 `status`는 아직 `pending` 이며, [Openstack CLI Command & Output](http://localhost/openstack-docs/openstack/image/add-project/#openstack-cli-command-output)의 결과 화면 `Note`에서 언급한대로 `accepted` 상태로 업데이트해야 `demo` 프로젝트에서 이미지를 사용할 수 있다.  
+
 === "Header"
     ``` http title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1"
     Content-Length: 230
@@ -795,7 +840,7 @@
     ```
 
 === "Body"
-    ``` json title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1"
+    ``` json title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1" hl_lines="4"
     {
       "member_id": "cdb477d9329c450e996cae2d02a2c44f",
       "image_id": "a42bfade-78ec-4c95-b7b4-272ba265072c",

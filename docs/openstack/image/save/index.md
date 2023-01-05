@@ -11,7 +11,7 @@
     [openstack image save](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-save)
 
 ??? example "openstack image save --file cirros-0.6.1-x86_64-download.img a42bfade-78ec-4c95-b7b4-272ba265072c"
-    ``` bash title="Console Output" linenums="1" hl_lines="6"
+    ``` console title="Console Output" linenums="1" hl_lines="6"
     $ openstack image save --file cirros-0.6.1-x86_64-download.img a42bfade-78ec-4c95-b7b4-272ba265072c
     $ ls -al
     total 20744

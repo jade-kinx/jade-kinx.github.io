@@ -10,7 +10,8 @@
     [openstack image list](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-list)
 
 ??? example "openstack image list --all"
-    ``` txt title="Console Output" linenums="1"
+    ``` console title="Console Output" linenums="1"
+    $ openstack image list --all
     +--------------------------------------+--------------------------+--------+
     | ID                                   | Name                     | Status |
     +--------------------------------------+--------------------------+--------+
