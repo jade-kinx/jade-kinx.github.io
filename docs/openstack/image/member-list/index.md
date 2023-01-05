@@ -1,48 +1,38 @@
 # openstack image member list
 
-이미지 목록을 출력한다.
-
 `add project`, `remove project`, `member list` 커맨드는 이미지 공유와 관련된 기능이다.  
-이미지는 `visibility=shared` 일때만, 이미지 공유가 가능하며, 공유 단위는 프로젝트 단위이다.  
+이미지는 `visibility=shared` 일때만 이미지 공유가 가능하며, 공유 단위는 프로젝트 단위이다.  
 
 | 커맨드 | 설명 |
-| :---: | :----: |
+| --- | ---- |
 | `add project` | 이미지를 사용할 수 있는 멤버 목록에 프로젝트를 추가한다 |
 | `remove project` | 이미지를 사용할 수 있는 멤버 목록에서 프로젝트를 제거한다 |
 | `member list` | 이미지를 사용할 수 있는 멤버 목록을 출력한다 |
 
-!!! tip "CLI 참조"
-    [openstack image member list](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-member-list)
+`openstack image member list` 커맨드를 이용하여 이미지 멤버 목록을 조회해 보고, 그 과정을 API 시퀀스 다이어그램으로 도출하고 Request/Response를 분석해본다.  
 
-## OpenStack Client Command
-``` bash title="python3-openstackclient command"
-# cirros-0.6.1-x86_64-disk 이미지의 멤버 목록 출력
-$ openstack image member list a42bfade-78ec-4c95-b7b4-272ba265072c
-```
+* 여기서는 이미지의 `id`를 이용하여 멤버 목록을 조회한다.  
 
-??? note ".vscode/launch.json"
-    ``` json title="configuration .vscode/launch.json"
-    {
-        "name": "Python: openstack image member list",
-        "type": "python",
-        "request": "launch",
-        "program": "Scripts/openstack.exe",
-        "args": ["image", "member", "list", "a42bfade-78ec-4c95-b7b4-272ba265072c"],
-        "env": {
-            "OS_AUTH_URL": "http://devstack-debug/identity",
-            "OS_IDENTITY_API_VERSION": "3",
-            "OS_USERNAME": "admin",
-            "OS_PASSWORD": "asdf",
-            "OS_PROJECT_NAME": "admin",
-            "OS_USER_DOMAIN_NAME": "Default",
-            "OS_PROJECT_DOMAIN_NAME": "Default"
-        },
-        "console": "integratedTerminal",
-        "justMyCode": false
-    }
+??? warning "이미지의 `visibility`가 `shared`가 아니면"
+    이미지의 `visibility`가 `shared`가 아닌 경우, 아래와 같은 에러 메세지와 함께 요청이 실패할 수 있다.  
+    ``` title=""
+    HttpException: 403: Client Error for url: http://182.161.114.101/image/v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members, Not allowed to create members for image a42bfade-78ec-4c95-b7b4-272ba265072c.: 403 Forbidden
     ```
 
-위 커맨드를 실행했을 때의 시퀀스 다이어그램 및 HTTP Request/Response 내용은 아래와 같다.  
+## Openstack CLI Command & Output
+
+!!! reference "CLI 참조"
+    [openstack image member list](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-member-list)
+
+??? example "openstack image member list a42bfade-78ec-4c95-b7b4-272ba265072c"
+    ``` console title="cirros-0.6.1-x86_64-disk 이미지의 멤버 목록 출력"
+    $ openstack image member list a42bfade-78ec-4c95-b7b4-272ba265072c
+    +--------------------------------------+----------------------------------+---------+
+    | Image ID                             | Member ID                        | Status  |
+    +--------------------------------------+----------------------------------+---------+
+    | a42bfade-78ec-4c95-b7b4-272ba265072c | cdb477d9329c450e996cae2d02a2c44f | pending |
+    +--------------------------------------+----------------------------------+---------+
+    ```
 
 ## Sequence Diagram
 
@@ -54,27 +44,21 @@ sequenceDiagram
 
 각 과정에 대한 간략한 설명은 다음과 같다.   
 
-- `openstack-client`가 `keystone` 서비스에 인증 정보를 보내 인증 토큰 발급 및 서비스 카탈로그를 수신한다. `(1-4)`
+- 사용자 인증 토큰 발급 및 서비스 카탈로그를 수신한다. `(1-4)`
+- `id` 또는 `name`으로 이미지 상세 정보를 얻는다. `(5-8)`
+- 이미지의 멤버 목록을 조회한다. `(9-10)`
 
 
 ## Request / Response
 
-!!! note
-    `Header` 에 포함된 `X-Requestshook-Request-Id`, `X-Requestshook-Request-From` 항목은 API Sequence 추적을 위해 `requestshook`에서 추가한 항목이며, 오픈스택에서 제공하는 정보가 아니므로 무시한다.  
+??? warning "X-Requestshook-Request-* 헤더"
+    `Header` 에 포함된 `X-Requestshook-Request-Id`, `X-Requestshook-Request-From` 항목은 API Sequence 추적을 위해 `requestshook`에서 추가한 항목이며, 오픈스택에서 제공하는 정보가 아니라는 점을 주의한다.    
 
 --8<-- "openstack/image/member-list/body.md"
 
-## Output
+## Full Log
 
-``` bash title="openstack image member list a42bfade-78ec-4c95-b7b4-272ba265072c"
-+--------------------------------------+----------------------------------+---------+
-| Image ID                             | Member ID                        | Status  |
-+--------------------------------------+----------------------------------+---------+
-| a42bfade-78ec-4c95-b7b4-272ba265072c | cdb477d9329c450e996cae2d02a2c44f | pending |
-+--------------------------------------+----------------------------------+---------+
-```
-
-??? quote "/var/log/requests.log"
+??? quote "/var/log/requestshook/requestshook.log"
     ``` text title="" linenums="1"
     --8<-- "openstack/image/member-list/log.md"
     ```

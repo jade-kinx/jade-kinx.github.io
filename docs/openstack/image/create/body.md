@@ -3,7 +3,7 @@
 `openstack` --> `keystone`
 
 환경변수 `OS_AUTH_URL` 에 정의된 URL로 `이미지` 서비스의 버전별 EndPoint 목록을 요청한다.  
-`(1-2)` 과정은 `version negotiation` 과정으로 볼 수 있다.  
+`(1-2)` 과정은 `version negotiation` 과정이며 `openstack-client`에서 수행하는 것으로 보인다.  
 이 요청에 대한 결과로 받은 EndPoint 중 적당한 EndPoint를 선택하여 Access Token 발급 및 서비스 API 카탈로그를 요청하게 된다.
 
 === "Header"

@@ -34,6 +34,9 @@
 !!! reference "API 참조 - Create image member"
     [POST /v2/images/{image_id}/members](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=create-image-member-detail#create-image-member)
 
+!!! reference "API 참조 - List image members"
+    [GET /v2/images/{image_id}/members](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=list-image-members-detail#list-image-members)
+
 ## Object Store Service
 
 !!! reference "API 참조 - Show container metadata"

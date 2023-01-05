@@ -63,6 +63,9 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
     Host: 182.161.114.101
@@ -111,7 +114,7 @@
 `openstack` <-- `keystone`
 
 === "Header"
-    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1"
+    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="3"
     Content-Type: application/json
     Content-Length: 3952
     X-Subject-Token: gAAAAABjso1tRVlid2ys_vShS8yICW15ZVZgacI39RPWc_2q52Q_mnJbnf6N3zVmOw7naEEf6y637rJ-6fFz8TFkjMh8dd0tbh2o_Un7vajESqEiTqPrybmrF2YmF7zbxTrJNrP0KWyLY94ac11pnZRHkt9G0mLScpCq7VXzryAjsKAylxEzRZM
@@ -335,8 +338,11 @@
 ### (5) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Show Image"
+    [GET /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=show-image-detail#show-image) 
+
 === "Header"
-    ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
+    ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -359,8 +365,14 @@
 ### (6) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
+
+`X-Auth-Token`에 사용된 인증 토큰은 `glance-api`가 이미 보유하고 있는 인증 토큰이다.  
+만약, 만료된 토큰이라면 이 요청은 실패를 응답하고, 다시 인증 토큰을 발급 받는 과정을 거쳐야 한다.  
+
 === "Header"
-    ``` http title="GET /identity/v3/auth/tokens" linenums="1"
+    ``` http title="GET /identity/v3/auth/tokens" linenums="1" hl_lines="6 8"
     Host: 182.161.114.101
     User-Agent: python-keystoneclient
     Accept-Encoding: gzip, deflate
@@ -651,8 +663,15 @@
 ### (9) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - List image members"
+    [GET /v2/images/{image_id}/members](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=list-image-members-detail#list-image-members)
+
+`List image members` API를 이용하여 `a42bfade-78ec-4c95-b7b4-272ba265072c` 이미지의 멤버 목록을 조회한다.  
+`X-Auth-Token` 인증 토큰은 `(5)` 요청에서 보낸 토큰과 동일하고 `(6-7)` 과정을 통해 이미 검증하였기 때문에, 토큰 캐싱으로 처리하고 다시 키스톤으로 검증 요청하지 않는다.  
+
+
 === "Header"
-    ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1"
+    ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -675,6 +694,8 @@
 ### (10) 200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members
 `openstack` <-- `glance-api`
 
+`Body`에서 결과 출력 화면의 `image_id`, `member_id`, `status` 항목을 확인할 수 있다.  
+
 === "Header"
     ``` http title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1"
     Content-Length: 278
@@ -685,7 +706,7 @@
     ```
 
 === "Body"
-    ``` json title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1"
+    ``` json title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members" linenums="1" hl_lines="4 5 6"
     {
       "members": [
         {
