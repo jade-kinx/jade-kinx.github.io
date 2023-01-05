@@ -63,6 +63,9 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
     Host: 182.161.114.101
@@ -111,7 +114,7 @@
 `openstack` <-- `keystone`
 
 === "Header"
-    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1"
+    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="3"
     Content-Type: application/json
     Content-Length: 3952
     X-Subject-Token: gAAAAABjspTyaw51wJWfI7N_oDgLKx3tGLWSrS0F9GeAR_6smdit8P-9t0xz_Em3CG8fwCgK5pHZb821ZXg8jsGXAJ2K7Xy5KEXIZc3zvrpeC6cP6fnUYu9aw_3x1fvGsU56hwL3d2L9cfhOoxeg6XxyhvRitXu1-jSiwbLUlbLFiFfM-57yEuw
@@ -335,8 +338,15 @@
 ### (5) GET /identity/v3/projects/cdb477d9329c450e996cae2d02a2c44f
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Show project details"
+    [GET /v3/projects/{project_id}](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=show-project-details-detail#show-project-details)
+
+`Show project details` API 요청을 통해 입력 인자로 받은 `cdb477d9329c450e996cae2d02a2c44f`가 `project_id` 인지 확인한다.  
+만약, 이 요청이 `404 NOT FOUND` 에러를 반환하게 되면, `List projects` - `GET /v3/projects` API를 `name` 필터를 이용하여 다시 요청하게 될 것이다.  
+프로젝트 `id`를 이미 알고 있는 상황이라면, 이 과정은 생략하고, `(11)` 요청에 바로 사용할 수 있다.  
+
 === "Header"
-    ``` http title="GET /identity/v3/projects/cdb477d9329c450e996cae2d02a2c44f" linenums="1"
+    ``` http title="GET /identity/v3/projects/cdb477d9329c450e996cae2d02a2c44f" linenums="1" hl_lines="6"
     Host: 182.161.114.101
     User-Agent: python-keystoneclient
     Accept-Encoding: gzip, deflate
@@ -356,6 +366,9 @@
 ### (6) 200 OK /identity/v3/projects/cdb477d9329c450e996cae2d02a2c44f
 `openstack` <-- `keystone`
 
+`200 OK` 응답을 통해 `cdb477d9329c450e996cae2d02a2c44f`가 프로젝트 `id`인 것을 확인하였다.  
+`Body`에서 `project.id`와 `project.name`을 확인할 수 있다.  
+
 === "Header"
     ``` http title="200 OK /identity/v3/projects/cdb477d9329c450e996cae2d02a2c44f" linenums="1"
     Content-Type: application/json
@@ -366,7 +379,7 @@
     ```
 
 === "Body"
-    ``` json title="200 OK /identity/v3/projects/cdb477d9329c450e996cae2d02a2c44f" linenums="1"
+    ``` json title="200 OK /identity/v3/projects/cdb477d9329c450e996cae2d02a2c44f" linenums="1" hl_lines="3 4"
     {
       "project": {
         "id": "cdb477d9329c450e996cae2d02a2c44f",
@@ -389,8 +402,13 @@
 ### (7) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Show Image"
+    [GET /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=show-image-detail#show-image) 
+
+`Show Image` API를 이용하여 입력 인자가 이미지의 `id` 인지 확인한다. 만약, 이미지의 `id`를 이미 알고 있는 상황이라면 이 과정을 생략하고 `(11)` 요청을 수행해도 무방해 보인다.  
+
 === "Header"
-    ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
+    ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -413,8 +431,14 @@
 ### (8) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
+
+`(8-9)` 과정은 `(7)` 요청에 대한 인증 토큰 검증 과정이다.  
+더 이상의 자세한 설명은 생략한다.   
+
 === "Header"
-    ``` http title="GET /identity/v3/auth/tokens" linenums="1"
+    ``` http title="GET /identity/v3/auth/tokens" linenums="1" hl_lines="6 8"
     Host: 182.161.114.101
     User-Agent: python-keystoneclient
     Accept-Encoding: gzip, deflate
@@ -661,6 +685,8 @@
 ### (10) 200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` <-- `glance-api`
 
+`200 OK` 응답을 통해 `a42bfade-78ec-4c95-b7b4-272ba265072c`가 이미지 `id`임을 확인하였다. (`Body`의 `id` 항목)  
+
 === "Header"
     ``` http title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
     Content-Length: 950
@@ -671,7 +697,7 @@
     ```
 
 === "Body"
-    ``` json title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
+    ``` json title="200 OK /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1" hl_lines="20"
     {
       "owner_specified.openstack.md5": "",
       "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk",
@@ -705,8 +731,16 @@
 ### (11) DELETE /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members/cdb477d9329c450e996cae2d02a2c44f
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Delete image member"
+    [DELETE /v2/images/{image_id}/members/{member_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=delete-image-member-detail#delete-image-member)
+
+`Delete image member` API를 이용하여, 이미지의 멤버에서 프로젝트를 제거한다.  
+이 요청이 이미지 멤버 삭제의 핵심 요청이며, `image_id`, `member_id(project_id)` 2개의 값을 필요로 한다.  
+앞선 과정은 이미지 `id`와 프로젝트 `id`를 확인하는 과정이다.  
+`image_id`와 `member_id`를 가지고 있다면, 앞의 과정은 모두 생략하고, `(11)` 요청을 직접 보내도 무방하다.  
+
 === "Header"
-    ``` http title="DELETE /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members/cdb477d9329c450e996cae2d02a2c44f" linenums="1"
+    ``` http title="DELETE /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members/cdb477d9329c450e996cae2d02a2c44f" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -730,6 +764,8 @@
 ### (12) 204 No Content /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members/cdb477d9329c450e996cae2d02a2c44f
 `openstack` <-- `glance-api`
 
+`204 No Content` 응답을 통해 `(11)` 요청이 성공적으로 수행되었음을 알 수 있다. 
+
 === "Header"
     ``` http title="204 No Content /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members/cdb477d9329c450e996cae2d02a2c44f" linenums="1"
     x-openstack-request-id: req-de4f660e-0a0e-4ae0-a8af-dc416ff78b00
@@ -741,4 +777,3 @@
     ``` json title="204 No Content /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/members/cdb477d9329c450e996cae2d02a2c44f" linenums="1"
     none
     ```
-

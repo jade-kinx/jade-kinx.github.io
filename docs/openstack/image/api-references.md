@@ -37,6 +37,9 @@
 !!! reference "API 참조 - List image members"
     [GET /v2/images/{image_id}/members](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=list-image-members-detail#list-image-members)
 
+!!! reference "API 참조 - Delete image member"
+    [DELETE /v2/images/{image_id}/members/{member_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=delete-image-member-detail#delete-image-member)
+
 ## Object Store Service
 
 !!! reference "API 참조 - Show container metadata"
