@@ -63,6 +63,9 @@
 ### (3) POST /identity/v3/auth/tokens
 `openstack` --> `keystone`
 
+!!! reference "API 참조 - Password authentication with scoped authorization"
+    [POST /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=password-authentication-with-scoped-authorization-detail#password-authentication-with-scoped-authorization)
+
 === "Header"
     ``` http title="POST /identity/v3/auth/tokens" linenums="1"
     Host: 182.161.114.101
@@ -111,7 +114,7 @@
 `openstack` <-- `keystone`
 
 === "Header"
-    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1"
+    ``` http title="201 CREATED /identity/v3/auth/tokens" linenums="1" hl_lines="3"
     Content-Type: application/json
     Content-Length: 3952
     X-Subject-Token: gAAAAABjspqRYUAniN5iuo7ofsTiEvNvpgB9uB86Vc_ammNtitLn4eOgCGUjUhv2AfPQP71z9cp6_JNSGVlsV-IbgJf-_kDhx8tAUf7Ev3D_9ntMwvA26v7RZ1sQtoMM-xj88_p9tb3HdUYQyFJJ20FTlZQ4FoxWzTN8n4aVZi7QrU2oJwlqdCw
@@ -335,8 +338,11 @@
 ### (5) GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Show Image"
+    [GET /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=show-image-detail#show-image) 
+
 === "Header"
-    ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1"
+    ``` http title="GET /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate
@@ -359,8 +365,11 @@
 ### (6) GET /identity/v3/auth/tokens
 `glance-api` --> `keystone`
 
+!!! reference "API 참조 - Validate and show information for token"
+    [GET /v3/auth/tokens](https://docs.openstack.org/api-ref/identity/v3/index.html?expanded=validate-and-show-information-for-token-detail#validate-and-show-information-for-token)
+
 === "Header"
-    ``` http title="GET /identity/v3/auth/tokens" linenums="1"
+    ``` http title="GET /identity/v3/auth/tokens" linenums="1" hl_lines="6 8"
     Host: 182.161.114.101
     User-Agent: python-keystoneclient
     Accept-Encoding: gzip, deflate
@@ -653,8 +662,13 @@
 ### (9) DELETE /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/tags/cirros
 `openstack` --> `glance-api`
 
+!!! reference "API 참조 - Delete image tag"
+    [DELETE /v2/images/{image_id}/tags/{tag}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=delete-image-tag-detail#delete-image-tag)
+
+이미지 태그를 추가할 때 사용한 `Update image` API가 `Body` 정보를 통해서 `tag`를 추가한 것과 비교하면, `Delete image tag`는 순수하게 RESTful API 사용으로 `Body` 정보가 없다.  
+
 === "Header"
-    ``` http title="DELETE /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/tags/cirros" linenums="1"
+    ``` http title="DELETE /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/tags/cirros" linenums="1" hl_lines="5"
     Host: 127.0.0.1:60999
     User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
     Accept-Encoding: gzip, deflate

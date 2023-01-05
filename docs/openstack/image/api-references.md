@@ -46,6 +46,9 @@
 !!! reference "API 참조 - Add image tag"
     [PUT /v2/images/{image_id}/tags/{tag}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=add-image-tag-detail#add-image-tag)
 
+!!! reference "API 참조 - Delete image tag"
+    [DELETE /v2/images/{image_id}/tags/{tag}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=delete-image-tag-detail#delete-image-tag)
+
 ## Object Store Service
 
 !!! reference "API 참조 - Show container metadata"
