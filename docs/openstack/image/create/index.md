@@ -1,6 +1,6 @@
 # openstack image create
 
-이미지를 생성하고 업로드하는 `openstack image create` CLI 커맨드를 이용하여 이미지를 등록하여 보고, 그 과정에서 발생하는 API 시퀀스 다이어그램을 작성하고 `Request`, `Response`를 분석해본다.  
+이미지를 생성하고 업로드하는 `openstack image create` CLI 커맨드를 이용하여 이미지를 등록하여 보고, 그 과정을 API 시퀀스 다이어그램으로 도출하고 `Request`, `Response`를 분석해본다.  
 
 * `qcow2` 디스크 타입의 [cirros-0.6.1-x86_64-disk.img](http://download.cirros-cloud.net/0.6.1/cirros-0.6.1-x86_64-disk.img)  
 * 생성된 이미지는 아래 설정에 의해 오브젝트 스토리지에 저장된다.  
@@ -84,6 +84,9 @@ sequenceDiagram
 !!! note 
     `(6-9)` 과정은 `glance-api`가 사용할 인증 토큰을 발급 받지 않았거나, 만료된 경우에 발생한다.  
     만약, `glance-api`가 만료되지 않은 인증 토큰을 보유하고 있는 경우, `(6-9)` 과정은 발생하지 않는다.   
+
+!!! question "`(13), (20)` 요청의 인증 토큰을 검증하지 않는 이유?"
+    `(10-11)`, `(17-18)` 과정을 통해 검증한 인증 토큰은 캐싱되어 캐싱 토큰과 비교를 통해 인증 처리를 하는 것으로 보인다. 인증 토큰이 만료(`expires_at`)되면 다시 `keystone`으로 인증 토큰 검증 요청을 할 것으로 보인다.    
 
 ??? warning "생략된 시퀀스"
 

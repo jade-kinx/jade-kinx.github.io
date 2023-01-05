@@ -9,7 +9,7 @@
 | `remove project` | 이미지를 사용할 수 있는 멤버 목록에서 프로젝트를 제거한다 |
 | `member list` | 이미지를 사용할 수 있는 멤버 목록을 출력한다 |
 
-`openstack image member list` 커맨드를 이용하여 이미지 멤버 목록을 조회해 보고, 그 과정을 API 시퀀스 다이어그램으로 도출하고 Request/Response를 분석해본다.  
+`openstack image member list` 커맨드를 이용하여 이미지 멤버 목록을 조회해 보고, 그 과정을 API 시퀀스 다이어그램으로 도출하고 `Request`, `Response`를 분석해본다.  
 
 * 여기서는 이미지의 `id`를 이용하여 멤버 목록을 조회한다.  
 

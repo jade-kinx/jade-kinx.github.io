@@ -1,6 +1,6 @@
 # openstack image delete
 
-이미지를 삭제하는 `openstack image delete` CLI 커맨드를 이용하여 이미지를 삭제하여 보고, 그 과정에서 발생하는 API 시퀀스 다이어그램을 작성해보고 `Request`, `Response`를 분석해본다.  
+이미지를 삭제하는 `openstack image delete` CLI 커맨드를 이용하여 이미지를 삭제하여 보고, 그 과정을 API 시퀀스 다이어그램으로 도출하고 `Request`, `Response`를 분석해본다.  
 
 ## Openstack CLI Command & Output
 

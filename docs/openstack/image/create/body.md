@@ -1051,10 +1051,6 @@
 `Content-Type`이 `application/octet-stream`, `Body`에는 파일의 바이너리 데이터가 포함된다.  
 `X-Auth-Token`에는 `openstack-client`가 발급 받은 인증 토큰을 사용한다.  
 
-!!! question "`(13)` 요청의 인증 토큰을 검증하지 않는 이유?"
-    `(10-11)` 과정을 통해 이미 검증한 토큰에 대해서는 캐싱하고 있으면서 토큰 만료(`expires_at`)까지 재검증 하지 않는 것으로 보인다.  
-    그리고, 이러한 정책은 다른 과정에서 모두 동일할 것으로 추정된다. (`(20)` 요청에 대해서도 검증하지 않음)  
-
 === "Header"
     ``` http title="PUT /v2/images/a42bfade-78ec-4c95-b7b4-272ba265072c/file" linenums="1" hl_lines="5 6"
     Host: 127.0.0.1:60999

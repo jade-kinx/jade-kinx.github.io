@@ -1,6 +1,6 @@
 # openstack image list
 
-조건에 해당하는 이미지 목록을 조회하는 `openstack image list` CLI 커맨드를 이용하여 이미지 목록을 조회, 그 과정에서 발생하는 API 요청들의 시퀀스 다이어그램을 작성하고, Request / Response 내용을 분석해 본다.  
+`openstack image list` 커맨드를 이용하여 이미지 목록을 조회하여 보고, 그 과정을 API 시퀀스 다이어그램으로 도출하고, `Request`, `Response`를 분석해 본다.  
 
 * `openstack image list --all` 커맨드를 이용하여 모든 이미지를 조회  
 

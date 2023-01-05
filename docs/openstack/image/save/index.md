@@ -1,6 +1,6 @@
 # openstack image save
 
-이미지 `id` 또는 `name`으로 이미지 파일을 다운로드하는 `openstack image save` CLI 커맨드를 이용하여 이미지를 다운로드, 그 과정에서 발생하는 API 시퀀스 다이어그램을 작성해보고 Request/Response를 분석해본다.  
+이미지 `id` 또는 `name`으로 이미지 파일을 다운로드하는 `openstack image save` CLI 커맨드를 이용하여 이미지를 다운로드 하여보고, 그 과정을 API 시퀀스 다이어그램으로 도출하고, `Request`, `Response`를 분석해본다.  
 
 * 여기서는 이미지의 `id`인 `a42bfade-78ec-4c95-b7b4-272ba265072c`를 이용하여 이미지를 다운로드한다.
 
