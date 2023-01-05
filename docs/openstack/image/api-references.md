@@ -40,6 +40,12 @@
 !!! reference "API 참조 - Delete image member"
     [DELETE /v2/images/{image_id}/members/{member_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=delete-image-member-detail#delete-image-member)
 
+!!! reference "API 참조 - Update image"
+    [PATCH /v2/images/{image_id}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=update-image-detail#update-image)
+
+!!! reference "API 참조 - Add image tag"
+    [PUT /v2/images/{image_id}/tags/{tag}](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=add-image-tag-detail#add-image-tag)
+
 ## Object Store Service
 
 !!! reference "API 참조 - Show container metadata"

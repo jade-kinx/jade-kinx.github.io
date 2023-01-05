@@ -1,38 +1,26 @@
 # openstack image set
 
-이미지 정보를 설정/수정한다.
+`openstack image set` 커맨드를 이용하여 이미지 `tag` 정보를 설정하고, 그 과정을 API 시퀀스 다이어그램으로 도출하고 `Request`, `Response`를 분석해 본다.  
 
-!!! tip "CLI 참조"
+* `openstack image set` 커맨드는 `tag` 정보 뿐 아니라, `property`, `visibility`, `name` 등 이미지의 정보를 추가/업데이트하는 기능을 한다.  
+* 과정은 대동소이하기 때문에, 여기서는 `tag` 정보를 추가하여 볼 것이다.  
+
+??? info "이미지 태그 API"
+    이미지의 `tag` 정보를 추가/삭제하는 작업은 `Image tags` API `PUT /v2/images/{image_id}/tags/{tag}`, `DELETE /v2/images/{image_id}/tags/{tag}`를 이용할 수 있다.  
+    또한, [Update image](https://docs.openstack.org/api-ref/image/v2/index.html?expanded=update-image-detail#update-image) API를 이용할 수도 있다.  
+    여기서는 `Update image` API를 사용하고 있다.  
+
+## Openstack CLI Command & Output
+
+!!! reference "CLI 참조"
     [openstack image set](https://docs.openstack.org/python-openstackclient/zed/cli/command-objects/image-v2.html#image-set)
 
-## OpenStack Client Command
-``` bash title="python3-openstackclient command"
-$ openstack image set --tag cirros a42bfade-78ec-4c95-b7b4-272ba265072c
-```
-
-??? note ".vscode/launch.json"
-    ``` json title="configuration .vscode/launch.json"
-    {
-        "name": "Python: openstack image set",
-        "type": "python",
-        "request": "launch",
-        "program": "Scripts/openstack.exe",
-        "args": ["image", "set", "--tag", "cirros", "a42bfade-78ec-4c95-b7b4-272ba265072c"],
-        "env": {
-            "OS_AUTH_URL": "http://devstack-debug/identity",
-            "OS_IDENTITY_API_VERSION": "3",
-            "OS_USERNAME": "admin",
-            "OS_PASSWORD": "asdf",
-            "OS_PROJECT_NAME": "admin",
-            "OS_USER_DOMAIN_NAME": "Default",
-            "OS_PROJECT_DOMAIN_NAME": "Default"
-        },
-        "console": "integratedTerminal",
-        "justMyCode": false
-    },
+??? example "openstack image set --tag cirros a42bfade-78ec-4c95-b7b4-272ba265072c"
+    ``` console title="Console Output" linenums="1" hl_lines="19"
+    $ openstack image set --tag cirros a42bfade-78ec-4c95-b7b4-272ba265072c
+    $
     ```
-
-위 커맨드를 실행했을 때의 시퀀스 다이어그램 및 HTTP Request/Response 내용은 아래와 같다.  
+    출력 결과 없음
 
 ## Sequence Diagram
 
@@ -44,23 +32,21 @@ sequenceDiagram
 
 각 과정에 대한 간략한 설명은 다음과 같다.   
 
-- `openstack-client`가 `keystone` 서비스에 인증 정보를 보내 인증 토큰 발급 및 서비스 카탈로그를 수신한다. `(1-4)`
+- 사용자 인증 토큰 발급 및 서비스 카탈로그를 수신한다. `(1-4)`
+- 이미지 `id`로 이미지 상세 정보를 얻는다. `(5-8)`
+- 이미지의 태그 정보를 추가한다. `(9-10)`
 
 
 ## Request / Response
 
-!!! note
-    `Header` 에 포함된 `X-Requestshook-Request-Id`, `X-Requestshook-Request-From` 항목은 API Sequence 추적을 위해 `requestshook`에서 추가한 항목이며, 오픈스택에서 제공하는 정보가 아니므로 무시한다.  
+??? warning "X-Requestshook-Request-* 헤더"
+    `Header` 에 포함된 `X-Requestshook-Request-Id`, `X-Requestshook-Request-From` 항목은 API Sequence 추적을 위해 `requestshook`에서 추가한 항목이며, 오픈스택에서 제공하는 정보가 아니라는 점을 주의한다.    
 
 --8<-- "openstack/image/set/body.md"
 
-## Output
+## Full Log
 
-``` bash title="openstack image set --tag cirros a42bfade-78ec-4c95-b7b4-272ba265072c"
-none
-```
-
-??? quote "/var/log/requests.log"
+??? quote "/var/log/requestshook/requestshook.log"
     ``` text title="" linenums="1"
     --8<-- "openstack/image/set/log.md"
     ```
