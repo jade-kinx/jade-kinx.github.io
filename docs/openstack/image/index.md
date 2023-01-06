@@ -1,4 +1,4 @@
-# OpenStack Image Service Sequence Dump
+# Setting Up Openstack API Call Sequence Dump
 
 이 문서에서는 `requestshook` 패키지를 만들고, 이를 이용하여 `glance` 서비스의 API 시퀀스를 추적하는 방법을 알아본다.  
 

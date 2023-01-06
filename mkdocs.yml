@@ -17,20 +17,20 @@ extra:
 theme:
   name: material
   features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    # - navigation.tabs.sticky
     # - announce.dismiss
     - content.code.annotate
     # - content.tabs.link
     - content.tooltips
     # - header.autohide
     # - navigation.expand
-    - navigation.indexes
-    # - navigation.instant
+    # - navigation.indexes
     # - navigation.prune
-    - navigation.sections
-    - navigation.tabs
-    # - navigation.tabs.sticky
+    # - navigation.sections
     - navigation.top
-    - navigation.tracking
     - search.highlight
     - search.share
     - search.suggest
@@ -136,19 +136,20 @@ nav:
       - python-openstackclient(requests dump): openstack/debugging/python-openstackclient-with-requests-dump.md
       - glance-api: openstack/debugging/glance-api.md
       - trove-api: openstack/debugging/trove-api.md
-    - Trove: 
+    - Trove:
       - Install Trove on DevStack: openstack/trove/install-trove-on-devstack.md
-  - Image(GLANCE): 
-    - openstack/image/index.md
-    - image create: openstack/image/create/index.md
-    - image list: openstack/image/list/index.md
-    - image show: openstack/image/show/index.md
-    - image save: openstack/image/save/index.md
-    - image add project: openstack/image/add-project/index.md
-    - image member list: openstack/image/member-list/index.md
-    - image remove project: openstack/image/remove-project/index.md
-    - image set: openstack/image/set/index.md
-    - image unset: openstack/image/unset/index.md
-    - image delete: openstack/image/delete/index.md
+  - API Sequence:
+    - Setting Up: openstack/image/index.md
+    - Image(GLANCE):
+      - image create: openstack/image/create/index.md
+      - image list: openstack/image/list/index.md
+      - image show: openstack/image/show/index.md
+      - image save: openstack/image/save/index.md
+      - image add project: openstack/image/add-project/index.md
+      - image member list: openstack/image/member-list/index.md
+      - image remove project: openstack/image/remove-project/index.md
+      - image set: openstack/image/set/index.md
+      - image unset: openstack/image/unset/index.md
+      - image delete: openstack/image/delete/index.md
     - Compute(Nova):
       - compute create: openstack/compute/create/index.md
