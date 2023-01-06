@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en"> <head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><meta content="Openstack documents repository for jade" name="description"/><meta content="Jade Keith" name="author"/><link href="https://jade-kinx.github.io/openstack-docs/openstack/debugging/python-openstackclient-with-requests-dump/" rel="canonical"/><link href="../python-openstackclient/" rel="prev"/><link href="../glance-api/" rel="next"/><link href="../../../assets/favicon.png" rel="icon"/><meta content="mkdocs-1.4.2, mkdocs-material-9.0.2" name="generator"/><title>python-openstackclient(requests dump) - OpenStack Docs</title><link href="../../../assets/stylesheets/main.f56500e0.min.css" rel="stylesheet"/><link href="../../../assets/stylesheets/palette.2505c338.min.css" rel="stylesheet"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/><style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style><link href="../../../assets/css/extra.css" rel="stylesheet"/><script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script><link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            
+                .gscrollbar-fixer { padding-right: 15px; }
+                .gdesc-inner { font-size: 0.75rem; }
+                body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+                body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+                body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+                </style><script src="../../../assets/javascripts/glightbox.min.js"></script></head> <body data-md-color-accent="teal" data-md-color-primary="teal" data-md-color-scheme="default" dir="ltr"> <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script> <input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/> <input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/> <label class="md-overlay" for="__drawer"></label> <div data-md-component="skip"> <a class="md-skip" href="#debugging-python-openstackclient-on-local-machine-with-python-venv"> Skip to content </a> </div> <div data-md-component="announce"> </div> <header class="md-header" data-md-component="header"> <nav aria-label="Header" class="md-header__inner md-grid"> <a aria-label="OpenStack Docs" class="md-header__button md-logo" data-md-component="logo" href="../../.." title="OpenStack Docs"> <svg viewbox="0 0 89 89" xmlns="http://www.w3.org/2000/svg"> <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z"></path> <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5"></path> <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z"></path> <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25"></path> </svg> </a> <label class="md-header__button md-icon" for="__drawer"> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg> </label> <div class="md-header__title" data-md-component="header-title"> <div class="md-header__ellipsis"> <div class="md-header__topic"> <span class="md-ellipsis"> OpenStack Docs </span> </div> <div class="md-header__topic" data-md-component="header-topic"> <span class="md-ellipsis"> python-openstackclient(requests dump) </span> </div> </div> </div> <form class="md-header__option" data-md-component="palette"> <input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="teal" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="default" id="__palette_1" name="__palette" type="radio"/> <label class="md-header__button md-icon" for="__palette_2" hidden="" title="Switch to dark mode"> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"></path></svg> </label> <input aria-label="Switch to light mode" class="md-option" data-md-color-accent="teal" data-md-color-media="" data-md-color-primary="teal" data-md-color-scheme="slate" id="__palette_2" name="__palette" type="radio"/> <label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to light mode"> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"></path></svg> </label> </form> <label class="md-header__button md-icon" for="__search"> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg> </label> <div class="md-search" data-md-component="search" role="dialog"> <label class="md-search__overlay" for="__search"></label> <div class="md-search__inner" role="search"> <form class="md-search__form" name="search"> <input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/> <label class="md-search__icon md-icon" for="__search"> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg> </label> <nav aria-label="Search" class="md-search__options"> <a aria-label="Share" class="md-search__icon md-icon" data-clipboard="" data-clipboard-text="" data-md-component="search-share" href="javascript:void(0)" tabindex="-1" title="Share"> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"></path></svg> </a> <button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset"> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg> </button> </nav> <div class="md-search__suggest" data-md-component="search-suggest"></div> </form> <div class="md-search__output"> <div class="md-search__scrollwrap" data-md-scrollfix=""> <div class="md-search-result" data-md-component="search-result"> <div class="md-search-result__meta"> Initializing search </div> <ol class="md-search-result__list"></ol> </div> </div> </div> </div> </div> <div class="md-header__source"> <a class="md-source" data-md-component="source" href="https://github.com/jade-kinx/openstack-docs/" title="Go to repository"> <div class="md-source__icon md-icon"> <svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!-- Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg> </div> <div class="md-source__repository"> jade-kinx/openstack-docs </div> </a> </div> </nav> </header> <div class="md-container" data-md-component="container"> <nav aria-label="Tabs" class="md-tabs" data-md-component="tabs"> <div class="md-tabs__inner md-grid"> <ul class="md-tabs__list"> <li class="md-tabs__item"> <a class="md-tabs__link" href="../../.."> Home </a> </li> <li class="md-tabs__item"> <a class="md-tabs__link md-tabs__link--active" href="../../overview/"> OpenStack </a> </li> <li class="md-tabs__item"> <a class="md-tabs__link" href="../../image/"> API Sequence </a> </li> </ul> </div> </nav> <main class="md-main" data-md-component="main"> <div class="md-main__inner md-grid"> <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation"> <div class="md-sidebar__scrollwrap"> <div class="md-sidebar__inner"> <nav aria-label="Navigation" class="md-nav md-nav--primary md-nav--lifted" data-md-level="0"> <label class="md-nav__title" for="__drawer"> <a aria-label="OpenStack Docs" class="md-nav__button md-logo" data-md-component="logo" href="../../.." title="OpenStack Docs"> <svg viewbox="0 0 89 89" xmlns="http://www.w3.org/2000/svg"> <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z"></path> <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5"></path> <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z"></path> <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25"></path> </svg> </a> OpenStack Docs </label> <div class="md-nav__source"> <a class="md-source" data-md-component="source" href="https://github.com/jade-kinx/openstack-docs/" title="Go to repository"> <div class="md-source__icon md-icon"> <svg viewbox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><!-- Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"></path></svg> </div> <div class="md-source__repository"> jade-kinx/openstack-docs </div> </a> </div> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" id="__nav_1" type="checkbox"/> <label class="md-nav__link" for="__nav_1"> Home <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="Home" class="md-nav" data-md-level="1"> <label class="md-nav__title" for="__nav_1"> <span class="md-nav__icon md-icon"></span> Home </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="../../.."> OpenStack Docs </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../../usage/"> Usage </a> </li> <li class="md-nav__item md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3" id="__nav_1_3" type="checkbox"/> <label class="md-nav__link" for="__nav_1_3"> Useful Links <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="Useful Links" class="md-nav" data-md-level="2"> <label class="md-nav__title" for="__nav_1_3"> <span class="md-nav__icon md-icon"></span> Useful Links </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3_1" id="__nav_1_3_1" type="checkbox"/> <label class="md-nav__link" for="__nav_1_3_1"> mkdocs-material <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="mkdocs-material" class="md-nav" data-md-level="3"> <label class="md-nav__title" for="__nav_1_3_1"> <span class="md-nav__icon md-icon"></span> mkdocs-material </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="https://squidfunk.github.io/mkdocs-material/"> Home </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="https://squidfunk.github.io/mkdocs-material/getting-started/"> Getting Started </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="https://squidfunk.github.io/mkdocs-material/setup/changing-the-colors/"> Setup </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="https://squidfunk.github.io/mkdocs-material/reference/"> Reference </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_3_2" id="__nav_1_3_2" type="checkbox"/> <label class="md-nav__link" for="__nav_1_3_2"> OpenStack <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="OpenStack" class="md-nav" data-md-level="3"> <label class="md-nav__title" for="__nav_1_3_2"> <span class="md-nav__icon md-icon"></span> OpenStack </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="https://docs.openstack.org"> docs.openstack.org </a> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--active md-nav__item--nested"> <input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" id="__nav_2" type="checkbox"/> <label class="md-nav__link" for="__nav_2"> OpenStack <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="OpenStack" class="md-nav" data-md-level="1"> <label class="md-nav__title" for="__nav_2"> <span class="md-nav__icon md-icon"></span> OpenStack </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="../../overview/"> Overview </a> </li> <li class="md-nav__item md-nav__item--active md-nav__item--nested"> <input checked="" class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_2" id="__nav_2_2" type="checkbox"/> <label class="md-nav__link" for="__nav_2_2"> Debugging <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="Debugging" class="md-nav" data-md-level="2"> <label class="md-nav__title" for="__nav_2_2"> <span class="md-nav__icon md-icon"></span> Debugging </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="../python-openstackclient/"> python-openstackclient </a> </li> <li class="md-nav__item md-nav__item--active"> <input class="md-nav__toggle md-toggle" data-md-toggle="toc" id="__toc" type="checkbox"/> <label class="md-nav__link md-nav__link--active" for="__toc"> python-openstackclient(requests dump) <span class="md-nav__icon md-icon"></span> </label> <a class="md-nav__link md-nav__link--active" href="./"> python-openstackclient(requests dump) </a> <nav aria-label="Table of contents" class="md-nav md-nav--secondary"> <label class="md-nav__title" for="__toc"> <span class="md-nav__icon md-icon"></span> Table of contents </label> <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="#python"> python 가상 환경 생성 </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#python-openstackclient"> python-openstackclient 설치 </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#visual-studio-code"> Visual Studio Code 실행 </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#launchjson"> launch.json 파일 구성 </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#set-break-point-on-entry-point"> Set Break Point on Entry Point </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#requests-package-dump"> requests package dump </a> <nav aria-label="requests package dump" class="md-nav"> <ul class="md-nav__list"> <li class="md-nav__item"> <a class="md-nav__link" href="#build-requests-observer-package"> build requests-observer package </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#install-requests-observer-on-venv"> Install requests-observer on venv </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#wrapping-on-httpadaptersend"> Wrapping on HTTPAdapter.send() </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../glance-api/"> glance-api </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../trove-api/"> trove-api </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2_3" id="__nav_2_3" type="checkbox"/> <label class="md-nav__link" for="__nav_2_3"> Trove <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="Trove" class="md-nav" data-md-level="2"> <label class="md-nav__title" for="__nav_2_3"> <span class="md-nav__icon md-icon"></span> Trove </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="../../trove/install-trove-on-devstack/"> Install Trove on DevStack </a> </li> </ul> </nav> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3" id="__nav_3" type="checkbox"/> <label class="md-nav__link" for="__nav_3"> API Sequence <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="API Sequence" class="md-nav" data-md-level="1"> <label class="md-nav__title" for="__nav_3"> <span class="md-nav__icon md-icon"></span> API Sequence </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/"> Setting Up </a> </li> <li class="md-nav__item md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_2" id="__nav_3_2" type="checkbox"/> <label class="md-nav__link" for="__nav_3_2"> Image(GLANCE) <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="Image(GLANCE)" class="md-nav" data-md-level="2"> <label class="md-nav__title" for="__nav_3_2"> <span class="md-nav__icon md-icon"></span> Image(GLANCE) </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/create/"> image create </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/list/"> image list </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/show/"> image show </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/save/"> image save </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/add-project/"> image add project </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/member-list/"> image member list </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/remove-project/"> image remove project </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/set/"> image set </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/unset/"> image unset </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="../../image/delete/"> image delete </a> </li> </ul> </nav> </li> <li class="md-nav__item md-nav__item--nested"> <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_3_3" id="__nav_3_3" type="checkbox"/> <label class="md-nav__link" for="__nav_3_3"> Compute(Nova) <span class="md-nav__icon md-icon"></span> </label> <nav aria-label="Compute(Nova)" class="md-nav" data-md-level="2"> <label class="md-nav__title" for="__nav_3_3"> <span class="md-nav__icon md-icon"></span> Compute(Nova) </label> <ul class="md-nav__list" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="../../compute/create/"> compute create </a> </li> </ul> </nav> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc"> <div class="md-sidebar__scrollwrap"> <div class="md-sidebar__inner"> <nav aria-label="Table of contents" class="md-nav md-nav--secondary"> <label class="md-nav__title" for="__toc"> <span class="md-nav__icon md-icon"></span> Table of contents </label> <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix=""> <li class="md-nav__item"> <a class="md-nav__link" href="#python"> python 가상 환경 생성 </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#python-openstackclient"> python-openstackclient 설치 </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#visual-studio-code"> Visual Studio Code 실행 </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#launchjson"> launch.json 파일 구성 </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#set-break-point-on-entry-point"> Set Break Point on Entry Point </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#requests-package-dump"> requests package dump </a> <nav aria-label="requests package dump" class="md-nav"> <ul class="md-nav__list"> <li class="md-nav__item"> <a class="md-nav__link" href="#build-requests-observer-package"> build requests-observer package </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#install-requests-observer-on-venv"> Install requests-observer on venv </a> </li> <li class="md-nav__item"> <a class="md-nav__link" href="#wrapping-on-httpadaptersend"> Wrapping on HTTPAdapter.send() </a> </li> </ul> </nav> </li> </ul> </nav> </div> </div> </div> <div class="md-content" data-md-component="content"> <article class="md-content__inner md-typeset"> <h1 id="debugging-python-openstackclient-on-local-machine-with-python-venv">Debugging python-openstackclient on local-machine with python venv<a class="headerlink" href="#debugging-python-openstackclient-on-local-machine-with-python-venv" title="Permanent link">¶</a></h1> <p>이 문서에서는 local 환경(<code>windows 10</code>)에서 python 가상환경을 이용하여 python-openstackclient를 디버깅하는 환경을 구성하는 방법을 알아보고, 각 openstack client의 API 요청에 대해 request / response를 로그 파일로 덤프하는 과정을 수행해 본다.<br/> 기본 환경 구성은 <a href="../python-openstackclient/">Debugging python-openstackclient</a>와 동일하다.</p> <div class="admonition note"> <p class="admonition-title">Note</p> <p>로컬머신에 <code>python</code> 및 <code>pip</code>, <code>venv</code> 등은 설치되어 있다고 가정한다. (현재 환경은 <code>python-3.11.0</code>)</p> </div> <div class="admonition note"> <p class="admonition-title">Note</p> <p>오픈스택이 설치되어 있는 remote host는 HOST_IP가 Public IP로 설치되어, 각 API EndPoint가 Public IP로 등록되어 있고, 외부에서 접속할 수 있다고 전제한다. (보안 그룹 설정에서 PORT 설정 필요할 수 있음)</p> <div class="highlight"><span class="filename">loopback interface에 public ip 추가</span><pre><span></span><code><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>ubuntu@devstack-for-debug:~# ip addr add 182.161.114.101/32 dev lo
+<a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>ubuntu@devstack-for-debug:~$ ip a
+<a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+<a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+<a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>    inet 127.0.0.1/8 scope host lo
+<a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>       valid_lft forever preferred_lft forever
+<a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>    inet 182.161.114.101/32 scope global lo
+<a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>       valid_lft forever preferred_lft forever
+<a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>    inet6 ::1/128 scope host
+<a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>       valid_lft forever preferred_lft forever
+<a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>
+<a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>    ubuntu@devstack-for-debug:~$
+<a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a>    ...
+</code></pre></div> </div> <h2 id="python">python 가상 환경 생성<a class="headerlink" href="#python" title="Permanent link">¶</a></h2> <div class="highlight"><span class="filename">venv 생성</span><pre><span></span><code><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a>D:\.venv&gt;python -m venv python-openstackclient
+<a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a>D:\.venv&gt;cd python-openstackclient
+<a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a>D:\.venv&gt;scripts\activate
+<a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a>(python-openstackclient) D:\.venv\python-openstackclient&gt;
+</code></pre></div> <h2 id="python-openstackclient">python-openstackclient 설치<a class="headerlink" href="#python-openstackclient" title="Permanent link">¶</a></h2> <p><div class="highlight"><span class="filename">python-openstackclient 설치</span><pre><span></span><code><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>(python-openstackclient) D:\.venv\python-openstackclient&gt;pip install python-openstackclient
+<a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>...
+<a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>Successfully installed keystoneauth1-5.1.0 openstacksdk-0.103.0 osc-lib-2.6.2 oslo.config-9.0.0 \
+<a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>oslo.i18n-5.1.0 oslo.serialization-5.0.0 oslo.utils-6.1.0 python-cinderclient-9.1.0 \
+<a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>python-keystoneclient-5.0.1 python-novaclient-18.2.0 python-openstackclient-6.0.0 requests-2.28.1 (생략...)
+<a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>(python-openstackclient) D:\.venv\python-openstackclient&gt;dir lib\site-packages\openstackclient
+<a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a> D 드라이브의 볼륨: DATA
+<a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a> 볼륨 일련 번호: 1AF4-B508
+<a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a>
+<a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a> D:\.venv\python-openstackclient\lib\site-packages\openstackclient 디렉터리
+<a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a>
+<a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          .
+<a href="#__codelineno-2-13" id="__codelineno-2-13" name="__codelineno-2-13"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          ..
+<a href="#__codelineno-2-14" id="__codelineno-2-14" name="__codelineno-2-14"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          api
+<a href="#__codelineno-2-15" id="__codelineno-2-15" name="__codelineno-2-15"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          common
+<a href="#__codelineno-2-16" id="__codelineno-2-16" name="__codelineno-2-16"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          compute
+<a href="#__codelineno-2-17" id="__codelineno-2-17" name="__codelineno-2-17"></a>2022-12-06  오후 03:30               791 i18n.py
+<a href="#__codelineno-2-18" id="__codelineno-2-18" name="__codelineno-2-18"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          identity
+<a href="#__codelineno-2-19" id="__codelineno-2-19" name="__codelineno-2-19"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          image
+<a href="#__codelineno-2-20" id="__codelineno-2-20" name="__codelineno-2-20"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          locale
+<a href="#__codelineno-2-21" id="__codelineno-2-21" name="__codelineno-2-21"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          network
+<a href="#__codelineno-2-22" id="__codelineno-2-22" name="__codelineno-2-22"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          object
+<a href="#__codelineno-2-23" id="__codelineno-2-23" name="__codelineno-2-23"></a>2022-12-06  오후 03:30             5,488 shell.py
+<a href="#__codelineno-2-24" id="__codelineno-2-24" name="__codelineno-2-24"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          tests
+<a href="#__codelineno-2-25" id="__codelineno-2-25" name="__codelineno-2-25"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          volume
+<a href="#__codelineno-2-26" id="__codelineno-2-26" name="__codelineno-2-26"></a>2022-12-06  오후 03:30               777 __init__.py
+<a href="#__codelineno-2-27" id="__codelineno-2-27" name="__codelineno-2-27"></a>2022-12-06  오후 03:30    &lt;DIR&gt;          __pycache__
+<a href="#__codelineno-2-28" id="__codelineno-2-28" name="__codelineno-2-28"></a>               3개 파일               7,056 바이트
+<a href="#__codelineno-2-29" id="__codelineno-2-29" name="__codelineno-2-29"></a>              13개 디렉터리  1,982,702,985,216 바이트 남음
+<a href="#__codelineno-2-30" id="__codelineno-2-30" name="__codelineno-2-30"></a>
+<a href="#__codelineno-2-31" id="__codelineno-2-31" name="__codelineno-2-31"></a>(python-openstackclient) D:\.venv\python-openstackclient&gt;
+</code></pre></div> <code>python-troveclient</code>, <code>python-swiftclient</code> 등도 설치할 수 있다.</p> <h2 id="visual-studio-code">Visual Studio Code 실행<a class="headerlink" href="#visual-studio-code" title="Permanent link">¶</a></h2> <p>가상환경 루트 경로(이 경우는 <code>D:\.venv\python-openstackclient</code>)에서 vscode를 실행한다. (혹은 폴더를 연다) <div class="highlight"><pre><span></span><code><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a>(python-openstackclient) D:\.venv\python-openstackclient&gt;code .
+</code></pre></div></p> <p>커맨드 팔레트를 열어 <code>Python: Select Interpreter</code> 커맨드를 실행한다. <a class="glightbox" data-desc-position="bottom" data-height="auto" data-title="python-select-interpreter" data-width="100%" href="../img/python-select-interpreter.png"><img alt="python-select-interpreter" src="../img/python-select-interpreter.png"/></a> <a class="glightbox" data-desc-position="bottom" data-height="auto" data-title="python-select-venv-interpreter" data-width="100%" href="../img/python-select-venv-interpreter.png"><img alt="python-select-venv-interpreter" src="../img/python-select-venv-interpreter.png"/></a></p> <h2 id="launchjson">launch.json 파일 구성<a class="headerlink" href="#launchjson" title="Permanent link">¶</a></h2> <div class="highlight"><span class="filename">.vscode/launch.json</span><pre><span></span><code><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="p">{</span>
+<a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="w">    </span><span class="c1">// Use IntelliSense to learn about possible attributes.</span>
+<a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="w">    </span><span class="c1">// Hover to view descriptions of existing attributes.</span>
+<a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="w">    </span><span class="c1">// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387</span>
+<a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="w">    </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0.2.0"</span><span class="p">,</span>
+<a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">    </span><span class="nt">"configurations"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">        </span><span class="p">{</span>
+<a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="w">            </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Python: openstack"</span><span class="p">,</span><span class="w">    </span><span class="c1">// 구성 이름</span>
+<a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"python"</span><span class="p">,</span>
+<a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="w">            </span><span class="nt">"request"</span><span class="p">:</span><span class="w"> </span><span class="s2">"launch"</span><span class="p">,</span>
+<a href="#__codelineno-4-11" id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="w">            </span><span class="nt">"program"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Scripts/openstack.exe"</span><span class="p">,</span><span class="w"> </span><span class="c1">// 오픈스택 클라이언트 실행 파일 경로</span>
+<a href="#__codelineno-4-12" id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="w">            </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"database"</span><span class="p">,</span><span class="w"> </span><span class="s2">"instance"</span><span class="p">,</span><span class="w"> </span><span class="s2">"list"</span><span class="p">,</span><span class="w"> </span><span class="s2">"-f"</span><span class="p">,</span><span class="w"> </span><span class="s2">"json"</span><span class="p">,</span><span class="w"> </span><span class="s2">"--all"</span><span class="p">],</span><span class="w"> </span><span class="c1">// 커맨드 인자</span>
+<a href="#__codelineno-4-13" id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="w">            </span><span class="c1">// 환경 설정</span>
+<a href="#__codelineno-4-14" id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="w">            </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<a href="#__codelineno-4-15" id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="w">                </span><span class="nt">"OS_AUTH_URL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://devstack-debug/identity/v3"</span><span class="p">,</span>
+<a href="#__codelineno-4-16" id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="w">                </span><span class="nt">"OS_IDENTITY_API_VERSION"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3"</span><span class="p">,</span>
+<a href="#__codelineno-4-17" id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="w">                </span><span class="nt">"OS_USERNAME"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin"</span><span class="p">,</span>
+<a href="#__codelineno-4-18" id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="w">                </span><span class="nt">"OS_PASSWORD"</span><span class="p">:</span><span class="w"> </span><span class="s2">"asdf"</span><span class="p">,</span>
+<a href="#__codelineno-4-19" id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="w">                </span><span class="nt">"OS_PROJECT_NAME"</span><span class="p">:</span><span class="w"> </span><span class="s2">"admin"</span><span class="p">,</span>
+<a href="#__codelineno-4-20" id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="w">                </span><span class="nt">"OS_USER_DOMAIN_NAME"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span>
+<a href="#__codelineno-4-21" id="__codelineno-4-21" name="__codelineno-4-21"></a><span class="w">                </span><span class="nt">"OS_PROJECT_DOMAIN_NAME"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span>
+<a href="#__codelineno-4-22" id="__codelineno-4-22" name="__codelineno-4-22"></a><span class="w">            </span><span class="p">},</span>
+<a href="#__codelineno-4-23" id="__codelineno-4-23" name="__codelineno-4-23"></a><span class="w">            </span><span class="nt">"console"</span><span class="p">:</span><span class="w"> </span><span class="s2">"integratedTerminal"</span><span class="p">,</span>
+<a href="#__codelineno-4-24" id="__codelineno-4-24" name="__codelineno-4-24"></a><span class="w">            </span><span class="nt">"justMyCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<a href="#__codelineno-4-25" id="__codelineno-4-25" name="__codelineno-4-25"></a><span class="w">        </span><span class="p">}</span>
+<a href="#__codelineno-4-26" id="__codelineno-4-26" name="__codelineno-4-26"></a><span class="w">    </span><span class="p">]</span>
+<a href="#__codelineno-4-27" id="__codelineno-4-27" name="__codelineno-4-27"></a><span class="p">}</span>
+</code></pre></div> <h2 id="set-break-point-on-entry-point">Set Break Point on Entry Point<a class="headerlink" href="#set-break-point-on-entry-point" title="Permanent link">¶</a></h2> <p><code>scripts/openstack.exe</code>가 실행되면 <code>Lib/site-packages/openstackclient/shell.py</code> 의 <code>main()</code> 으로 진입한다.<br/> 여기서 break point를 걸고, 디버깅을 시작하여 break point가 잘 걸리는 지 확인한다.</p> <p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-title="break point" data-width="100%" href="../img/break-point-on-entry-point.png"><img alt="break point" src="../img/break-point-on-entry-point.png"/></a></p> <h2 id="requests-package-dump">requests package dump<a class="headerlink" href="#requests-package-dump" title="Permanent link">¶</a></h2> <p>Entry Point를 따라, 진입하면 모든 요청은 <code>requests</code> 패키지의 <code>adapters.py</code> 모듈의 <code>HTTPAdapter.send()</code>를 통해 API 요청을 보내고 응답을 받는다는 것을 알 수 있다. ( https 인 경우는 다른 아답터겠지만... )</p> <h3 id="build-requests-observer-package">build requests-observer package<a class="headerlink" href="#build-requests-observer-package" title="Permanent link">¶</a></h3> <p><code>HTTPAdapter.send()</code> 메소드를 래핑하여 request/response를 로그 파일로 출력하기 위해, requests-observer 패키지를 만들었다.</p> <div class="highlight"><span class="filename">requests-observer package</span><pre><span></span><code><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>D:\WORKS\REQUESTS-OBSERVER
+<a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>│  LICENSE
+<a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>│  main.py
+<a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>│  README.md
+<a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a>│  setup.py
+<a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a>│
+<a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a>└─requestsObserver
+<a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a>        observer.py
+<a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a>        __init__.py
+</code></pre></div> <div class="highlight"><span class="filename">setup.py</span><pre><span></span><code><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="kn">import</span> <span class="nn">setuptools</span>
+<a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>
+<a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"README.md"</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+<a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>    <span class="n">long_description</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a>
+<a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="n">setuptools</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span>
+<a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a>    <span class="n">name</span><span class="o">=</span><span class="s1">'requestsObserver'</span><span class="p">,</span>
+<a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a>    <span class="n">version</span><span class="o">=</span><span class="s1">'0.0.1'</span><span class="p">,</span>
+<a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a>    <span class="n">author</span><span class="o">=</span><span class="s1">'jade-kinx'</span><span class="p">,</span>
+<a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a>    <span class="n">author_email</span><span class="o">=</span><span class="s1">'jade@kinx.net'</span><span class="p">,</span>
+<a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a>    <span class="n">description</span><span class="o">=</span><span class="s1">'tracing requests.response with decorator'</span><span class="p">,</span>
+<a href="#__codelineno-6-12" id="__codelineno-6-12" name="__codelineno-6-12"></a>    <span class="n">long_description</span><span class="o">=</span><span class="n">long_description</span><span class="p">,</span>
+<a href="#__codelineno-6-13" id="__codelineno-6-13" name="__codelineno-6-13"></a>    <span class="n">long_description_content_type</span><span class="o">=</span><span class="s2">"text/markdown"</span><span class="p">,</span>
+<a href="#__codelineno-6-14" id="__codelineno-6-14" name="__codelineno-6-14"></a>    <span class="n">url</span><span class="o">=</span><span class="s1">'https://github.com/jade-kinx/requestsObserver'</span><span class="p">,</span>
+<a href="#__codelineno-6-15" id="__codelineno-6-15" name="__codelineno-6-15"></a>    <span class="n">packages</span><span class="o">=</span><span class="n">setuptools</span><span class="o">.</span><span class="n">find_packages</span><span class="p">(),</span>
+<a href="#__codelineno-6-16" id="__codelineno-6-16" name="__codelineno-6-16"></a>    <span class="n">classifiers</span><span class="o">=</span><span class="p">[</span>
+<a href="#__codelineno-6-17" id="__codelineno-6-17" name="__codelineno-6-17"></a>        <span class="s2">"Programming Language :: Python :: 3"</span><span class="p">,</span>
+<a href="#__codelineno-6-18" id="__codelineno-6-18" name="__codelineno-6-18"></a>        <span class="s2">"License :: OSI Approved :: MIT License"</span><span class="p">,</span>
+<a href="#__codelineno-6-19" id="__codelineno-6-19" name="__codelineno-6-19"></a>        <span class="s2">"Operating System :: OS Independent"</span><span class="p">,</span>
+<a href="#__codelineno-6-20" id="__codelineno-6-20" name="__codelineno-6-20"></a>    <span class="p">],</span>    
+<a href="#__codelineno-6-21" id="__codelineno-6-21" name="__codelineno-6-21"></a>    <span class="n">python_requires</span><span class="o">=</span><span class="s1">'&gt;=3.8'</span><span class="p">,</span>
+<a href="#__codelineno-6-22" id="__codelineno-6-22" name="__codelineno-6-22"></a><span class="p">)</span>
+</code></pre></div> <div class="highlight"><span class="filename">observer.py</span><pre><span></span><code><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="sd">"""tracing requests.response for debugging ( only private studying purpose )"""</span>
+<a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>
+<a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="kn">import</span> <span class="nn">os</span>
+<a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="kn">import</span> <span class="nn">sys</span>
+<a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="kn">import</span> <span class="nn">platform</span>
+<a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="kn">import</span> <span class="nn">logging</span>
+<a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="kn">import</span> <span class="nn">textwrap</span>
+<a href="#__codelineno-7-9" id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="kn">import</span> <span class="nn">json</span>
+<a href="#__codelineno-7-10" id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<a href="#__codelineno-7-11" id="__codelineno-7-11" name="__codelineno-7-11"></a>
+<a href="#__codelineno-7-12" id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="c1"># syslog exists?</span>
+<a href="#__codelineno-7-13" id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="k">try</span><span class="p">:</span>
+<a href="#__codelineno-7-14" id="__codelineno-7-14" name="__codelineno-7-14"></a>    <span class="kn">import</span> <span class="nn">syslog</span>
+<a href="#__codelineno-7-15" id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="k">except</span><span class="p">:</span>
+<a href="#__codelineno-7-16" id="__codelineno-7-16" name="__codelineno-7-16"></a>    <span class="n">syslog</span> <span class="o">=</span> <span class="kc">None</span>
+<a href="#__codelineno-7-17" id="__codelineno-7-17" name="__codelineno-7-17"></a>
+<a href="#__codelineno-7-18" id="__codelineno-7-18" name="__codelineno-7-18"></a><span class="c1"># request counter</span>
+<a href="#__codelineno-7-19" id="__codelineno-7-19" name="__codelineno-7-19"></a><span class="n">req_idx</span> <span class="o">=</span> <span class="mi">0</span>
+<a href="#__codelineno-7-20" id="__codelineno-7-20" name="__codelineno-7-20"></a>
+<a href="#__codelineno-7-21" id="__codelineno-7-21" name="__codelineno-7-21"></a><span class="c1"># get log file path</span>
+<a href="#__codelineno-7-22" id="__codelineno-7-22" name="__codelineno-7-22"></a><span class="c1"># on linux: /var/log/requests-observer/request.log</span>
+<a href="#__codelineno-7-23" id="__codelineno-7-23" name="__codelineno-7-23"></a><span class="c1"># on windows: C:\Users\{UserId}\logs\requests.log on windows</span>
+<a href="#__codelineno-7-24" id="__codelineno-7-24" name="__codelineno-7-24"></a><span class="k">def</span> <span class="nf">get_log_filepath</span><span class="p">():</span>
+<a href="#__codelineno-7-25" id="__codelineno-7-25" name="__codelineno-7-25"></a>
+<a href="#__codelineno-7-26" id="__codelineno-7-26" name="__codelineno-7-26"></a>    <span class="c1"># create log path if not exists</span>
+<a href="#__codelineno-7-27" id="__codelineno-7-27" name="__codelineno-7-27"></a>    <span class="n">log_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'~'</span><span class="p">,</span> <span class="s2">"logs"</span><span class="p">))</span> <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span> <span class="o">==</span> <span class="s1">'Windows'</span> <span class="k">else</span> <span class="s1">'/var/log/requests-observer'</span>
+<a href="#__codelineno-7-28" id="__codelineno-7-28" name="__codelineno-7-28"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">log_path</span><span class="p">):</span>
+<a href="#__codelineno-7-29" id="__codelineno-7-29" name="__codelineno-7-29"></a>        <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">log_path</span><span class="p">)</span>
+<a href="#__codelineno-7-30" id="__codelineno-7-30" name="__codelineno-7-30"></a>
+<a href="#__codelineno-7-31" id="__codelineno-7-31" name="__codelineno-7-31"></a>    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">log_path</span><span class="p">,</span> <span class="s2">"requests.log"</span><span class="p">)</span>
+<a href="#__codelineno-7-32" id="__codelineno-7-32" name="__codelineno-7-32"></a>
+<a href="#__codelineno-7-33" id="__codelineno-7-33" name="__codelineno-7-33"></a><span class="c1"># print error message</span>
+<a href="#__codelineno-7-34" id="__codelineno-7-34" name="__codelineno-7-34"></a><span class="k">def</span> <span class="nf">print_error</span><span class="p">(</span><span class="n">err</span><span class="p">):</span>
+<a href="#__codelineno-7-35" id="__codelineno-7-35" name="__codelineno-7-35"></a>    <span class="k">if</span> <span class="n">syslog</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a href="#__codelineno-7-36" id="__codelineno-7-36" name="__codelineno-7-36"></a>        <span class="n">syslog</span><span class="o">.</span><span class="n">syslog</span><span class="p">(</span><span class="n">syslog</span><span class="o">.</span><span class="n">LOG_ERR</span><span class="p">,</span> <span class="s2">"requests-observer: </span><span class="si">{0}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<a href="#__codelineno-7-37" id="__codelineno-7-37" name="__codelineno-7-37"></a>    <span class="k">else</span><span class="p">:</span>
+<a href="#__codelineno-7-38" id="__codelineno-7-38" name="__codelineno-7-38"></a>        <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"requests-observer: </span><span class="si">{0}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+<a href="#__codelineno-7-39" id="__codelineno-7-39" name="__codelineno-7-39"></a>
+<a href="#__codelineno-7-40" id="__codelineno-7-40" name="__codelineno-7-40"></a><span class="c1"># print log message</span>
+<a href="#__codelineno-7-41" id="__codelineno-7-41" name="__codelineno-7-41"></a><span class="k">def</span> <span class="nf">print_log</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+<a href="#__codelineno-7-42" id="__codelineno-7-42" name="__codelineno-7-42"></a>
+<a href="#__codelineno-7-43" id="__codelineno-7-43" name="__codelineno-7-43"></a>    <span class="c1"># write log message</span>
+<a href="#__codelineno-7-44" id="__codelineno-7-44" name="__codelineno-7-44"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">get_log_filepath</span><span class="p">(),</span> <span class="s2">"a"</span><span class="p">)</span> <span class="k">as</span> <span class="n">logger</span><span class="p">:</span>
+<a href="#__codelineno-7-45" id="__codelineno-7-45" name="__codelineno-7-45"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">"</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+<a href="#__codelineno-7-46" id="__codelineno-7-46" name="__codelineno-7-46"></a>
+<a href="#__codelineno-7-47" id="__codelineno-7-47" name="__codelineno-7-47"></a><span class="c1"># observer decorator</span>
+<a href="#__codelineno-7-48" id="__codelineno-7-48" name="__codelineno-7-48"></a><span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<a href="#__codelineno-7-49" id="__codelineno-7-49" name="__codelineno-7-49"></a>    <span class="nd">@wraps</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<a href="#__codelineno-7-50" id="__codelineno-7-50" name="__codelineno-7-50"></a>    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<a href="#__codelineno-7-51" id="__codelineno-7-51" name="__codelineno-7-51"></a>
+<a href="#__codelineno-7-52" id="__codelineno-7-52" name="__codelineno-7-52"></a>        <span class="c1"># original method call</span>
+<a href="#__codelineno-7-53" id="__codelineno-7-53" name="__codelineno-7-53"></a>        <span class="n">response</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a href="#__codelineno-7-54" id="__codelineno-7-54" name="__codelineno-7-54"></a>
+<a href="#__codelineno-7-55" id="__codelineno-7-55" name="__codelineno-7-55"></a>        <span class="c1"># trace response</span>
+<a href="#__codelineno-7-56" id="__codelineno-7-56" name="__codelineno-7-56"></a>        <span class="k">try</span><span class="p">:</span>
+<a href="#__codelineno-7-57" id="__codelineno-7-57" name="__codelineno-7-57"></a>            <span class="c1"># increment request counter</span>
+<a href="#__codelineno-7-58" id="__codelineno-7-58" name="__codelineno-7-58"></a>            <span class="k">global</span> <span class="n">req_idx</span>
+<a href="#__codelineno-7-59" id="__codelineno-7-59" name="__codelineno-7-59"></a>            <span class="n">req_idx</span> <span class="o">+=</span> <span class="mi">1</span>
+<a href="#__codelineno-7-60" id="__codelineno-7-60" name="__codelineno-7-60"></a>
+<a href="#__codelineno-7-61" id="__codelineno-7-61" name="__codelineno-7-61"></a>            <span class="c1"># print log message</span>
+<a href="#__codelineno-7-62" id="__codelineno-7-62" name="__codelineno-7-62"></a>            <span class="n">print_log</span><span class="p">(</span><span class="n">format_response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">req_idx</span><span class="p">))</span>
+<a href="#__codelineno-7-63" id="__codelineno-7-63" name="__codelineno-7-63"></a>
+<a href="#__codelineno-7-64" id="__codelineno-7-64" name="__codelineno-7-64"></a>        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+<a href="#__codelineno-7-65" id="__codelineno-7-65" name="__codelineno-7-65"></a>            <span class="n">print_error</span><span class="p">(</span><span class="nb">repr</span><span class="p">(</span><span class="n">ex</span><span class="p">))</span>
+<a href="#__codelineno-7-66" id="__codelineno-7-66" name="__codelineno-7-66"></a>
+<a href="#__codelineno-7-67" id="__codelineno-7-67" name="__codelineno-7-67"></a>        <span class="k">finally</span><span class="p">:</span>
+<a href="#__codelineno-7-68" id="__codelineno-7-68" name="__codelineno-7-68"></a>            <span class="c1"># original response</span>
+<a href="#__codelineno-7-69" id="__codelineno-7-69" name="__codelineno-7-69"></a>            <span class="k">return</span> <span class="n">response</span>
+<a href="#__codelineno-7-70" id="__codelineno-7-70" name="__codelineno-7-70"></a>
+<a href="#__codelineno-7-71" id="__codelineno-7-71" name="__codelineno-7-71"></a>    <span class="k">return</span> <span class="n">decorator</span>
+<a href="#__codelineno-7-72" id="__codelineno-7-72" name="__codelineno-7-72"></a>
+<a href="#__codelineno-7-73" id="__codelineno-7-73" name="__codelineno-7-73"></a><span class="c1"># beautify json string with indent 2 space</span>
+<a href="#__codelineno-7-74" id="__codelineno-7-74" name="__codelineno-7-74"></a><span class="k">def</span> <span class="nf">beautify_json</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<a href="#__codelineno-7-75" id="__codelineno-7-75" name="__codelineno-7-75"></a>    <span class="k">try</span><span class="p">:</span>
+<a href="#__codelineno-7-76" id="__codelineno-7-76" name="__codelineno-7-76"></a>        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a href="#__codelineno-7-77" id="__codelineno-7-77" name="__codelineno-7-77"></a>    <span class="k">except</span><span class="p">:</span>
+<a href="#__codelineno-7-78" id="__codelineno-7-78" name="__codelineno-7-78"></a>        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<a href="#__codelineno-7-79" id="__codelineno-7-79" name="__codelineno-7-79"></a>
+<a href="#__codelineno-7-80" id="__codelineno-7-80" name="__codelineno-7-80"></a><span class="c1"># format requests.response</span>
+<a href="#__codelineno-7-81" id="__codelineno-7-81" name="__codelineno-7-81"></a><span class="k">def</span> <span class="nf">format_response</span><span class="p">(</span><span class="n">response</span><span class="p">,</span> <span class="n">seq</span><span class="p">):</span>
+<a href="#__codelineno-7-82" id="__codelineno-7-82" name="__codelineno-7-82"></a>    <span class="n">format_headers</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">d</span><span class="p">:</span> <span class="s1">'</span><span class="se">\n</span><span class="s1">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">'</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+<a href="#__codelineno-7-83" id="__codelineno-7-83" name="__codelineno-7-83"></a>
+<a href="#__codelineno-7-84" id="__codelineno-7-84" name="__codelineno-7-84"></a>    <span class="k">try</span><span class="p">:</span>
+<a href="#__codelineno-7-85" id="__codelineno-7-85" name="__codelineno-7-85"></a>        <span class="n">resp</span> <span class="o">=</span> <span class="n">response</span>
+<a href="#__codelineno-7-86" id="__codelineno-7-86" name="__codelineno-7-86"></a>        <span class="n">req</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">request</span>
+<a href="#__codelineno-7-87" id="__codelineno-7-87" name="__codelineno-7-87"></a>
+<a href="#__codelineno-7-88" id="__codelineno-7-88" name="__codelineno-7-88"></a>        <span class="c1"># entry point name ( ex: openstack, glance-api, trove-api )</span>
+<a href="#__codelineno-7-89" id="__codelineno-7-89" name="__codelineno-7-89"></a>        <span class="n">ep</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">stem</span>
+<a href="#__codelineno-7-90" id="__codelineno-7-90" name="__codelineno-7-90"></a>
+<a href="#__codelineno-7-91" id="__codelineno-7-91" name="__codelineno-7-91"></a>        <span class="c1"># parse response.body by content-type</span>
+<a href="#__codelineno-7-92" id="__codelineno-7-92" name="__codelineno-7-92"></a>        <span class="n">content_type</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'content-type'</span><span class="p">)</span>
+<a href="#__codelineno-7-93" id="__codelineno-7-93" name="__codelineno-7-93"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">content_type</span><span class="p">:</span>
+<a href="#__codelineno-7-94" id="__codelineno-7-94" name="__codelineno-7-94"></a>            <span class="n">resp_body</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span>
+<a href="#__codelineno-7-95" id="__codelineno-7-95" name="__codelineno-7-95"></a>        <span class="k">elif</span> <span class="s1">'json'</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+<a href="#__codelineno-7-96" id="__codelineno-7-96" name="__codelineno-7-96"></a>            <span class="n">resp_body</span> <span class="o">=</span> <span class="n">beautify_json</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<a href="#__codelineno-7-97" id="__codelineno-7-97" name="__codelineno-7-97"></a>        <span class="k">elif</span> <span class="s1">'octet-stream'</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+<a href="#__codelineno-7-98" id="__codelineno-7-98" name="__codelineno-7-98"></a>            <span class="n">resp_body</span> <span class="o">=</span> <span class="s1">'&lt;octet-stream&gt; 0x</span><span class="si">{0}</span><span class="s1">...'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">''</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">'</span><span class="si">{:02x}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">resp</span><span class="o">.</span><span class="n">content</span><span class="p">[:</span><span class="mi">32</span><span class="p">]))</span>
+<a href="#__codelineno-7-99" id="__codelineno-7-99" name="__codelineno-7-99"></a>        <span class="k">else</span><span class="p">:</span>
+<a href="#__codelineno-7-100" id="__codelineno-7-100" name="__codelineno-7-100"></a>            <span class="n">resp_body</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span>
+<a href="#__codelineno-7-101" id="__codelineno-7-101" name="__codelineno-7-101"></a>
+<a href="#__codelineno-7-102" id="__codelineno-7-102" name="__codelineno-7-102"></a>        <span class="k">return</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="s2">"""</span>
+<a href="#__codelineno-7-103" id="__codelineno-7-103" name="__codelineno-7-103"></a><span class="s2">            __</span><span class="si">{ep}</span><span class="s2">__ -&gt; Request [</span><span class="si">{seq}</span><span class="s2">] </span><span class="si">{req.method}</span><span class="s2"> </span><span class="si">{req.url}</span>
+<a href="#__codelineno-7-104" id="__codelineno-7-104" name="__codelineno-7-104"></a><span class="s2">            </span><span class="si">{req_header}</span>
+<a href="#__codelineno-7-105" id="__codelineno-7-105" name="__codelineno-7-105"></a>
+<a href="#__codelineno-7-106" id="__codelineno-7-106" name="__codelineno-7-106"></a><span class="s2">            </span><span class="si">{req_body}</span>
+<a href="#__codelineno-7-107" id="__codelineno-7-107" name="__codelineno-7-107"></a>
+<a href="#__codelineno-7-108" id="__codelineno-7-108" name="__codelineno-7-108"></a><span class="s2">            __</span><span class="si">{ep}</span><span class="s2">__ &lt;- Response [</span><span class="si">{seq}</span><span class="s2">] </span><span class="si">{resp.status_code}</span><span class="s2"> </span><span class="si">{resp.reason}</span><span class="s2"> </span><span class="si">{resp.url}</span>
+<a href="#__codelineno-7-109" id="__codelineno-7-109" name="__codelineno-7-109"></a><span class="s2">            </span><span class="si">{resp_header}</span>
+<a href="#__codelineno-7-110" id="__codelineno-7-110" name="__codelineno-7-110"></a>
+<a href="#__codelineno-7-111" id="__codelineno-7-111" name="__codelineno-7-111"></a><span class="s2">            </span><span class="si">{resp_body}</span>
+<a href="#__codelineno-7-112" id="__codelineno-7-112" name="__codelineno-7-112"></a><span class="s2">        """</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<a href="#__codelineno-7-113" id="__codelineno-7-113" name="__codelineno-7-113"></a>            <span class="n">ep</span> <span class="o">=</span> <span class="n">ep</span><span class="p">,</span>
+<a href="#__codelineno-7-114" id="__codelineno-7-114" name="__codelineno-7-114"></a>            <span class="n">seq</span> <span class="o">=</span> <span class="n">seq</span><span class="p">,</span>
+<a href="#__codelineno-7-115" id="__codelineno-7-115" name="__codelineno-7-115"></a>            <span class="n">resp</span> <span class="o">=</span> <span class="n">resp</span><span class="p">,</span>
+<a href="#__codelineno-7-116" id="__codelineno-7-116" name="__codelineno-7-116"></a>            <span class="n">req</span> <span class="o">=</span> <span class="n">req</span><span class="p">,</span>
+<a href="#__codelineno-7-117" id="__codelineno-7-117" name="__codelineno-7-117"></a>            <span class="n">req_header</span> <span class="o">=</span> <span class="n">format_headers</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">headers</span><span class="p">),</span>
+<a href="#__codelineno-7-118" id="__codelineno-7-118" name="__codelineno-7-118"></a>            <span class="n">resp_header</span> <span class="o">=</span> <span class="n">format_headers</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">headers</span><span class="p">),</span>
+<a href="#__codelineno-7-119" id="__codelineno-7-119" name="__codelineno-7-119"></a>            <span class="n">req_body</span> <span class="o">=</span> <span class="n">beautify_json</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">body</span><span class="p">),</span>
+<a href="#__codelineno-7-120" id="__codelineno-7-120" name="__codelineno-7-120"></a>            <span class="n">resp_body</span> <span class="o">=</span> <span class="n">resp_body</span>
+<a href="#__codelineno-7-121" id="__codelineno-7-121" name="__codelineno-7-121"></a>        <span class="p">)</span>
+<a href="#__codelineno-7-122" id="__codelineno-7-122" name="__codelineno-7-122"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+<a href="#__codelineno-7-123" id="__codelineno-7-123" name="__codelineno-7-123"></a>        <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">ex</span><span class="p">)</span>
+</code></pre></div> <p><div class="highlight"><span class="filename">build package</span><pre><span></span><code><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a>D:\works\requests-observer&gt;python setup.py bdist_wheel
+</code></pre></div> <code>dist\requestsObserver-*.whl</code> 패키지 파일이 빌드되었다. 가상환경 경로로 복사한다.</p> <h3 id="install-requests-observer-on-venv">Install requests-observer on venv<a class="headerlink" href="#install-requests-observer-on-venv" title="Permanent link">¶</a></h3> <p><code>python-openstackclient</code> venv 가 활성화 된 상태에서 빌드된 패키지를 설치한다. <div class="highlight"><span class="filename">install requests-objserver</span><pre><span></span><code><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a>(python-openstackclient) d:\.venv\python-openstackclient&gt;pip install requestsObserver-0.0.1-py3-none-any.whl
+<a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a>Processing .\requestsobserver-0.0.1-py3-none-any.whl
+<a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a>Installing collected packages: requestsObserver
+<a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a>Successfully installed requestsObserver-0.0.1
+<a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a>
+<a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a>(python-openstackclient) d:\.venv\python-openstackclient&gt;
+</code></pre></div></p> <p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-title="requests-observer installed" data-width="100%" href="../img/requests-observer-installed.png"><img alt="requests-observer installed" src="../img/requests-observer-installed.png"/></a></p> <p>패키지가 잘 설치되었다.</p> <h3 id="wrapping-on-httpadaptersend">Wrapping on HTTPAdapter.send()<a class="headerlink" href="#wrapping-on-httpadaptersend" title="Permanent link">¶</a></h3> <div class="highlight"><span class="filename">Lib/site-packages/requests/adapters.py</span><pre><span></span><code><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a>    <span class="c1"># MODIFIED(jade-kinx): @observe for dump req/res</span>
+<a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="hll">    <span class="kn">from</span> <span class="nn">requestsObserver.observer</span> <span class="kn">import</span> <span class="n">observe</span>
+</span><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="hll">    <span class="nd">@observe</span>
+</span><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span>
+<a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a>        <span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cert</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">proxies</span><span class="o">=</span><span class="kc">None</span>
+<a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a>    <span class="p">):</span>
+<a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a>    <span class="o">...</span><span class="p">(</span><span class="n">생략</span><span class="p">)</span><span class="o">...</span>    
+</code></pre></div> <p>이제 가상환경에서 openstack.exe 를 실행하면 사용자의 홈 디렉토리의 logs 폴더에 API 요청에 대한 로그 파일이 생성된다.</p> <div class="admonition note"> <p class="admonition-title">Note</p> <p>아래 로그와 시퀀스 다이어그램은 <code>devstack</code>이 설치된 우분투 환경에서 <code>openstack image list</code>를 실행한 결과이다</p> </div> <div class="highlight"><pre><span></span><code><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>$<span class="w"> </span>openstack<span class="w"> </span>image<span class="w"> </span>list
+</code></pre></div> <div class="highlight"><span class="filename">/var/log/requests-observer/requests.log</span><pre><span></span><code><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a>__openstack__ -&gt; Request [1] GET http://182.161.114.101/identity
+<a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+<a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>Accept-Encoding: gzip, deflate
+<a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>Accept: application/json
+<a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a>Connection: keep-alive
+<a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a>
+<a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a>None
+<a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a>
+<a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a>__openstack__ &lt;- Response [1] 300 MULTIPLE CHOICES http://182.161.114.101/identity
+<a href="#__codelineno-12-10" id="__codelineno-12-10" name="__codelineno-12-10"></a>Date: Thu, 15 Dec 2022 09:23:40 GMT
+<a href="#__codelineno-12-11" id="__codelineno-12-11" name="__codelineno-12-11"></a>Server: Apache/2.4.41 (Ubuntu)
+<a href="#__codelineno-12-12" id="__codelineno-12-12" name="__codelineno-12-12"></a>Content-Type: application/json
+<a href="#__codelineno-12-13" id="__codelineno-12-13" name="__codelineno-12-13"></a>Content-Length: 274
+<a href="#__codelineno-12-14" id="__codelineno-12-14" name="__codelineno-12-14"></a>Location: http://182.161.114.101/identity/v3/
+<a href="#__codelineno-12-15" id="__codelineno-12-15" name="__codelineno-12-15"></a>Vary: X-Auth-Token
+<a href="#__codelineno-12-16" id="__codelineno-12-16" name="__codelineno-12-16"></a>x-openstack-request-id: req-0b9cef33-0236-4ef8-8952-248405aa88ac
+<a href="#__codelineno-12-17" id="__codelineno-12-17" name="__codelineno-12-17"></a>Connection: close
+<a href="#__codelineno-12-18" id="__codelineno-12-18" name="__codelineno-12-18"></a>
+<a href="#__codelineno-12-19" id="__codelineno-12-19" name="__codelineno-12-19"></a>{
+<a href="#__codelineno-12-20" id="__codelineno-12-20" name="__codelineno-12-20"></a>  "versions": {
+<a href="#__codelineno-12-21" id="__codelineno-12-21" name="__codelineno-12-21"></a>    "values": [
+<a href="#__codelineno-12-22" id="__codelineno-12-22" name="__codelineno-12-22"></a>      {
+<a href="#__codelineno-12-23" id="__codelineno-12-23" name="__codelineno-12-23"></a>        "id": "v3.14",
+<a href="#__codelineno-12-24" id="__codelineno-12-24" name="__codelineno-12-24"></a>        "status": "stable",
+<a href="#__codelineno-12-25" id="__codelineno-12-25" name="__codelineno-12-25"></a>        "updated": "2020-04-07T00:00:00Z",
+<a href="#__codelineno-12-26" id="__codelineno-12-26" name="__codelineno-12-26"></a>        "links": [
+<a href="#__codelineno-12-27" id="__codelineno-12-27" name="__codelineno-12-27"></a>          {
+<a href="#__codelineno-12-28" id="__codelineno-12-28" name="__codelineno-12-28"></a>            "rel": "self",
+<a href="#__codelineno-12-29" id="__codelineno-12-29" name="__codelineno-12-29"></a>            "href": "http://182.161.114.101/identity/v3/"
+<a href="#__codelineno-12-30" id="__codelineno-12-30" name="__codelineno-12-30"></a>          }
+<a href="#__codelineno-12-31" id="__codelineno-12-31" name="__codelineno-12-31"></a>        ],
+<a href="#__codelineno-12-32" id="__codelineno-12-32" name="__codelineno-12-32"></a>        "media-types": [
+<a href="#__codelineno-12-33" id="__codelineno-12-33" name="__codelineno-12-33"></a>          {
+<a href="#__codelineno-12-34" id="__codelineno-12-34" name="__codelineno-12-34"></a>            "base": "application/json",
+<a href="#__codelineno-12-35" id="__codelineno-12-35" name="__codelineno-12-35"></a>            "type": "application/vnd.openstack.identity-v3+json"
+<a href="#__codelineno-12-36" id="__codelineno-12-36" name="__codelineno-12-36"></a>          }
+<a href="#__codelineno-12-37" id="__codelineno-12-37" name="__codelineno-12-37"></a>        ]
+<a href="#__codelineno-12-38" id="__codelineno-12-38" name="__codelineno-12-38"></a>      }
+<a href="#__codelineno-12-39" id="__codelineno-12-39" name="__codelineno-12-39"></a>    ]
+<a href="#__codelineno-12-40" id="__codelineno-12-40" name="__codelineno-12-40"></a>  }
+<a href="#__codelineno-12-41" id="__codelineno-12-41" name="__codelineno-12-41"></a>}
+<a href="#__codelineno-12-42" id="__codelineno-12-42" name="__codelineno-12-42"></a>
+<a href="#__codelineno-12-43" id="__codelineno-12-43" name="__codelineno-12-43"></a>
+<a href="#__codelineno-12-44" id="__codelineno-12-44" name="__codelineno-12-44"></a>__openstack__ -&gt; Request [2] POST http://182.161.114.101/identity/v3/auth/tokens
+<a href="#__codelineno-12-45" id="__codelineno-12-45" name="__codelineno-12-45"></a>User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+<a href="#__codelineno-12-46" id="__codelineno-12-46" name="__codelineno-12-46"></a>Accept-Encoding: gzip, deflate
+<a href="#__codelineno-12-47" id="__codelineno-12-47" name="__codelineno-12-47"></a>Accept: application/json
+<a href="#__codelineno-12-48" id="__codelineno-12-48" name="__codelineno-12-48"></a>Connection: keep-alive
+<a href="#__codelineno-12-49" id="__codelineno-12-49" name="__codelineno-12-49"></a>Content-Type: application/json
+<a href="#__codelineno-12-50" id="__codelineno-12-50" name="__codelineno-12-50"></a>Content-Length: 209
+<a href="#__codelineno-12-51" id="__codelineno-12-51" name="__codelineno-12-51"></a>
+<a href="#__codelineno-12-52" id="__codelineno-12-52" name="__codelineno-12-52"></a>{
+<a href="#__codelineno-12-53" id="__codelineno-12-53" name="__codelineno-12-53"></a>  "auth": {
+<a href="#__codelineno-12-54" id="__codelineno-12-54" name="__codelineno-12-54"></a>    "identity": {
+<a href="#__codelineno-12-55" id="__codelineno-12-55" name="__codelineno-12-55"></a>      "methods": [
+<a href="#__codelineno-12-56" id="__codelineno-12-56" name="__codelineno-12-56"></a>        "password"
+<a href="#__codelineno-12-57" id="__codelineno-12-57" name="__codelineno-12-57"></a>      ],
+<a href="#__codelineno-12-58" id="__codelineno-12-58" name="__codelineno-12-58"></a>      "password": {
+<a href="#__codelineno-12-59" id="__codelineno-12-59" name="__codelineno-12-59"></a>        "user": {
+<a href="#__codelineno-12-60" id="__codelineno-12-60" name="__codelineno-12-60"></a>          "password": "asdf",
+<a href="#__codelineno-12-61" id="__codelineno-12-61" name="__codelineno-12-61"></a>          "name": "admin",
+<a href="#__codelineno-12-62" id="__codelineno-12-62" name="__codelineno-12-62"></a>          "domain": {
+<a href="#__codelineno-12-63" id="__codelineno-12-63" name="__codelineno-12-63"></a>            "id": "default"
+<a href="#__codelineno-12-64" id="__codelineno-12-64" name="__codelineno-12-64"></a>          }
+<a href="#__codelineno-12-65" id="__codelineno-12-65" name="__codelineno-12-65"></a>        }
+<a href="#__codelineno-12-66" id="__codelineno-12-66" name="__codelineno-12-66"></a>      }
+<a href="#__codelineno-12-67" id="__codelineno-12-67" name="__codelineno-12-67"></a>    },
+<a href="#__codelineno-12-68" id="__codelineno-12-68" name="__codelineno-12-68"></a>    "scope": {
+<a href="#__codelineno-12-69" id="__codelineno-12-69" name="__codelineno-12-69"></a>      "project": {
+<a href="#__codelineno-12-70" id="__codelineno-12-70" name="__codelineno-12-70"></a>        "name": "admin",
+<a href="#__codelineno-12-71" id="__codelineno-12-71" name="__codelineno-12-71"></a>        "domain": {
+<a href="#__codelineno-12-72" id="__codelineno-12-72" name="__codelineno-12-72"></a>          "id": "default"
+<a href="#__codelineno-12-73" id="__codelineno-12-73" name="__codelineno-12-73"></a>        }
+<a href="#__codelineno-12-74" id="__codelineno-12-74" name="__codelineno-12-74"></a>      }
+<a href="#__codelineno-12-75" id="__codelineno-12-75" name="__codelineno-12-75"></a>    }
+<a href="#__codelineno-12-76" id="__codelineno-12-76" name="__codelineno-12-76"></a>  }
+<a href="#__codelineno-12-77" id="__codelineno-12-77" name="__codelineno-12-77"></a>}
+<a href="#__codelineno-12-78" id="__codelineno-12-78" name="__codelineno-12-78"></a>
+<a href="#__codelineno-12-79" id="__codelineno-12-79" name="__codelineno-12-79"></a>__openstack__ &lt;- Response [2] 201 CREATED http://182.161.114.101/identity/v3/auth/tokens
+<a href="#__codelineno-12-80" id="__codelineno-12-80" name="__codelineno-12-80"></a>Date: Thu, 15 Dec 2022 09:23:40 GMT
+<a href="#__codelineno-12-81" id="__codelineno-12-81" name="__codelineno-12-81"></a>Server: Apache/2.4.41 (Ubuntu)
+<a href="#__codelineno-12-82" id="__codelineno-12-82" name="__codelineno-12-82"></a>Content-Type: application/json
+<a href="#__codelineno-12-83" id="__codelineno-12-83" name="__codelineno-12-83"></a>Content-Length: 3952
+<a href="#__codelineno-12-84" id="__codelineno-12-84" name="__codelineno-12-84"></a>X-Subject-Token: gAAAAABjmuecYFmRPQsVsMQG0ISfxCu8my-78UFyTsH3pvEyXoED6xdWFniwmGex1QGimVH2utjSxyxDJI9Rso6QFflEjaDgWoO3KzZ_8C3oVzpLp9nBxlPhn97YNn01BT7UFubQucRARWUGTdSXeLK_KqKAhy4080GkUXHIal2SUQcqhrhC1yA
+<a href="#__codelineno-12-85" id="__codelineno-12-85" name="__codelineno-12-85"></a>Vary: X-Auth-Token
+<a href="#__codelineno-12-86" id="__codelineno-12-86" name="__codelineno-12-86"></a>x-openstack-request-id: req-6ea1f0e1-7ffc-4640-83fb-71fd68c1b58e
+<a href="#__codelineno-12-87" id="__codelineno-12-87" name="__codelineno-12-87"></a>Connection: close
+<a href="#__codelineno-12-88" id="__codelineno-12-88" name="__codelineno-12-88"></a>
+<a href="#__codelineno-12-89" id="__codelineno-12-89" name="__codelineno-12-89"></a>{
+<a href="#__codelineno-12-90" id="__codelineno-12-90" name="__codelineno-12-90"></a>  "token": {
+<a href="#__codelineno-12-91" id="__codelineno-12-91" name="__codelineno-12-91"></a>    "methods": [
+<a href="#__codelineno-12-92" id="__codelineno-12-92" name="__codelineno-12-92"></a>      "password"
+<a href="#__codelineno-12-93" id="__codelineno-12-93" name="__codelineno-12-93"></a>    ],
+<a href="#__codelineno-12-94" id="__codelineno-12-94" name="__codelineno-12-94"></a>    "user": {
+<a href="#__codelineno-12-95" id="__codelineno-12-95" name="__codelineno-12-95"></a>      "domain": {
+<a href="#__codelineno-12-96" id="__codelineno-12-96" name="__codelineno-12-96"></a>        "id": "default",
+<a href="#__codelineno-12-97" id="__codelineno-12-97" name="__codelineno-12-97"></a>        "name": "Default"
+<a href="#__codelineno-12-98" id="__codelineno-12-98" name="__codelineno-12-98"></a>      },
+<a href="#__codelineno-12-99" id="__codelineno-12-99" name="__codelineno-12-99"></a>      "id": "8221f17fbf934d309ba96cf2218be3ff",
+<a href="#__codelineno-12-100" id="__codelineno-12-100" name="__codelineno-12-100"></a>      "name": "admin",
+<a href="#__codelineno-12-101" id="__codelineno-12-101" name="__codelineno-12-101"></a>      "password_expires_at": null
+<a href="#__codelineno-12-102" id="__codelineno-12-102" name="__codelineno-12-102"></a>    },
+<a href="#__codelineno-12-103" id="__codelineno-12-103" name="__codelineno-12-103"></a>    "audit_ids": [
+<a href="#__codelineno-12-104" id="__codelineno-12-104" name="__codelineno-12-104"></a>      "gU0UDl2MSOeHLxUg2DBN0A"
+<a href="#__codelineno-12-105" id="__codelineno-12-105" name="__codelineno-12-105"></a>    ],
+<a href="#__codelineno-12-106" id="__codelineno-12-106" name="__codelineno-12-106"></a>    "expires_at": "2022-12-15T12:23:40.000000Z",
+<a href="#__codelineno-12-107" id="__codelineno-12-107" name="__codelineno-12-107"></a>    "issued_at": "2022-12-15T09:23:40.000000Z",
+<a href="#__codelineno-12-108" id="__codelineno-12-108" name="__codelineno-12-108"></a>    "project": {
+<a href="#__codelineno-12-109" id="__codelineno-12-109" name="__codelineno-12-109"></a>      "domain": {
+<a href="#__codelineno-12-110" id="__codelineno-12-110" name="__codelineno-12-110"></a>        "id": "default",
+<a href="#__codelineno-12-111" id="__codelineno-12-111" name="__codelineno-12-111"></a>        "name": "Default"
+<a href="#__codelineno-12-112" id="__codelineno-12-112" name="__codelineno-12-112"></a>      },
+<a href="#__codelineno-12-113" id="__codelineno-12-113" name="__codelineno-12-113"></a>      "id": "a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-114" id="__codelineno-12-114" name="__codelineno-12-114"></a>      "name": "admin"
+<a href="#__codelineno-12-115" id="__codelineno-12-115" name="__codelineno-12-115"></a>    },
+<a href="#__codelineno-12-116" id="__codelineno-12-116" name="__codelineno-12-116"></a>    "is_domain": false,
+<a href="#__codelineno-12-117" id="__codelineno-12-117" name="__codelineno-12-117"></a>    "roles": [
+<a href="#__codelineno-12-118" id="__codelineno-12-118" name="__codelineno-12-118"></a>      {
+<a href="#__codelineno-12-119" id="__codelineno-12-119" name="__codelineno-12-119"></a>        "id": "9ec297ce89234ce6bf2813e5e0166e4d",
+<a href="#__codelineno-12-120" id="__codelineno-12-120" name="__codelineno-12-120"></a>        "name": "member"
+<a href="#__codelineno-12-121" id="__codelineno-12-121" name="__codelineno-12-121"></a>      },
+<a href="#__codelineno-12-122" id="__codelineno-12-122" name="__codelineno-12-122"></a>      {
+<a href="#__codelineno-12-123" id="__codelineno-12-123" name="__codelineno-12-123"></a>        "id": "dbf0266266eb4ea885528545e3eb59ec",
+<a href="#__codelineno-12-124" id="__codelineno-12-124" name="__codelineno-12-124"></a>        "name": "reader"
+<a href="#__codelineno-12-125" id="__codelineno-12-125" name="__codelineno-12-125"></a>      },
+<a href="#__codelineno-12-126" id="__codelineno-12-126" name="__codelineno-12-126"></a>      {
+<a href="#__codelineno-12-127" id="__codelineno-12-127" name="__codelineno-12-127"></a>        "id": "89efad03325b4fb9a021bd88e534bbad",
+<a href="#__codelineno-12-128" id="__codelineno-12-128" name="__codelineno-12-128"></a>        "name": "admin"
+<a href="#__codelineno-12-129" id="__codelineno-12-129" name="__codelineno-12-129"></a>      }
+<a href="#__codelineno-12-130" id="__codelineno-12-130" name="__codelineno-12-130"></a>    ],
+<a href="#__codelineno-12-131" id="__codelineno-12-131" name="__codelineno-12-131"></a>    "catalog": [
+<a href="#__codelineno-12-132" id="__codelineno-12-132" name="__codelineno-12-132"></a>      {
+<a href="#__codelineno-12-133" id="__codelineno-12-133" name="__codelineno-12-133"></a>        "endpoints": [
+<a href="#__codelineno-12-134" id="__codelineno-12-134" name="__codelineno-12-134"></a>          {
+<a href="#__codelineno-12-135" id="__codelineno-12-135" name="__codelineno-12-135"></a>            "id": "06b2a46d96e349d08631686ab53d7e83",
+<a href="#__codelineno-12-136" id="__codelineno-12-136" name="__codelineno-12-136"></a>            "interface": "public",
+<a href="#__codelineno-12-137" id="__codelineno-12-137" name="__codelineno-12-137"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-138" id="__codelineno-12-138" name="__codelineno-12-138"></a>            "url": "http://182.161.114.101/compute/v2/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-139" id="__codelineno-12-139" name="__codelineno-12-139"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-140" id="__codelineno-12-140" name="__codelineno-12-140"></a>          }
+<a href="#__codelineno-12-141" id="__codelineno-12-141" name="__codelineno-12-141"></a>        ],
+<a href="#__codelineno-12-142" id="__codelineno-12-142" name="__codelineno-12-142"></a>        "id": "1ca87647ab754599b632a643e5b02c7c",
+<a href="#__codelineno-12-143" id="__codelineno-12-143" name="__codelineno-12-143"></a>        "type": "compute_legacy",
+<a href="#__codelineno-12-144" id="__codelineno-12-144" name="__codelineno-12-144"></a>        "name": "nova_legacy"
+<a href="#__codelineno-12-145" id="__codelineno-12-145" name="__codelineno-12-145"></a>      },
+<a href="#__codelineno-12-146" id="__codelineno-12-146" name="__codelineno-12-146"></a>      {
+<a href="#__codelineno-12-147" id="__codelineno-12-147" name="__codelineno-12-147"></a>        "endpoints": [
+<a href="#__codelineno-12-148" id="__codelineno-12-148" name="__codelineno-12-148"></a>          {
+<a href="#__codelineno-12-149" id="__codelineno-12-149" name="__codelineno-12-149"></a>            "id": "254257a27e574069b9510cc4f218afa1",
+<a href="#__codelineno-12-150" id="__codelineno-12-150" name="__codelineno-12-150"></a>            "interface": "public",
+<a href="#__codelineno-12-151" id="__codelineno-12-151" name="__codelineno-12-151"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-152" id="__codelineno-12-152" name="__codelineno-12-152"></a>            "url": "http://182.161.114.101/identity",
+<a href="#__codelineno-12-153" id="__codelineno-12-153" name="__codelineno-12-153"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-154" id="__codelineno-12-154" name="__codelineno-12-154"></a>          }
+<a href="#__codelineno-12-155" id="__codelineno-12-155" name="__codelineno-12-155"></a>        ],
+<a href="#__codelineno-12-156" id="__codelineno-12-156" name="__codelineno-12-156"></a>        "id": "2241c852ef204ee5bd4f4092ae9b5c7d",
+<a href="#__codelineno-12-157" id="__codelineno-12-157" name="__codelineno-12-157"></a>        "type": "identity",
+<a href="#__codelineno-12-158" id="__codelineno-12-158" name="__codelineno-12-158"></a>        "name": "keystone"
+<a href="#__codelineno-12-159" id="__codelineno-12-159" name="__codelineno-12-159"></a>      },
+<a href="#__codelineno-12-160" id="__codelineno-12-160" name="__codelineno-12-160"></a>      {
+<a href="#__codelineno-12-161" id="__codelineno-12-161" name="__codelineno-12-161"></a>        "endpoints": [
+<a href="#__codelineno-12-162" id="__codelineno-12-162" name="__codelineno-12-162"></a>          {
+<a href="#__codelineno-12-163" id="__codelineno-12-163" name="__codelineno-12-163"></a>            "id": "a49d989ec6dd4e8f9399cf8a5caf519b",
+<a href="#__codelineno-12-164" id="__codelineno-12-164" name="__codelineno-12-164"></a>            "interface": "public",
+<a href="#__codelineno-12-165" id="__codelineno-12-165" name="__codelineno-12-165"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-166" id="__codelineno-12-166" name="__codelineno-12-166"></a>            "url": "http://182.161.114.101/volume/v3/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-167" id="__codelineno-12-167" name="__codelineno-12-167"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-168" id="__codelineno-12-168" name="__codelineno-12-168"></a>          }
+<a href="#__codelineno-12-169" id="__codelineno-12-169" name="__codelineno-12-169"></a>        ],
+<a href="#__codelineno-12-170" id="__codelineno-12-170" name="__codelineno-12-170"></a>        "id": "2baac711c03b4da1abaabe4e0f0f3575",
+<a href="#__codelineno-12-171" id="__codelineno-12-171" name="__codelineno-12-171"></a>        "type": "volumev3",
+<a href="#__codelineno-12-172" id="__codelineno-12-172" name="__codelineno-12-172"></a>        "name": "cinderv3"
+<a href="#__codelineno-12-173" id="__codelineno-12-173" name="__codelineno-12-173"></a>      },
+<a href="#__codelineno-12-174" id="__codelineno-12-174" name="__codelineno-12-174"></a>      {
+<a href="#__codelineno-12-175" id="__codelineno-12-175" name="__codelineno-12-175"></a>        "endpoints": [
+<a href="#__codelineno-12-176" id="__codelineno-12-176" name="__codelineno-12-176"></a>          {
+<a href="#__codelineno-12-177" id="__codelineno-12-177" name="__codelineno-12-177"></a>            "id": "3195d06aa49541009838146ab9072997",
+<a href="#__codelineno-12-178" id="__codelineno-12-178" name="__codelineno-12-178"></a>            "interface": "public",
+<a href="#__codelineno-12-179" id="__codelineno-12-179" name="__codelineno-12-179"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-180" id="__codelineno-12-180" name="__codelineno-12-180"></a>            "url": "http://182.161.114.101/image",
+<a href="#__codelineno-12-181" id="__codelineno-12-181" name="__codelineno-12-181"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-182" id="__codelineno-12-182" name="__codelineno-12-182"></a>          }
+<a href="#__codelineno-12-183" id="__codelineno-12-183" name="__codelineno-12-183"></a>        ],
+<a href="#__codelineno-12-184" id="__codelineno-12-184" name="__codelineno-12-184"></a>        "id": "4134c089d54f40c4bff6629c9b3c8b17",
+<a href="#__codelineno-12-185" id="__codelineno-12-185" name="__codelineno-12-185"></a>        "type": "image",
+<a href="#__codelineno-12-186" id="__codelineno-12-186" name="__codelineno-12-186"></a>        "name": "glance"
+<a href="#__codelineno-12-187" id="__codelineno-12-187" name="__codelineno-12-187"></a>      },
+<a href="#__codelineno-12-188" id="__codelineno-12-188" name="__codelineno-12-188"></a>      {
+<a href="#__codelineno-12-189" id="__codelineno-12-189" name="__codelineno-12-189"></a>        "endpoints": [
+<a href="#__codelineno-12-190" id="__codelineno-12-190" name="__codelineno-12-190"></a>          {
+<a href="#__codelineno-12-191" id="__codelineno-12-191" name="__codelineno-12-191"></a>            "id": "be657c3c268e49c08bb0d31aa7b79b01",
+<a href="#__codelineno-12-192" id="__codelineno-12-192" name="__codelineno-12-192"></a>            "interface": "public",
+<a href="#__codelineno-12-193" id="__codelineno-12-193" name="__codelineno-12-193"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-194" id="__codelineno-12-194" name="__codelineno-12-194"></a>            "url": "http://182.161.114.101:9696/networking",
+<a href="#__codelineno-12-195" id="__codelineno-12-195" name="__codelineno-12-195"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-196" id="__codelineno-12-196" name="__codelineno-12-196"></a>          }
+<a href="#__codelineno-12-197" id="__codelineno-12-197" name="__codelineno-12-197"></a>        ],
+<a href="#__codelineno-12-198" id="__codelineno-12-198" name="__codelineno-12-198"></a>        "id": "59d326ea519d4ad58dcc784330c372a4",
+<a href="#__codelineno-12-199" id="__codelineno-12-199" name="__codelineno-12-199"></a>        "type": "network",
+<a href="#__codelineno-12-200" id="__codelineno-12-200" name="__codelineno-12-200"></a>        "name": "neutron"
+<a href="#__codelineno-12-201" id="__codelineno-12-201" name="__codelineno-12-201"></a>      },
+<a href="#__codelineno-12-202" id="__codelineno-12-202" name="__codelineno-12-202"></a>      {
+<a href="#__codelineno-12-203" id="__codelineno-12-203" name="__codelineno-12-203"></a>        "endpoints": [
+<a href="#__codelineno-12-204" id="__codelineno-12-204" name="__codelineno-12-204"></a>          {
+<a href="#__codelineno-12-205" id="__codelineno-12-205" name="__codelineno-12-205"></a>            "id": "64319e2274594aca8b7ff17be26f1306",
+<a href="#__codelineno-12-206" id="__codelineno-12-206" name="__codelineno-12-206"></a>            "interface": "admin",
+<a href="#__codelineno-12-207" id="__codelineno-12-207" name="__codelineno-12-207"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-208" id="__codelineno-12-208" name="__codelineno-12-208"></a>            "url": "http://182.161.114.101:8080",
+<a href="#__codelineno-12-209" id="__codelineno-12-209" name="__codelineno-12-209"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-210" id="__codelineno-12-210" name="__codelineno-12-210"></a>          },
+<a href="#__codelineno-12-211" id="__codelineno-12-211" name="__codelineno-12-211"></a>          {
+<a href="#__codelineno-12-212" id="__codelineno-12-212" name="__codelineno-12-212"></a>            "id": "721a5750cf0448729c85f21749859ec0",
+<a href="#__codelineno-12-213" id="__codelineno-12-213" name="__codelineno-12-213"></a>            "interface": "public",
+<a href="#__codelineno-12-214" id="__codelineno-12-214" name="__codelineno-12-214"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-215" id="__codelineno-12-215" name="__codelineno-12-215"></a>            "url": "http://182.161.114.101:8080/v1/AUTH_a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-216" id="__codelineno-12-216" name="__codelineno-12-216"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-217" id="__codelineno-12-217" name="__codelineno-12-217"></a>          }
+<a href="#__codelineno-12-218" id="__codelineno-12-218" name="__codelineno-12-218"></a>        ],
+<a href="#__codelineno-12-219" id="__codelineno-12-219" name="__codelineno-12-219"></a>        "id": "5b4f3dd567054612914e94f37e396d05",
+<a href="#__codelineno-12-220" id="__codelineno-12-220" name="__codelineno-12-220"></a>        "type": "object-store",
+<a href="#__codelineno-12-221" id="__codelineno-12-221" name="__codelineno-12-221"></a>        "name": "swift"
+<a href="#__codelineno-12-222" id="__codelineno-12-222" name="__codelineno-12-222"></a>      },
+<a href="#__codelineno-12-223" id="__codelineno-12-223" name="__codelineno-12-223"></a>      {
+<a href="#__codelineno-12-224" id="__codelineno-12-224" name="__codelineno-12-224"></a>        "endpoints": [
+<a href="#__codelineno-12-225" id="__codelineno-12-225" name="__codelineno-12-225"></a>          {
+<a href="#__codelineno-12-226" id="__codelineno-12-226" name="__codelineno-12-226"></a>            "id": "dac7532e7f2547d59c42be1309388076",
+<a href="#__codelineno-12-227" id="__codelineno-12-227" name="__codelineno-12-227"></a>            "interface": "public",
+<a href="#__codelineno-12-228" id="__codelineno-12-228" name="__codelineno-12-228"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-229" id="__codelineno-12-229" name="__codelineno-12-229"></a>            "url": "http://182.161.114.101/placement",
+<a href="#__codelineno-12-230" id="__codelineno-12-230" name="__codelineno-12-230"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-231" id="__codelineno-12-231" name="__codelineno-12-231"></a>          }
+<a href="#__codelineno-12-232" id="__codelineno-12-232" name="__codelineno-12-232"></a>        ],
+<a href="#__codelineno-12-233" id="__codelineno-12-233" name="__codelineno-12-233"></a>        "id": "5f8648439aa0443588164675566362a4",
+<a href="#__codelineno-12-234" id="__codelineno-12-234" name="__codelineno-12-234"></a>        "type": "placement",
+<a href="#__codelineno-12-235" id="__codelineno-12-235" name="__codelineno-12-235"></a>        "name": "placement"
+<a href="#__codelineno-12-236" id="__codelineno-12-236" name="__codelineno-12-236"></a>      },
+<a href="#__codelineno-12-237" id="__codelineno-12-237" name="__codelineno-12-237"></a>      {
+<a href="#__codelineno-12-238" id="__codelineno-12-238" name="__codelineno-12-238"></a>        "endpoints": [
+<a href="#__codelineno-12-239" id="__codelineno-12-239" name="__codelineno-12-239"></a>          {
+<a href="#__codelineno-12-240" id="__codelineno-12-240" name="__codelineno-12-240"></a>            "id": "0d3a0c91848845ddb1794791ceeed1db",
+<a href="#__codelineno-12-241" id="__codelineno-12-241" name="__codelineno-12-241"></a>            "interface": "public",
+<a href="#__codelineno-12-242" id="__codelineno-12-242" name="__codelineno-12-242"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-243" id="__codelineno-12-243" name="__codelineno-12-243"></a>            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-244" id="__codelineno-12-244" name="__codelineno-12-244"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-245" id="__codelineno-12-245" name="__codelineno-12-245"></a>          },
+<a href="#__codelineno-12-246" id="__codelineno-12-246" name="__codelineno-12-246"></a>          {
+<a href="#__codelineno-12-247" id="__codelineno-12-247" name="__codelineno-12-247"></a>            "id": "d4e369995c8847d9aaeeab1824dc3a02",
+<a href="#__codelineno-12-248" id="__codelineno-12-248" name="__codelineno-12-248"></a>            "interface": "admin",
+<a href="#__codelineno-12-249" id="__codelineno-12-249" name="__codelineno-12-249"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-250" id="__codelineno-12-250" name="__codelineno-12-250"></a>            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-251" id="__codelineno-12-251" name="__codelineno-12-251"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-252" id="__codelineno-12-252" name="__codelineno-12-252"></a>          },
+<a href="#__codelineno-12-253" id="__codelineno-12-253" name="__codelineno-12-253"></a>          {
+<a href="#__codelineno-12-254" id="__codelineno-12-254" name="__codelineno-12-254"></a>            "id": "de625690480c40878f484c10f0cc21c3",
+<a href="#__codelineno-12-255" id="__codelineno-12-255" name="__codelineno-12-255"></a>            "interface": "internal",
+<a href="#__codelineno-12-256" id="__codelineno-12-256" name="__codelineno-12-256"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-257" id="__codelineno-12-257" name="__codelineno-12-257"></a>            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-258" id="__codelineno-12-258" name="__codelineno-12-258"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-259" id="__codelineno-12-259" name="__codelineno-12-259"></a>          }
+<a href="#__codelineno-12-260" id="__codelineno-12-260" name="__codelineno-12-260"></a>        ],
+<a href="#__codelineno-12-261" id="__codelineno-12-261" name="__codelineno-12-261"></a>        "id": "985cf9347e11431bbbc8640d3c73e064",
+<a href="#__codelineno-12-262" id="__codelineno-12-262" name="__codelineno-12-262"></a>        "type": "database",
+<a href="#__codelineno-12-263" id="__codelineno-12-263" name="__codelineno-12-263"></a>        "name": "trove"
+<a href="#__codelineno-12-264" id="__codelineno-12-264" name="__codelineno-12-264"></a>      },
+<a href="#__codelineno-12-265" id="__codelineno-12-265" name="__codelineno-12-265"></a>      {
+<a href="#__codelineno-12-266" id="__codelineno-12-266" name="__codelineno-12-266"></a>        "endpoints": [
+<a href="#__codelineno-12-267" id="__codelineno-12-267" name="__codelineno-12-267"></a>          {
+<a href="#__codelineno-12-268" id="__codelineno-12-268" name="__codelineno-12-268"></a>            "id": "ce7d3f34c48d4c1a877222ca8403bcbc",
+<a href="#__codelineno-12-269" id="__codelineno-12-269" name="__codelineno-12-269"></a>            "interface": "public",
+<a href="#__codelineno-12-270" id="__codelineno-12-270" name="__codelineno-12-270"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-271" id="__codelineno-12-271" name="__codelineno-12-271"></a>            "url": "http://182.161.114.101/volume/v3/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-272" id="__codelineno-12-272" name="__codelineno-12-272"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-273" id="__codelineno-12-273" name="__codelineno-12-273"></a>          }
+<a href="#__codelineno-12-274" id="__codelineno-12-274" name="__codelineno-12-274"></a>        ],
+<a href="#__codelineno-12-275" id="__codelineno-12-275" name="__codelineno-12-275"></a>        "id": "ec5120d847b7457485bbbafc555df0af",
+<a href="#__codelineno-12-276" id="__codelineno-12-276" name="__codelineno-12-276"></a>        "type": "block-storage",
+<a href="#__codelineno-12-277" id="__codelineno-12-277" name="__codelineno-12-277"></a>        "name": "cinder"
+<a href="#__codelineno-12-278" id="__codelineno-12-278" name="__codelineno-12-278"></a>      },
+<a href="#__codelineno-12-279" id="__codelineno-12-279" name="__codelineno-12-279"></a>      {
+<a href="#__codelineno-12-280" id="__codelineno-12-280" name="__codelineno-12-280"></a>        "endpoints": [
+<a href="#__codelineno-12-281" id="__codelineno-12-281" name="__codelineno-12-281"></a>          {
+<a href="#__codelineno-12-282" id="__codelineno-12-282" name="__codelineno-12-282"></a>            "id": "82bfd276ae734c3788bc66159b0c6d39",
+<a href="#__codelineno-12-283" id="__codelineno-12-283" name="__codelineno-12-283"></a>            "interface": "public",
+<a href="#__codelineno-12-284" id="__codelineno-12-284" name="__codelineno-12-284"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-285" id="__codelineno-12-285" name="__codelineno-12-285"></a>            "url": "http://182.161.114.101/compute/v2.1",
+<a href="#__codelineno-12-286" id="__codelineno-12-286" name="__codelineno-12-286"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-287" id="__codelineno-12-287" name="__codelineno-12-287"></a>          }
+<a href="#__codelineno-12-288" id="__codelineno-12-288" name="__codelineno-12-288"></a>        ],
+<a href="#__codelineno-12-289" id="__codelineno-12-289" name="__codelineno-12-289"></a>        "id": "fa5e4dfaffbe476c88be86bbc10f092e",
+<a href="#__codelineno-12-290" id="__codelineno-12-290" name="__codelineno-12-290"></a>        "type": "compute",
+<a href="#__codelineno-12-291" id="__codelineno-12-291" name="__codelineno-12-291"></a>        "name": "nova"
+<a href="#__codelineno-12-292" id="__codelineno-12-292" name="__codelineno-12-292"></a>      }
+<a href="#__codelineno-12-293" id="__codelineno-12-293" name="__codelineno-12-293"></a>    ]
+<a href="#__codelineno-12-294" id="__codelineno-12-294" name="__codelineno-12-294"></a>  }
+<a href="#__codelineno-12-295" id="__codelineno-12-295" name="__codelineno-12-295"></a>}
+<a href="#__codelineno-12-296" id="__codelineno-12-296" name="__codelineno-12-296"></a>
+<a href="#__codelineno-12-297" id="__codelineno-12-297" name="__codelineno-12-297"></a>
+<a href="#__codelineno-12-298" id="__codelineno-12-298" name="__codelineno-12-298"></a>__openstack__ -&gt; Request [3] GET http://182.161.114.101/image
+<a href="#__codelineno-12-299" id="__codelineno-12-299" name="__codelineno-12-299"></a>User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+<a href="#__codelineno-12-300" id="__codelineno-12-300" name="__codelineno-12-300"></a>Accept-Encoding: gzip, deflate
+<a href="#__codelineno-12-301" id="__codelineno-12-301" name="__codelineno-12-301"></a>Accept: application/json
+<a href="#__codelineno-12-302" id="__codelineno-12-302" name="__codelineno-12-302"></a>Connection: keep-alive
+<a href="#__codelineno-12-303" id="__codelineno-12-303" name="__codelineno-12-303"></a>
+<a href="#__codelineno-12-304" id="__codelineno-12-304" name="__codelineno-12-304"></a>None
+<a href="#__codelineno-12-305" id="__codelineno-12-305" name="__codelineno-12-305"></a>
+<a href="#__codelineno-12-306" id="__codelineno-12-306" name="__codelineno-12-306"></a>__openstack__ &lt;- Response [3] 300 Multiple Choices http://182.161.114.101/image
+<a href="#__codelineno-12-307" id="__codelineno-12-307" name="__codelineno-12-307"></a>Date: Thu, 15 Dec 2022 09:23:41 GMT
+<a href="#__codelineno-12-308" id="__codelineno-12-308" name="__codelineno-12-308"></a>Server: Apache/2.4.41 (Ubuntu)
+<a href="#__codelineno-12-309" id="__codelineno-12-309" name="__codelineno-12-309"></a>Content-Type: application/json
+<a href="#__codelineno-12-310" id="__codelineno-12-310" name="__codelineno-12-310"></a>Content-Length: 1347
+<a href="#__codelineno-12-311" id="__codelineno-12-311" name="__codelineno-12-311"></a>Connection: close
+<a href="#__codelineno-12-312" id="__codelineno-12-312" name="__codelineno-12-312"></a>
+<a href="#__codelineno-12-313" id="__codelineno-12-313" name="__codelineno-12-313"></a>{
+<a href="#__codelineno-12-314" id="__codelineno-12-314" name="__codelineno-12-314"></a>  "versions": [
+<a href="#__codelineno-12-315" id="__codelineno-12-315" name="__codelineno-12-315"></a>    {
+<a href="#__codelineno-12-316" id="__codelineno-12-316" name="__codelineno-12-316"></a>      "id": "v2.16",
+<a href="#__codelineno-12-317" id="__codelineno-12-317" name="__codelineno-12-317"></a>      "status": "CURRENT",
+<a href="#__codelineno-12-318" id="__codelineno-12-318" name="__codelineno-12-318"></a>      "links": [
+<a href="#__codelineno-12-319" id="__codelineno-12-319" name="__codelineno-12-319"></a>        {
+<a href="#__codelineno-12-320" id="__codelineno-12-320" name="__codelineno-12-320"></a>          "rel": "self",
+<a href="#__codelineno-12-321" id="__codelineno-12-321" name="__codelineno-12-321"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-322" id="__codelineno-12-322" name="__codelineno-12-322"></a>        }
+<a href="#__codelineno-12-323" id="__codelineno-12-323" name="__codelineno-12-323"></a>      ]
+<a href="#__codelineno-12-324" id="__codelineno-12-324" name="__codelineno-12-324"></a>    },
+<a href="#__codelineno-12-325" id="__codelineno-12-325" name="__codelineno-12-325"></a>    {
+<a href="#__codelineno-12-326" id="__codelineno-12-326" name="__codelineno-12-326"></a>      "id": "v2.15",
+<a href="#__codelineno-12-327" id="__codelineno-12-327" name="__codelineno-12-327"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-328" id="__codelineno-12-328" name="__codelineno-12-328"></a>      "links": [
+<a href="#__codelineno-12-329" id="__codelineno-12-329" name="__codelineno-12-329"></a>        {
+<a href="#__codelineno-12-330" id="__codelineno-12-330" name="__codelineno-12-330"></a>          "rel": "self",
+<a href="#__codelineno-12-331" id="__codelineno-12-331" name="__codelineno-12-331"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-332" id="__codelineno-12-332" name="__codelineno-12-332"></a>        }
+<a href="#__codelineno-12-333" id="__codelineno-12-333" name="__codelineno-12-333"></a>      ]
+<a href="#__codelineno-12-334" id="__codelineno-12-334" name="__codelineno-12-334"></a>    },
+<a href="#__codelineno-12-335" id="__codelineno-12-335" name="__codelineno-12-335"></a>    {
+<a href="#__codelineno-12-336" id="__codelineno-12-336" name="__codelineno-12-336"></a>      "id": "v2.14",
+<a href="#__codelineno-12-337" id="__codelineno-12-337" name="__codelineno-12-337"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-338" id="__codelineno-12-338" name="__codelineno-12-338"></a>      "links": [
+<a href="#__codelineno-12-339" id="__codelineno-12-339" name="__codelineno-12-339"></a>        {
+<a href="#__codelineno-12-340" id="__codelineno-12-340" name="__codelineno-12-340"></a>          "rel": "self",
+<a href="#__codelineno-12-341" id="__codelineno-12-341" name="__codelineno-12-341"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-342" id="__codelineno-12-342" name="__codelineno-12-342"></a>        }
+<a href="#__codelineno-12-343" id="__codelineno-12-343" name="__codelineno-12-343"></a>      ]
+<a href="#__codelineno-12-344" id="__codelineno-12-344" name="__codelineno-12-344"></a>    },
+<a href="#__codelineno-12-345" id="__codelineno-12-345" name="__codelineno-12-345"></a>    {
+<a href="#__codelineno-12-346" id="__codelineno-12-346" name="__codelineno-12-346"></a>      "id": "v2.9",
+<a href="#__codelineno-12-347" id="__codelineno-12-347" name="__codelineno-12-347"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-348" id="__codelineno-12-348" name="__codelineno-12-348"></a>      "links": [
+<a href="#__codelineno-12-349" id="__codelineno-12-349" name="__codelineno-12-349"></a>        {
+<a href="#__codelineno-12-350" id="__codelineno-12-350" name="__codelineno-12-350"></a>          "rel": "self",
+<a href="#__codelineno-12-351" id="__codelineno-12-351" name="__codelineno-12-351"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-352" id="__codelineno-12-352" name="__codelineno-12-352"></a>        }
+<a href="#__codelineno-12-353" id="__codelineno-12-353" name="__codelineno-12-353"></a>      ]
+<a href="#__codelineno-12-354" id="__codelineno-12-354" name="__codelineno-12-354"></a>    },
+<a href="#__codelineno-12-355" id="__codelineno-12-355" name="__codelineno-12-355"></a>    {
+<a href="#__codelineno-12-356" id="__codelineno-12-356" name="__codelineno-12-356"></a>      "id": "v2.7",
+<a href="#__codelineno-12-357" id="__codelineno-12-357" name="__codelineno-12-357"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-358" id="__codelineno-12-358" name="__codelineno-12-358"></a>      "links": [
+<a href="#__codelineno-12-359" id="__codelineno-12-359" name="__codelineno-12-359"></a>        {
+<a href="#__codelineno-12-360" id="__codelineno-12-360" name="__codelineno-12-360"></a>          "rel": "self",
+<a href="#__codelineno-12-361" id="__codelineno-12-361" name="__codelineno-12-361"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-362" id="__codelineno-12-362" name="__codelineno-12-362"></a>        }
+<a href="#__codelineno-12-363" id="__codelineno-12-363" name="__codelineno-12-363"></a>      ]
+<a href="#__codelineno-12-364" id="__codelineno-12-364" name="__codelineno-12-364"></a>    },
+<a href="#__codelineno-12-365" id="__codelineno-12-365" name="__codelineno-12-365"></a>    {
+<a href="#__codelineno-12-366" id="__codelineno-12-366" name="__codelineno-12-366"></a>      "id": "v2.6",
+<a href="#__codelineno-12-367" id="__codelineno-12-367" name="__codelineno-12-367"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-368" id="__codelineno-12-368" name="__codelineno-12-368"></a>      "links": [
+<a href="#__codelineno-12-369" id="__codelineno-12-369" name="__codelineno-12-369"></a>        {
+<a href="#__codelineno-12-370" id="__codelineno-12-370" name="__codelineno-12-370"></a>          "rel": "self",
+<a href="#__codelineno-12-371" id="__codelineno-12-371" name="__codelineno-12-371"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-372" id="__codelineno-12-372" name="__codelineno-12-372"></a>        }
+<a href="#__codelineno-12-373" id="__codelineno-12-373" name="__codelineno-12-373"></a>      ]
+<a href="#__codelineno-12-374" id="__codelineno-12-374" name="__codelineno-12-374"></a>    },
+<a href="#__codelineno-12-375" id="__codelineno-12-375" name="__codelineno-12-375"></a>    {
+<a href="#__codelineno-12-376" id="__codelineno-12-376" name="__codelineno-12-376"></a>      "id": "v2.5",
+<a href="#__codelineno-12-377" id="__codelineno-12-377" name="__codelineno-12-377"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-378" id="__codelineno-12-378" name="__codelineno-12-378"></a>      "links": [
+<a href="#__codelineno-12-379" id="__codelineno-12-379" name="__codelineno-12-379"></a>        {
+<a href="#__codelineno-12-380" id="__codelineno-12-380" name="__codelineno-12-380"></a>          "rel": "self",
+<a href="#__codelineno-12-381" id="__codelineno-12-381" name="__codelineno-12-381"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-382" id="__codelineno-12-382" name="__codelineno-12-382"></a>        }
+<a href="#__codelineno-12-383" id="__codelineno-12-383" name="__codelineno-12-383"></a>      ]
+<a href="#__codelineno-12-384" id="__codelineno-12-384" name="__codelineno-12-384"></a>    },
+<a href="#__codelineno-12-385" id="__codelineno-12-385" name="__codelineno-12-385"></a>    {
+<a href="#__codelineno-12-386" id="__codelineno-12-386" name="__codelineno-12-386"></a>      "id": "v2.4",
+<a href="#__codelineno-12-387" id="__codelineno-12-387" name="__codelineno-12-387"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-388" id="__codelineno-12-388" name="__codelineno-12-388"></a>      "links": [
+<a href="#__codelineno-12-389" id="__codelineno-12-389" name="__codelineno-12-389"></a>        {
+<a href="#__codelineno-12-390" id="__codelineno-12-390" name="__codelineno-12-390"></a>          "rel": "self",
+<a href="#__codelineno-12-391" id="__codelineno-12-391" name="__codelineno-12-391"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-392" id="__codelineno-12-392" name="__codelineno-12-392"></a>        }
+<a href="#__codelineno-12-393" id="__codelineno-12-393" name="__codelineno-12-393"></a>      ]
+<a href="#__codelineno-12-394" id="__codelineno-12-394" name="__codelineno-12-394"></a>    },
+<a href="#__codelineno-12-395" id="__codelineno-12-395" name="__codelineno-12-395"></a>    {
+<a href="#__codelineno-12-396" id="__codelineno-12-396" name="__codelineno-12-396"></a>      "id": "v2.3",
+<a href="#__codelineno-12-397" id="__codelineno-12-397" name="__codelineno-12-397"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-398" id="__codelineno-12-398" name="__codelineno-12-398"></a>      "links": [
+<a href="#__codelineno-12-399" id="__codelineno-12-399" name="__codelineno-12-399"></a>        {
+<a href="#__codelineno-12-400" id="__codelineno-12-400" name="__codelineno-12-400"></a>          "rel": "self",
+<a href="#__codelineno-12-401" id="__codelineno-12-401" name="__codelineno-12-401"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-402" id="__codelineno-12-402" name="__codelineno-12-402"></a>        }
+<a href="#__codelineno-12-403" id="__codelineno-12-403" name="__codelineno-12-403"></a>      ]
+<a href="#__codelineno-12-404" id="__codelineno-12-404" name="__codelineno-12-404"></a>    },
+<a href="#__codelineno-12-405" id="__codelineno-12-405" name="__codelineno-12-405"></a>    {
+<a href="#__codelineno-12-406" id="__codelineno-12-406" name="__codelineno-12-406"></a>      "id": "v2.2",
+<a href="#__codelineno-12-407" id="__codelineno-12-407" name="__codelineno-12-407"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-408" id="__codelineno-12-408" name="__codelineno-12-408"></a>      "links": [
+<a href="#__codelineno-12-409" id="__codelineno-12-409" name="__codelineno-12-409"></a>        {
+<a href="#__codelineno-12-410" id="__codelineno-12-410" name="__codelineno-12-410"></a>          "rel": "self",
+<a href="#__codelineno-12-411" id="__codelineno-12-411" name="__codelineno-12-411"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-412" id="__codelineno-12-412" name="__codelineno-12-412"></a>        }
+<a href="#__codelineno-12-413" id="__codelineno-12-413" name="__codelineno-12-413"></a>      ]
+<a href="#__codelineno-12-414" id="__codelineno-12-414" name="__codelineno-12-414"></a>    },
+<a href="#__codelineno-12-415" id="__codelineno-12-415" name="__codelineno-12-415"></a>    {
+<a href="#__codelineno-12-416" id="__codelineno-12-416" name="__codelineno-12-416"></a>      "id": "v2.1",
+<a href="#__codelineno-12-417" id="__codelineno-12-417" name="__codelineno-12-417"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-418" id="__codelineno-12-418" name="__codelineno-12-418"></a>      "links": [
+<a href="#__codelineno-12-419" id="__codelineno-12-419" name="__codelineno-12-419"></a>        {
+<a href="#__codelineno-12-420" id="__codelineno-12-420" name="__codelineno-12-420"></a>          "rel": "self",
+<a href="#__codelineno-12-421" id="__codelineno-12-421" name="__codelineno-12-421"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-422" id="__codelineno-12-422" name="__codelineno-12-422"></a>        }
+<a href="#__codelineno-12-423" id="__codelineno-12-423" name="__codelineno-12-423"></a>      ]
+<a href="#__codelineno-12-424" id="__codelineno-12-424" name="__codelineno-12-424"></a>    },
+<a href="#__codelineno-12-425" id="__codelineno-12-425" name="__codelineno-12-425"></a>    {
+<a href="#__codelineno-12-426" id="__codelineno-12-426" name="__codelineno-12-426"></a>      "id": "v2.0",
+<a href="#__codelineno-12-427" id="__codelineno-12-427" name="__codelineno-12-427"></a>      "status": "SUPPORTED",
+<a href="#__codelineno-12-428" id="__codelineno-12-428" name="__codelineno-12-428"></a>      "links": [
+<a href="#__codelineno-12-429" id="__codelineno-12-429" name="__codelineno-12-429"></a>        {
+<a href="#__codelineno-12-430" id="__codelineno-12-430" name="__codelineno-12-430"></a>          "rel": "self",
+<a href="#__codelineno-12-431" id="__codelineno-12-431" name="__codelineno-12-431"></a>          "href": "http://182.161.114.101/image/v2/"
+<a href="#__codelineno-12-432" id="__codelineno-12-432" name="__codelineno-12-432"></a>        }
+<a href="#__codelineno-12-433" id="__codelineno-12-433" name="__codelineno-12-433"></a>      ]
+<a href="#__codelineno-12-434" id="__codelineno-12-434" name="__codelineno-12-434"></a>    }
+<a href="#__codelineno-12-435" id="__codelineno-12-435" name="__codelineno-12-435"></a>  ]
+<a href="#__codelineno-12-436" id="__codelineno-12-436" name="__codelineno-12-436"></a>}
+<a href="#__codelineno-12-437" id="__codelineno-12-437" name="__codelineno-12-437"></a>
+<a href="#__codelineno-12-438" id="__codelineno-12-438" name="__codelineno-12-438"></a>
+<a href="#__codelineno-12-439" id="__codelineno-12-439" name="__codelineno-12-439"></a>__glance-api__ -&gt; Request [4] GET http://182.161.114.101/identity/v3/auth/tokens
+<a href="#__codelineno-12-440" id="__codelineno-12-440" name="__codelineno-12-440"></a>User-Agent: python-keystoneclient
+<a href="#__codelineno-12-441" id="__codelineno-12-441" name="__codelineno-12-441"></a>Accept-Encoding: gzip, deflate
+<a href="#__codelineno-12-442" id="__codelineno-12-442" name="__codelineno-12-442"></a>Accept: application/json
+<a href="#__codelineno-12-443" id="__codelineno-12-443" name="__codelineno-12-443"></a>Connection: keep-alive
+<a href="#__codelineno-12-444" id="__codelineno-12-444" name="__codelineno-12-444"></a>X-Subject-Token: gAAAAABjmuecYFmRPQsVsMQG0ISfxCu8my-78UFyTsH3pvEyXoED6xdWFniwmGex1QGimVH2utjSxyxDJI9Rso6QFflEjaDgWoO3KzZ_8C3oVzpLp9nBxlPhn97YNn01BT7UFubQucRARWUGTdSXeLK_KqKAhy4080GkUXHIal2SUQcqhrhC1yA
+<a href="#__codelineno-12-445" id="__codelineno-12-445" name="__codelineno-12-445"></a>OpenStack-Identity-Access-Rules: 1
+<a href="#__codelineno-12-446" id="__codelineno-12-446" name="__codelineno-12-446"></a>X-Auth-Token: gAAAAABjmuI-z7IINEe2nD9Ekm2B_uSPktIkGnwWwMU40ulNziBvPCEqdSoCKM-DjHxIM_-ph6Qfc6kldbn0a7EQDcfUTp7VLw68MKEleCNuwNI3IAid89k1r6VUPev0X61hu-xB5ihRZZFiwiC8tSleEO8O07mKRQOMt8rRfCHjiYR2VZ-uMHU
+<a href="#__codelineno-12-447" id="__codelineno-12-447" name="__codelineno-12-447"></a>
+<a href="#__codelineno-12-448" id="__codelineno-12-448" name="__codelineno-12-448"></a>None
+<a href="#__codelineno-12-449" id="__codelineno-12-449" name="__codelineno-12-449"></a>
+<a href="#__codelineno-12-450" id="__codelineno-12-450" name="__codelineno-12-450"></a>__glance-api__ &lt;- Response [4] 200 OK http://182.161.114.101/identity/v3/auth/tokens
+<a href="#__codelineno-12-451" id="__codelineno-12-451" name="__codelineno-12-451"></a>Date: Thu, 15 Dec 2022 09:23:41 GMT
+<a href="#__codelineno-12-452" id="__codelineno-12-452" name="__codelineno-12-452"></a>Server: Apache/2.4.41 (Ubuntu)
+<a href="#__codelineno-12-453" id="__codelineno-12-453" name="__codelineno-12-453"></a>Content-Type: application/json
+<a href="#__codelineno-12-454" id="__codelineno-12-454" name="__codelineno-12-454"></a>Content-Length: 3952
+<a href="#__codelineno-12-455" id="__codelineno-12-455" name="__codelineno-12-455"></a>X-Subject-Token: gAAAAABjmuecYFmRPQsVsMQG0ISfxCu8my-78UFyTsH3pvEyXoED6xdWFniwmGex1QGimVH2utjSxyxDJI9Rso6QFflEjaDgWoO3KzZ_8C3oVzpLp9nBxlPhn97YNn01BT7UFubQucRARWUGTdSXeLK_KqKAhy4080GkUXHIal2SUQcqhrhC1yA
+<a href="#__codelineno-12-456" id="__codelineno-12-456" name="__codelineno-12-456"></a>Vary: X-Auth-Token
+<a href="#__codelineno-12-457" id="__codelineno-12-457" name="__codelineno-12-457"></a>x-openstack-request-id: req-5cf38014-99f6-4134-87f9-e8a52191e5d3
+<a href="#__codelineno-12-458" id="__codelineno-12-458" name="__codelineno-12-458"></a>Connection: close
+<a href="#__codelineno-12-459" id="__codelineno-12-459" name="__codelineno-12-459"></a>
+<a href="#__codelineno-12-460" id="__codelineno-12-460" name="__codelineno-12-460"></a>{
+<a href="#__codelineno-12-461" id="__codelineno-12-461" name="__codelineno-12-461"></a>  "token": {
+<a href="#__codelineno-12-462" id="__codelineno-12-462" name="__codelineno-12-462"></a>    "methods": [
+<a href="#__codelineno-12-463" id="__codelineno-12-463" name="__codelineno-12-463"></a>      "password"
+<a href="#__codelineno-12-464" id="__codelineno-12-464" name="__codelineno-12-464"></a>    ],
+<a href="#__codelineno-12-465" id="__codelineno-12-465" name="__codelineno-12-465"></a>    "user": {
+<a href="#__codelineno-12-466" id="__codelineno-12-466" name="__codelineno-12-466"></a>      "domain": {
+<a href="#__codelineno-12-467" id="__codelineno-12-467" name="__codelineno-12-467"></a>        "id": "default",
+<a href="#__codelineno-12-468" id="__codelineno-12-468" name="__codelineno-12-468"></a>        "name": "Default"
+<a href="#__codelineno-12-469" id="__codelineno-12-469" name="__codelineno-12-469"></a>      },
+<a href="#__codelineno-12-470" id="__codelineno-12-470" name="__codelineno-12-470"></a>      "id": "8221f17fbf934d309ba96cf2218be3ff",
+<a href="#__codelineno-12-471" id="__codelineno-12-471" name="__codelineno-12-471"></a>      "name": "admin",
+<a href="#__codelineno-12-472" id="__codelineno-12-472" name="__codelineno-12-472"></a>      "password_expires_at": null
+<a href="#__codelineno-12-473" id="__codelineno-12-473" name="__codelineno-12-473"></a>    },
+<a href="#__codelineno-12-474" id="__codelineno-12-474" name="__codelineno-12-474"></a>    "audit_ids": [
+<a href="#__codelineno-12-475" id="__codelineno-12-475" name="__codelineno-12-475"></a>      "gU0UDl2MSOeHLxUg2DBN0A"
+<a href="#__codelineno-12-476" id="__codelineno-12-476" name="__codelineno-12-476"></a>    ],
+<a href="#__codelineno-12-477" id="__codelineno-12-477" name="__codelineno-12-477"></a>    "expires_at": "2022-12-15T12:23:40.000000Z",
+<a href="#__codelineno-12-478" id="__codelineno-12-478" name="__codelineno-12-478"></a>    "issued_at": "2022-12-15T09:23:40.000000Z",
+<a href="#__codelineno-12-479" id="__codelineno-12-479" name="__codelineno-12-479"></a>    "project": {
+<a href="#__codelineno-12-480" id="__codelineno-12-480" name="__codelineno-12-480"></a>      "domain": {
+<a href="#__codelineno-12-481" id="__codelineno-12-481" name="__codelineno-12-481"></a>        "id": "default",
+<a href="#__codelineno-12-482" id="__codelineno-12-482" name="__codelineno-12-482"></a>        "name": "Default"
+<a href="#__codelineno-12-483" id="__codelineno-12-483" name="__codelineno-12-483"></a>      },
+<a href="#__codelineno-12-484" id="__codelineno-12-484" name="__codelineno-12-484"></a>      "id": "a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-485" id="__codelineno-12-485" name="__codelineno-12-485"></a>      "name": "admin"
+<a href="#__codelineno-12-486" id="__codelineno-12-486" name="__codelineno-12-486"></a>    },
+<a href="#__codelineno-12-487" id="__codelineno-12-487" name="__codelineno-12-487"></a>    "is_domain": false,
+<a href="#__codelineno-12-488" id="__codelineno-12-488" name="__codelineno-12-488"></a>    "roles": [
+<a href="#__codelineno-12-489" id="__codelineno-12-489" name="__codelineno-12-489"></a>      {
+<a href="#__codelineno-12-490" id="__codelineno-12-490" name="__codelineno-12-490"></a>        "id": "9ec297ce89234ce6bf2813e5e0166e4d",
+<a href="#__codelineno-12-491" id="__codelineno-12-491" name="__codelineno-12-491"></a>        "name": "member"
+<a href="#__codelineno-12-492" id="__codelineno-12-492" name="__codelineno-12-492"></a>      },
+<a href="#__codelineno-12-493" id="__codelineno-12-493" name="__codelineno-12-493"></a>      {
+<a href="#__codelineno-12-494" id="__codelineno-12-494" name="__codelineno-12-494"></a>        "id": "dbf0266266eb4ea885528545e3eb59ec",
+<a href="#__codelineno-12-495" id="__codelineno-12-495" name="__codelineno-12-495"></a>        "name": "reader"
+<a href="#__codelineno-12-496" id="__codelineno-12-496" name="__codelineno-12-496"></a>      },
+<a href="#__codelineno-12-497" id="__codelineno-12-497" name="__codelineno-12-497"></a>      {
+<a href="#__codelineno-12-498" id="__codelineno-12-498" name="__codelineno-12-498"></a>        "id": "89efad03325b4fb9a021bd88e534bbad",
+<a href="#__codelineno-12-499" id="__codelineno-12-499" name="__codelineno-12-499"></a>        "name": "admin"
+<a href="#__codelineno-12-500" id="__codelineno-12-500" name="__codelineno-12-500"></a>      }
+<a href="#__codelineno-12-501" id="__codelineno-12-501" name="__codelineno-12-501"></a>    ],
+<a href="#__codelineno-12-502" id="__codelineno-12-502" name="__codelineno-12-502"></a>    "catalog": [
+<a href="#__codelineno-12-503" id="__codelineno-12-503" name="__codelineno-12-503"></a>      {
+<a href="#__codelineno-12-504" id="__codelineno-12-504" name="__codelineno-12-504"></a>        "endpoints": [
+<a href="#__codelineno-12-505" id="__codelineno-12-505" name="__codelineno-12-505"></a>          {
+<a href="#__codelineno-12-506" id="__codelineno-12-506" name="__codelineno-12-506"></a>            "id": "06b2a46d96e349d08631686ab53d7e83",
+<a href="#__codelineno-12-507" id="__codelineno-12-507" name="__codelineno-12-507"></a>            "interface": "public",
+<a href="#__codelineno-12-508" id="__codelineno-12-508" name="__codelineno-12-508"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-509" id="__codelineno-12-509" name="__codelineno-12-509"></a>            "url": "http://182.161.114.101/compute/v2/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-510" id="__codelineno-12-510" name="__codelineno-12-510"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-511" id="__codelineno-12-511" name="__codelineno-12-511"></a>          }
+<a href="#__codelineno-12-512" id="__codelineno-12-512" name="__codelineno-12-512"></a>        ],
+<a href="#__codelineno-12-513" id="__codelineno-12-513" name="__codelineno-12-513"></a>        "id": "1ca87647ab754599b632a643e5b02c7c",
+<a href="#__codelineno-12-514" id="__codelineno-12-514" name="__codelineno-12-514"></a>        "type": "compute_legacy",
+<a href="#__codelineno-12-515" id="__codelineno-12-515" name="__codelineno-12-515"></a>        "name": "nova_legacy"
+<a href="#__codelineno-12-516" id="__codelineno-12-516" name="__codelineno-12-516"></a>      },
+<a href="#__codelineno-12-517" id="__codelineno-12-517" name="__codelineno-12-517"></a>      {
+<a href="#__codelineno-12-518" id="__codelineno-12-518" name="__codelineno-12-518"></a>        "endpoints": [
+<a href="#__codelineno-12-519" id="__codelineno-12-519" name="__codelineno-12-519"></a>          {
+<a href="#__codelineno-12-520" id="__codelineno-12-520" name="__codelineno-12-520"></a>            "id": "254257a27e574069b9510cc4f218afa1",
+<a href="#__codelineno-12-521" id="__codelineno-12-521" name="__codelineno-12-521"></a>            "interface": "public",
+<a href="#__codelineno-12-522" id="__codelineno-12-522" name="__codelineno-12-522"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-523" id="__codelineno-12-523" name="__codelineno-12-523"></a>            "url": "http://182.161.114.101/identity",
+<a href="#__codelineno-12-524" id="__codelineno-12-524" name="__codelineno-12-524"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-525" id="__codelineno-12-525" name="__codelineno-12-525"></a>          }
+<a href="#__codelineno-12-526" id="__codelineno-12-526" name="__codelineno-12-526"></a>        ],
+<a href="#__codelineno-12-527" id="__codelineno-12-527" name="__codelineno-12-527"></a>        "id": "2241c852ef204ee5bd4f4092ae9b5c7d",
+<a href="#__codelineno-12-528" id="__codelineno-12-528" name="__codelineno-12-528"></a>        "type": "identity",
+<a href="#__codelineno-12-529" id="__codelineno-12-529" name="__codelineno-12-529"></a>        "name": "keystone"
+<a href="#__codelineno-12-530" id="__codelineno-12-530" name="__codelineno-12-530"></a>      },
+<a href="#__codelineno-12-531" id="__codelineno-12-531" name="__codelineno-12-531"></a>      {
+<a href="#__codelineno-12-532" id="__codelineno-12-532" name="__codelineno-12-532"></a>        "endpoints": [
+<a href="#__codelineno-12-533" id="__codelineno-12-533" name="__codelineno-12-533"></a>          {
+<a href="#__codelineno-12-534" id="__codelineno-12-534" name="__codelineno-12-534"></a>            "id": "a49d989ec6dd4e8f9399cf8a5caf519b",
+<a href="#__codelineno-12-535" id="__codelineno-12-535" name="__codelineno-12-535"></a>            "interface": "public",
+<a href="#__codelineno-12-536" id="__codelineno-12-536" name="__codelineno-12-536"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-537" id="__codelineno-12-537" name="__codelineno-12-537"></a>            "url": "http://182.161.114.101/volume/v3/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-538" id="__codelineno-12-538" name="__codelineno-12-538"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-539" id="__codelineno-12-539" name="__codelineno-12-539"></a>          }
+<a href="#__codelineno-12-540" id="__codelineno-12-540" name="__codelineno-12-540"></a>        ],
+<a href="#__codelineno-12-541" id="__codelineno-12-541" name="__codelineno-12-541"></a>        "id": "2baac711c03b4da1abaabe4e0f0f3575",
+<a href="#__codelineno-12-542" id="__codelineno-12-542" name="__codelineno-12-542"></a>        "type": "volumev3",
+<a href="#__codelineno-12-543" id="__codelineno-12-543" name="__codelineno-12-543"></a>        "name": "cinderv3"
+<a href="#__codelineno-12-544" id="__codelineno-12-544" name="__codelineno-12-544"></a>      },
+<a href="#__codelineno-12-545" id="__codelineno-12-545" name="__codelineno-12-545"></a>      {
+<a href="#__codelineno-12-546" id="__codelineno-12-546" name="__codelineno-12-546"></a>        "endpoints": [
+<a href="#__codelineno-12-547" id="__codelineno-12-547" name="__codelineno-12-547"></a>          {
+<a href="#__codelineno-12-548" id="__codelineno-12-548" name="__codelineno-12-548"></a>            "id": "3195d06aa49541009838146ab9072997",
+<a href="#__codelineno-12-549" id="__codelineno-12-549" name="__codelineno-12-549"></a>            "interface": "public",
+<a href="#__codelineno-12-550" id="__codelineno-12-550" name="__codelineno-12-550"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-551" id="__codelineno-12-551" name="__codelineno-12-551"></a>            "url": "http://182.161.114.101/image",
+<a href="#__codelineno-12-552" id="__codelineno-12-552" name="__codelineno-12-552"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-553" id="__codelineno-12-553" name="__codelineno-12-553"></a>          }
+<a href="#__codelineno-12-554" id="__codelineno-12-554" name="__codelineno-12-554"></a>        ],
+<a href="#__codelineno-12-555" id="__codelineno-12-555" name="__codelineno-12-555"></a>        "id": "4134c089d54f40c4bff6629c9b3c8b17",
+<a href="#__codelineno-12-556" id="__codelineno-12-556" name="__codelineno-12-556"></a>        "type": "image",
+<a href="#__codelineno-12-557" id="__codelineno-12-557" name="__codelineno-12-557"></a>        "name": "glance"
+<a href="#__codelineno-12-558" id="__codelineno-12-558" name="__codelineno-12-558"></a>      },
+<a href="#__codelineno-12-559" id="__codelineno-12-559" name="__codelineno-12-559"></a>      {
+<a href="#__codelineno-12-560" id="__codelineno-12-560" name="__codelineno-12-560"></a>        "endpoints": [
+<a href="#__codelineno-12-561" id="__codelineno-12-561" name="__codelineno-12-561"></a>          {
+<a href="#__codelineno-12-562" id="__codelineno-12-562" name="__codelineno-12-562"></a>            "id": "be657c3c268e49c08bb0d31aa7b79b01",
+<a href="#__codelineno-12-563" id="__codelineno-12-563" name="__codelineno-12-563"></a>            "interface": "public",
+<a href="#__codelineno-12-564" id="__codelineno-12-564" name="__codelineno-12-564"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-565" id="__codelineno-12-565" name="__codelineno-12-565"></a>            "url": "http://182.161.114.101:9696/networking",
+<a href="#__codelineno-12-566" id="__codelineno-12-566" name="__codelineno-12-566"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-567" id="__codelineno-12-567" name="__codelineno-12-567"></a>          }
+<a href="#__codelineno-12-568" id="__codelineno-12-568" name="__codelineno-12-568"></a>        ],
+<a href="#__codelineno-12-569" id="__codelineno-12-569" name="__codelineno-12-569"></a>        "id": "59d326ea519d4ad58dcc784330c372a4",
+<a href="#__codelineno-12-570" id="__codelineno-12-570" name="__codelineno-12-570"></a>        "type": "network",
+<a href="#__codelineno-12-571" id="__codelineno-12-571" name="__codelineno-12-571"></a>        "name": "neutron"
+<a href="#__codelineno-12-572" id="__codelineno-12-572" name="__codelineno-12-572"></a>      },
+<a href="#__codelineno-12-573" id="__codelineno-12-573" name="__codelineno-12-573"></a>      {
+<a href="#__codelineno-12-574" id="__codelineno-12-574" name="__codelineno-12-574"></a>        "endpoints": [
+<a href="#__codelineno-12-575" id="__codelineno-12-575" name="__codelineno-12-575"></a>          {
+<a href="#__codelineno-12-576" id="__codelineno-12-576" name="__codelineno-12-576"></a>            "id": "64319e2274594aca8b7ff17be26f1306",
+<a href="#__codelineno-12-577" id="__codelineno-12-577" name="__codelineno-12-577"></a>            "interface": "admin",
+<a href="#__codelineno-12-578" id="__codelineno-12-578" name="__codelineno-12-578"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-579" id="__codelineno-12-579" name="__codelineno-12-579"></a>            "url": "http://182.161.114.101:8080",
+<a href="#__codelineno-12-580" id="__codelineno-12-580" name="__codelineno-12-580"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-581" id="__codelineno-12-581" name="__codelineno-12-581"></a>          },
+<a href="#__codelineno-12-582" id="__codelineno-12-582" name="__codelineno-12-582"></a>          {
+<a href="#__codelineno-12-583" id="__codelineno-12-583" name="__codelineno-12-583"></a>            "id": "721a5750cf0448729c85f21749859ec0",
+<a href="#__codelineno-12-584" id="__codelineno-12-584" name="__codelineno-12-584"></a>            "interface": "public",
+<a href="#__codelineno-12-585" id="__codelineno-12-585" name="__codelineno-12-585"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-586" id="__codelineno-12-586" name="__codelineno-12-586"></a>            "url": "http://182.161.114.101:8080/v1/AUTH_a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-587" id="__codelineno-12-587" name="__codelineno-12-587"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-588" id="__codelineno-12-588" name="__codelineno-12-588"></a>          }
+<a href="#__codelineno-12-589" id="__codelineno-12-589" name="__codelineno-12-589"></a>        ],
+<a href="#__codelineno-12-590" id="__codelineno-12-590" name="__codelineno-12-590"></a>        "id": "5b4f3dd567054612914e94f37e396d05",
+<a href="#__codelineno-12-591" id="__codelineno-12-591" name="__codelineno-12-591"></a>        "type": "object-store",
+<a href="#__codelineno-12-592" id="__codelineno-12-592" name="__codelineno-12-592"></a>        "name": "swift"
+<a href="#__codelineno-12-593" id="__codelineno-12-593" name="__codelineno-12-593"></a>      },
+<a href="#__codelineno-12-594" id="__codelineno-12-594" name="__codelineno-12-594"></a>      {
+<a href="#__codelineno-12-595" id="__codelineno-12-595" name="__codelineno-12-595"></a>        "endpoints": [
+<a href="#__codelineno-12-596" id="__codelineno-12-596" name="__codelineno-12-596"></a>          {
+<a href="#__codelineno-12-597" id="__codelineno-12-597" name="__codelineno-12-597"></a>            "id": "dac7532e7f2547d59c42be1309388076",
+<a href="#__codelineno-12-598" id="__codelineno-12-598" name="__codelineno-12-598"></a>            "interface": "public",
+<a href="#__codelineno-12-599" id="__codelineno-12-599" name="__codelineno-12-599"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-600" id="__codelineno-12-600" name="__codelineno-12-600"></a>            "url": "http://182.161.114.101/placement",
+<a href="#__codelineno-12-601" id="__codelineno-12-601" name="__codelineno-12-601"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-602" id="__codelineno-12-602" name="__codelineno-12-602"></a>          }
+<a href="#__codelineno-12-603" id="__codelineno-12-603" name="__codelineno-12-603"></a>        ],
+<a href="#__codelineno-12-604" id="__codelineno-12-604" name="__codelineno-12-604"></a>        "id": "5f8648439aa0443588164675566362a4",
+<a href="#__codelineno-12-605" id="__codelineno-12-605" name="__codelineno-12-605"></a>        "type": "placement",
+<a href="#__codelineno-12-606" id="__codelineno-12-606" name="__codelineno-12-606"></a>        "name": "placement"
+<a href="#__codelineno-12-607" id="__codelineno-12-607" name="__codelineno-12-607"></a>      },
+<a href="#__codelineno-12-608" id="__codelineno-12-608" name="__codelineno-12-608"></a>      {
+<a href="#__codelineno-12-609" id="__codelineno-12-609" name="__codelineno-12-609"></a>        "endpoints": [
+<a href="#__codelineno-12-610" id="__codelineno-12-610" name="__codelineno-12-610"></a>          {
+<a href="#__codelineno-12-611" id="__codelineno-12-611" name="__codelineno-12-611"></a>            "id": "0d3a0c91848845ddb1794791ceeed1db",
+<a href="#__codelineno-12-612" id="__codelineno-12-612" name="__codelineno-12-612"></a>            "interface": "public",
+<a href="#__codelineno-12-613" id="__codelineno-12-613" name="__codelineno-12-613"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-614" id="__codelineno-12-614" name="__codelineno-12-614"></a>            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-615" id="__codelineno-12-615" name="__codelineno-12-615"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-616" id="__codelineno-12-616" name="__codelineno-12-616"></a>          },
+<a href="#__codelineno-12-617" id="__codelineno-12-617" name="__codelineno-12-617"></a>          {
+<a href="#__codelineno-12-618" id="__codelineno-12-618" name="__codelineno-12-618"></a>            "id": "d4e369995c8847d9aaeeab1824dc3a02",
+<a href="#__codelineno-12-619" id="__codelineno-12-619" name="__codelineno-12-619"></a>            "interface": "admin",
+<a href="#__codelineno-12-620" id="__codelineno-12-620" name="__codelineno-12-620"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-621" id="__codelineno-12-621" name="__codelineno-12-621"></a>            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-622" id="__codelineno-12-622" name="__codelineno-12-622"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-623" id="__codelineno-12-623" name="__codelineno-12-623"></a>          },
+<a href="#__codelineno-12-624" id="__codelineno-12-624" name="__codelineno-12-624"></a>          {
+<a href="#__codelineno-12-625" id="__codelineno-12-625" name="__codelineno-12-625"></a>            "id": "de625690480c40878f484c10f0cc21c3",
+<a href="#__codelineno-12-626" id="__codelineno-12-626" name="__codelineno-12-626"></a>            "interface": "internal",
+<a href="#__codelineno-12-627" id="__codelineno-12-627" name="__codelineno-12-627"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-628" id="__codelineno-12-628" name="__codelineno-12-628"></a>            "url": "http://182.161.114.101:8779/v1.0/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-629" id="__codelineno-12-629" name="__codelineno-12-629"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-630" id="__codelineno-12-630" name="__codelineno-12-630"></a>          }
+<a href="#__codelineno-12-631" id="__codelineno-12-631" name="__codelineno-12-631"></a>        ],
+<a href="#__codelineno-12-632" id="__codelineno-12-632" name="__codelineno-12-632"></a>        "id": "985cf9347e11431bbbc8640d3c73e064",
+<a href="#__codelineno-12-633" id="__codelineno-12-633" name="__codelineno-12-633"></a>        "type": "database",
+<a href="#__codelineno-12-634" id="__codelineno-12-634" name="__codelineno-12-634"></a>        "name": "trove"
+<a href="#__codelineno-12-635" id="__codelineno-12-635" name="__codelineno-12-635"></a>      },
+<a href="#__codelineno-12-636" id="__codelineno-12-636" name="__codelineno-12-636"></a>      {
+<a href="#__codelineno-12-637" id="__codelineno-12-637" name="__codelineno-12-637"></a>        "endpoints": [
+<a href="#__codelineno-12-638" id="__codelineno-12-638" name="__codelineno-12-638"></a>          {
+<a href="#__codelineno-12-639" id="__codelineno-12-639" name="__codelineno-12-639"></a>            "id": "ce7d3f34c48d4c1a877222ca8403bcbc",
+<a href="#__codelineno-12-640" id="__codelineno-12-640" name="__codelineno-12-640"></a>            "interface": "public",
+<a href="#__codelineno-12-641" id="__codelineno-12-641" name="__codelineno-12-641"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-642" id="__codelineno-12-642" name="__codelineno-12-642"></a>            "url": "http://182.161.114.101/volume/v3/a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-643" id="__codelineno-12-643" name="__codelineno-12-643"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-644" id="__codelineno-12-644" name="__codelineno-12-644"></a>          }
+<a href="#__codelineno-12-645" id="__codelineno-12-645" name="__codelineno-12-645"></a>        ],
+<a href="#__codelineno-12-646" id="__codelineno-12-646" name="__codelineno-12-646"></a>        "id": "ec5120d847b7457485bbbafc555df0af",
+<a href="#__codelineno-12-647" id="__codelineno-12-647" name="__codelineno-12-647"></a>        "type": "block-storage",
+<a href="#__codelineno-12-648" id="__codelineno-12-648" name="__codelineno-12-648"></a>        "name": "cinder"
+<a href="#__codelineno-12-649" id="__codelineno-12-649" name="__codelineno-12-649"></a>      },
+<a href="#__codelineno-12-650" id="__codelineno-12-650" name="__codelineno-12-650"></a>      {
+<a href="#__codelineno-12-651" id="__codelineno-12-651" name="__codelineno-12-651"></a>        "endpoints": [
+<a href="#__codelineno-12-652" id="__codelineno-12-652" name="__codelineno-12-652"></a>          {
+<a href="#__codelineno-12-653" id="__codelineno-12-653" name="__codelineno-12-653"></a>            "id": "82bfd276ae734c3788bc66159b0c6d39",
+<a href="#__codelineno-12-654" id="__codelineno-12-654" name="__codelineno-12-654"></a>            "interface": "public",
+<a href="#__codelineno-12-655" id="__codelineno-12-655" name="__codelineno-12-655"></a>            "region_id": "RegionOne",
+<a href="#__codelineno-12-656" id="__codelineno-12-656" name="__codelineno-12-656"></a>            "url": "http://182.161.114.101/compute/v2.1",
+<a href="#__codelineno-12-657" id="__codelineno-12-657" name="__codelineno-12-657"></a>            "region": "RegionOne"
+<a href="#__codelineno-12-658" id="__codelineno-12-658" name="__codelineno-12-658"></a>          }
+<a href="#__codelineno-12-659" id="__codelineno-12-659" name="__codelineno-12-659"></a>        ],
+<a href="#__codelineno-12-660" id="__codelineno-12-660" name="__codelineno-12-660"></a>        "id": "fa5e4dfaffbe476c88be86bbc10f092e",
+<a href="#__codelineno-12-661" id="__codelineno-12-661" name="__codelineno-12-661"></a>        "type": "compute",
+<a href="#__codelineno-12-662" id="__codelineno-12-662" name="__codelineno-12-662"></a>        "name": "nova"
+<a href="#__codelineno-12-663" id="__codelineno-12-663" name="__codelineno-12-663"></a>      }
+<a href="#__codelineno-12-664" id="__codelineno-12-664" name="__codelineno-12-664"></a>    ]
+<a href="#__codelineno-12-665" id="__codelineno-12-665" name="__codelineno-12-665"></a>  }
+<a href="#__codelineno-12-666" id="__codelineno-12-666" name="__codelineno-12-666"></a>}
+<a href="#__codelineno-12-667" id="__codelineno-12-667" name="__codelineno-12-667"></a>
+<a href="#__codelineno-12-668" id="__codelineno-12-668" name="__codelineno-12-668"></a>
+<a href="#__codelineno-12-669" id="__codelineno-12-669" name="__codelineno-12-669"></a>__openstack__ -&gt; Request [4] GET http://182.161.114.101/image/v2/images
+<a href="#__codelineno-12-670" id="__codelineno-12-670" name="__codelineno-12-670"></a>User-Agent: openstacksdk/0.101.0 keystoneauth1/5.0.0 python-requests/2.28.1 CPython/3.8.10
+<a href="#__codelineno-12-671" id="__codelineno-12-671" name="__codelineno-12-671"></a>Accept-Encoding: gzip, deflate
+<a href="#__codelineno-12-672" id="__codelineno-12-672" name="__codelineno-12-672"></a>Accept: application/json
+<a href="#__codelineno-12-673" id="__codelineno-12-673" name="__codelineno-12-673"></a>Connection: keep-alive
+<a href="#__codelineno-12-674" id="__codelineno-12-674" name="__codelineno-12-674"></a>X-Auth-Token: gAAAAABjmuecYFmRPQsVsMQG0ISfxCu8my-78UFyTsH3pvEyXoED6xdWFniwmGex1QGimVH2utjSxyxDJI9Rso6QFflEjaDgWoO3KzZ_8C3oVzpLp9nBxlPhn97YNn01BT7UFubQucRARWUGTdSXeLK_KqKAhy4080GkUXHIal2SUQcqhrhC1yA
+<a href="#__codelineno-12-675" id="__codelineno-12-675" name="__codelineno-12-675"></a>
+<a href="#__codelineno-12-676" id="__codelineno-12-676" name="__codelineno-12-676"></a>None
+<a href="#__codelineno-12-677" id="__codelineno-12-677" name="__codelineno-12-677"></a>
+<a href="#__codelineno-12-678" id="__codelineno-12-678" name="__codelineno-12-678"></a>__openstack__ &lt;- Response [4] 200 OK http://182.161.114.101/image/v2/images
+<a href="#__codelineno-12-679" id="__codelineno-12-679" name="__codelineno-12-679"></a>Date: Thu, 15 Dec 2022 09:23:41 GMT
+<a href="#__codelineno-12-680" id="__codelineno-12-680" name="__codelineno-12-680"></a>Server: Apache/2.4.41 (Ubuntu)
+<a href="#__codelineno-12-681" id="__codelineno-12-681" name="__codelineno-12-681"></a>Content-Length: 2985
+<a href="#__codelineno-12-682" id="__codelineno-12-682" name="__codelineno-12-682"></a>Content-Type: application/json
+<a href="#__codelineno-12-683" id="__codelineno-12-683" name="__codelineno-12-683"></a>X-Openstack-Request-Id: req-3e68af9b-78b8-4ae9-b068-a4afdc7b79c4
+<a href="#__codelineno-12-684" id="__codelineno-12-684" name="__codelineno-12-684"></a>Connection: close
+<a href="#__codelineno-12-685" id="__codelineno-12-685" name="__codelineno-12-685"></a>
+<a href="#__codelineno-12-686" id="__codelineno-12-686" name="__codelineno-12-686"></a>{
+<a href="#__codelineno-12-687" id="__codelineno-12-687" name="__codelineno-12-687"></a>  "images": [
+<a href="#__codelineno-12-688" id="__codelineno-12-688" name="__codelineno-12-688"></a>    {
+<a href="#__codelineno-12-689" id="__codelineno-12-689" name="__codelineno-12-689"></a>      "owner_specified.openstack.md5": "",
+<a href="#__codelineno-12-690" id="__codelineno-12-690" name="__codelineno-12-690"></a>      "owner_specified.openstack.object": "images/cirros-0.6.1-x86_64-disk",
+<a href="#__codelineno-12-691" id="__codelineno-12-691" name="__codelineno-12-691"></a>      "owner_specified.openstack.sha256": "",
+<a href="#__codelineno-12-692" id="__codelineno-12-692" name="__codelineno-12-692"></a>      "name": "cirros-0.6.1-x86_64-disk",
+<a href="#__codelineno-12-693" id="__codelineno-12-693" name="__codelineno-12-693"></a>      "disk_format": "qcow2",
+<a href="#__codelineno-12-694" id="__codelineno-12-694" name="__codelineno-12-694"></a>      "container_format": "bare",
+<a href="#__codelineno-12-695" id="__codelineno-12-695" name="__codelineno-12-695"></a>      "visibility": "public",
+<a href="#__codelineno-12-696" id="__codelineno-12-696" name="__codelineno-12-696"></a>      "size": 21233664,
+<a href="#__codelineno-12-697" id="__codelineno-12-697" name="__codelineno-12-697"></a>      "virtual_size": 117440512,
+<a href="#__codelineno-12-698" id="__codelineno-12-698" name="__codelineno-12-698"></a>      "status": "active",
+<a href="#__codelineno-12-699" id="__codelineno-12-699" name="__codelineno-12-699"></a>      "checksum": "0c839612eb3f2469420f2ccae990827f",
+<a href="#__codelineno-12-700" id="__codelineno-12-700" name="__codelineno-12-700"></a>      "protected": false,
+<a href="#__codelineno-12-701" id="__codelineno-12-701" name="__codelineno-12-701"></a>      "min_ram": 0,
+<a href="#__codelineno-12-702" id="__codelineno-12-702" name="__codelineno-12-702"></a>      "min_disk": 0,
+<a href="#__codelineno-12-703" id="__codelineno-12-703" name="__codelineno-12-703"></a>      "owner": "d34b18d2e5934d7d84900220483ad8b7",
+<a href="#__codelineno-12-704" id="__codelineno-12-704" name="__codelineno-12-704"></a>      "os_hidden": false,
+<a href="#__codelineno-12-705" id="__codelineno-12-705" name="__codelineno-12-705"></a>      "os_hash_algo": "sha512",
+<a href="#__codelineno-12-706" id="__codelineno-12-706" name="__codelineno-12-706"></a>      "os_hash_value": "df88bac2791254f68941229792539621516bd480aa3d6fe4c0ca16057393d024a4944d644959f323dc01a25e3417c0b581776ab3c8db8da542039f2a67230579",
+<a href="#__codelineno-12-707" id="__codelineno-12-707" name="__codelineno-12-707"></a>      "id": "9faa6fd5-b254-4184-80c0-66b7c062315e",
+<a href="#__codelineno-12-708" id="__codelineno-12-708" name="__codelineno-12-708"></a>      "created_at": "2022-12-13T08:35:27Z",
+<a href="#__codelineno-12-709" id="__codelineno-12-709" name="__codelineno-12-709"></a>      "updated_at": "2022-12-14T07:13:16Z",
+<a href="#__codelineno-12-710" id="__codelineno-12-710" name="__codelineno-12-710"></a>      "tags": [],
+<a href="#__codelineno-12-711" id="__codelineno-12-711" name="__codelineno-12-711"></a>      "self": "/v2/images/9faa6fd5-b254-4184-80c0-66b7c062315e",
+<a href="#__codelineno-12-712" id="__codelineno-12-712" name="__codelineno-12-712"></a>      "file": "/v2/images/9faa6fd5-b254-4184-80c0-66b7c062315e/file",
+<a href="#__codelineno-12-713" id="__codelineno-12-713" name="__codelineno-12-713"></a>      "schema": "/v2/schemas/image"
+<a href="#__codelineno-12-714" id="__codelineno-12-714" name="__codelineno-12-714"></a>    },
+<a href="#__codelineno-12-715" id="__codelineno-12-715" name="__codelineno-12-715"></a>    {
+<a href="#__codelineno-12-716" id="__codelineno-12-716" name="__codelineno-12-716"></a>      "hw_rng_model": "virtio",
+<a href="#__codelineno-12-717" id="__codelineno-12-717" name="__codelineno-12-717"></a>      "owner_specified.openstack.md5": "",
+<a href="#__codelineno-12-718" id="__codelineno-12-718" name="__codelineno-12-718"></a>      "owner_specified.openstack.object": "images/trove-guest-ubuntu-focal",
+<a href="#__codelineno-12-719" id="__codelineno-12-719" name="__codelineno-12-719"></a>      "owner_specified.openstack.sha256": "",
+<a href="#__codelineno-12-720" id="__codelineno-12-720" name="__codelineno-12-720"></a>      "name": "trove-guest-ubuntu-focal",
+<a href="#__codelineno-12-721" id="__codelineno-12-721" name="__codelineno-12-721"></a>      "disk_format": "qcow2",
+<a href="#__codelineno-12-722" id="__codelineno-12-722" name="__codelineno-12-722"></a>      "container_format": "bare",
+<a href="#__codelineno-12-723" id="__codelineno-12-723" name="__codelineno-12-723"></a>      "visibility": "shared",
+<a href="#__codelineno-12-724" id="__codelineno-12-724" name="__codelineno-12-724"></a>      "size": 1033043968,
+<a href="#__codelineno-12-725" id="__codelineno-12-725" name="__codelineno-12-725"></a>      "virtual_size": 5368709120,
+<a href="#__codelineno-12-726" id="__codelineno-12-726" name="__codelineno-12-726"></a>      "status": "active",
+<a href="#__codelineno-12-727" id="__codelineno-12-727" name="__codelineno-12-727"></a>      "checksum": "a68f5d086d6dd6cbe341dee9911412c8",
+<a href="#__codelineno-12-728" id="__codelineno-12-728" name="__codelineno-12-728"></a>      "protected": false,
+<a href="#__codelineno-12-729" id="__codelineno-12-729" name="__codelineno-12-729"></a>      "min_ram": 0,
+<a href="#__codelineno-12-730" id="__codelineno-12-730" name="__codelineno-12-730"></a>      "min_disk": 0,
+<a href="#__codelineno-12-731" id="__codelineno-12-731" name="__codelineno-12-731"></a>      "owner": "3a16cadd069e4a70b95f71316ec6f3e8",
+<a href="#__codelineno-12-732" id="__codelineno-12-732" name="__codelineno-12-732"></a>      "os_hidden": false,
+<a href="#__codelineno-12-733" id="__codelineno-12-733" name="__codelineno-12-733"></a>      "os_hash_algo": "sha512",
+<a href="#__codelineno-12-734" id="__codelineno-12-734" name="__codelineno-12-734"></a>      "os_hash_value": "50e0e621db571157f5962cefeb9181cf93e9007ff023dbac31d66bf5eb50d51ba53c5634d4dfaf78fbdba631413f0b81cc216d26640c2d540aeedb6a59b839b4",
+<a href="#__codelineno-12-735" id="__codelineno-12-735" name="__codelineno-12-735"></a>      "id": "53713cd4-241d-4b87-8dee-7619615f05e3",
+<a href="#__codelineno-12-736" id="__codelineno-12-736" name="__codelineno-12-736"></a>      "created_at": "2022-12-06T05:20:41Z",
+<a href="#__codelineno-12-737" id="__codelineno-12-737" name="__codelineno-12-737"></a>      "updated_at": "2022-12-06T05:22:31Z",
+<a href="#__codelineno-12-738" id="__codelineno-12-738" name="__codelineno-12-738"></a>      "tags": [
+<a href="#__codelineno-12-739" id="__codelineno-12-739" name="__codelineno-12-739"></a>        "trove"
+<a href="#__codelineno-12-740" id="__codelineno-12-740" name="__codelineno-12-740"></a>      ],
+<a href="#__codelineno-12-741" id="__codelineno-12-741" name="__codelineno-12-741"></a>      "self": "/v2/images/53713cd4-241d-4b87-8dee-7619615f05e3",
+<a href="#__codelineno-12-742" id="__codelineno-12-742" name="__codelineno-12-742"></a>      "file": "/v2/images/53713cd4-241d-4b87-8dee-7619615f05e3/file",
+<a href="#__codelineno-12-743" id="__codelineno-12-743" name="__codelineno-12-743"></a>      "schema": "/v2/schemas/image"
+<a href="#__codelineno-12-744" id="__codelineno-12-744" name="__codelineno-12-744"></a>    },
+<a href="#__codelineno-12-745" id="__codelineno-12-745" name="__codelineno-12-745"></a>    {
+<a href="#__codelineno-12-746" id="__codelineno-12-746" name="__codelineno-12-746"></a>      "hw_rng_model": "virtio",
+<a href="#__codelineno-12-747" id="__codelineno-12-747" name="__codelineno-12-747"></a>      "owner_specified.openstack.md5": "",
+<a href="#__codelineno-12-748" id="__codelineno-12-748" name="__codelineno-12-748"></a>      "owner_specified.openstack.object": "images/cirros-0.5.2-x86_64-disk",
+<a href="#__codelineno-12-749" id="__codelineno-12-749" name="__codelineno-12-749"></a>      "owner_specified.openstack.sha256": "",
+<a href="#__codelineno-12-750" id="__codelineno-12-750" name="__codelineno-12-750"></a>      "name": "cirros-0.5.2-x86_64-disk",
+<a href="#__codelineno-12-751" id="__codelineno-12-751" name="__codelineno-12-751"></a>      "disk_format": "qcow2",
+<a href="#__codelineno-12-752" id="__codelineno-12-752" name="__codelineno-12-752"></a>      "container_format": "bare",
+<a href="#__codelineno-12-753" id="__codelineno-12-753" name="__codelineno-12-753"></a>      "visibility": "public",
+<a href="#__codelineno-12-754" id="__codelineno-12-754" name="__codelineno-12-754"></a>      "size": 16300544,
+<a href="#__codelineno-12-755" id="__codelineno-12-755" name="__codelineno-12-755"></a>      "virtual_size": 117440512,
+<a href="#__codelineno-12-756" id="__codelineno-12-756" name="__codelineno-12-756"></a>      "status": "active",
+<a href="#__codelineno-12-757" id="__codelineno-12-757" name="__codelineno-12-757"></a>      "checksum": "b874c39491a2377b8490f5f1e89761a4",
+<a href="#__codelineno-12-758" id="__codelineno-12-758" name="__codelineno-12-758"></a>      "protected": false,
+<a href="#__codelineno-12-759" id="__codelineno-12-759" name="__codelineno-12-759"></a>      "min_ram": 0,
+<a href="#__codelineno-12-760" id="__codelineno-12-760" name="__codelineno-12-760"></a>      "min_disk": 0,
+<a href="#__codelineno-12-761" id="__codelineno-12-761" name="__codelineno-12-761"></a>      "owner": "a5362cbd04fd4783a038d5a342d58e87",
+<a href="#__codelineno-12-762" id="__codelineno-12-762" name="__codelineno-12-762"></a>      "os_hidden": false,
+<a href="#__codelineno-12-763" id="__codelineno-12-763" name="__codelineno-12-763"></a>      "os_hash_algo": "sha512",
+<a href="#__codelineno-12-764" id="__codelineno-12-764" name="__codelineno-12-764"></a>      "os_hash_value": "6b813aa46bb90b4da216a4d19376593fa3f4fc7e617f03a92b7fe11e9a3981cbe8f0959dbebe36225e5f53dc4492341a4863cac4ed1ee0909f3fc78ef9c3e869",
+<a href="#__codelineno-12-765" id="__codelineno-12-765" name="__codelineno-12-765"></a>      "id": "9c31f2c6-f22c-440e-b670-d8d5a5cc0405",
+<a href="#__codelineno-12-766" id="__codelineno-12-766" name="__codelineno-12-766"></a>      "created_at": "2022-12-06T04:47:33Z",
+<a href="#__codelineno-12-767" id="__codelineno-12-767" name="__codelineno-12-767"></a>      "updated_at": "2022-12-13T02:32:48Z",
+<a href="#__codelineno-12-768" id="__codelineno-12-768" name="__codelineno-12-768"></a>      "tags": [],
+<a href="#__codelineno-12-769" id="__codelineno-12-769" name="__codelineno-12-769"></a>      "self": "/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405",
+<a href="#__codelineno-12-770" id="__codelineno-12-770" name="__codelineno-12-770"></a>      "file": "/v2/images/9c31f2c6-f22c-440e-b670-d8d5a5cc0405/file",
+<a href="#__codelineno-12-771" id="__codelineno-12-771" name="__codelineno-12-771"></a>      "schema": "/v2/schemas/image"
+<a href="#__codelineno-12-772" id="__codelineno-12-772" name="__codelineno-12-772"></a>    }
+<a href="#__codelineno-12-773" id="__codelineno-12-773" name="__codelineno-12-773"></a>  ],
+<a href="#__codelineno-12-774" id="__codelineno-12-774" name="__codelineno-12-774"></a>  "first": "/v2/images",
+<a href="#__codelineno-12-775" id="__codelineno-12-775" name="__codelineno-12-775"></a>  "schema": "/v2/schemas/images"
+<a href="#__codelineno-12-776" id="__codelineno-12-776" name="__codelineno-12-776"></a>}
+</code></pre></div> <p><code>openstack image list</code> 커맨드를 실행했을 때의 로그 파일이다.<br/> 이 로그 파일에 따른 API 요청 관계를 Diagram으로 표현하면 아래와 같다.</p> <pre class="mermaid"><code>sequenceDiagram
+  autonumber
+  participant client as openstack-client
+  participant keystone as keystone-api
+  participant glance as glance-api
+  client-&gt;&gt;keystone: keystone endpoint 목록 요청
+  keystone--&gt;&gt;client: keystone endpoint 목록 응답
+  client-&gt;&gt;keystone: access token 발급 요청
+  keystone--&gt;&gt;client: access token 및 service catalog
+  client-&gt;&gt;glance: glance endpoint 목록 요청
+  glance--&gt;&gt;client: glance endpoint 목록 응답
+  client-&gt;&gt;glance: 이미지 목록 요청
+  opt 사용자 토큰 검증
+      glance-&gt;&gt;keystone: 클라이언트 토큰 검증 요청
+      keystone--&gt;&gt;glance: 클라이언트 토큰 검증 응답
+  end
+  glance--&gt;&gt;client: 이미지 목록 응답</code></pre> <div class="admonition note"> <p class="admonition-title">Note</p> <p>로그 파일에는 (7) 이미지 목록 요청이 (9) 클라이언트 토큰 검증 응답 후에 나오지만, Response를 받은 후에 로그 파일을 기록하는 시점 상의 문제이며, 실제로는 (7)이미지 목록 요청을 받은 <code>glance-api</code>가 <code>keystone-api</code>로 (8)사용자 토큰 검증을 요청하고, (9)사용자 토큰 검증 응답을 받은 후에, 최종적으로 (10)이미지 목록을 응답한다.</p> </div> <div class="admonition note"> <p class="admonition-title">Note</p> <p>로그 파일에 <code>openstack</code>의 request sequence number는 순차적으로 출력되지만, <code>glance-api</code>의 reqeust sequence number는 [3]에서 시작하는데, 이것은 <code>glance-api</code>는 지속적으로 실행되고 있는 프로세스이며 이전 요청에 의해 sequence number(<code>req_idx</code>)가 이미 증가한 상태이기 때문이다. </p> </div> </article> </div> </div> <a class="md-top md-icon" data-md-component="top" hidden="" href="#"> <svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"></path></svg> Back to top </a> </main> <footer class="md-footer"> <div class="md-footer-meta md-typeset"> <div class="md-footer-meta__inner md-grid"> <div class="md-copyright"> <div class="md-copyright__highlight"> KINX Inc. All Rights Reserved. </div> </div> </div> </div> </footer> </div> <div class="md-dialog" data-md-component="dialog"> <div class="md-dialog__inner md-typeset"></div> </div> <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "content.code.annotate", "content.tooltips", "navigation.top", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../../../assets/javascripts/workers/search.12658920.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script> <script src="../../../assets/javascripts/bundle.5cf534bf.min.js"></script> <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body> </html>
