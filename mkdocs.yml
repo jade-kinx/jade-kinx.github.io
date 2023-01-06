@@ -150,3 +150,5 @@ nav:
     - image set: openstack/image/set/index.md
     - image unset: openstack/image/unset/index.md
     - image delete: openstack/image/delete/index.md
+    - Compute(Nova):
+      - compute create: openstack/compute/create/index.md
